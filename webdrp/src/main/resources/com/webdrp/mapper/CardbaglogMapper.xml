@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.CardbaglogMapper">
+    <insert id="insert" parameterType="com.webdrp.entity.Cardbaglog"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into cardbaglog(
+            id,orignUserId,toUserId,`number`,note
+        )
+        values(
+            #{id},#{orignUserId},#{toUserId},#{number},#{note}
+        )
+    </insert>
+    <!--sql片段，时间格式化-->
+    <sql id="select">
+         id,orignUserId,toUserId,`number`,note,DATE_FORMAT(createTime,'%Y-%m-%d %H:%i:%s')as createTime,DATE_FORMAT(updateTime,'%Y-%m-%d %H:%i:%s')as updateTime
+    </sql>
+
+    <sql id="query">
+        <if test="entity.id!=null">
+            and id = #{entity.id}
+        </if>
+        <if test="entity.orignUserId!=null">
+            and orignUserId = #{entity.orignUserId}
+        </if>
+        <if test="entity.toUserId!=null">
+            and toUserId = #{entity.toUserId}
+        </if>
+        <if test="entity.number!=null">
+            and number = #{entity.number}
+        </if>
+        <if test="entity.note!=null">
+            and note = #{entity.note}
+        </if>
+
+    </sql>
+
+    <delete id="delete" parameterType="com.webdrp.entity.Cardbaglog">
+        delete from cardbaglog where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.webdrp.entity.Cardbaglog">
+        update cardbaglog
+        <set>
+            <if test="id!=null">
+                id = #{id},
+            </if>
+            <if test="orignUserId!=null">
+                orignUserId = #{orignUserId},
+            </if>
+            <if test="toUserId!=null">
+                toUserId = #{toUserId},
+            </if>
+            <if test="number!=null">
+                number = #{number},
+            </if>
+            <if test="note!=null">
+                note = #{note},
+            </if>
+
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findAll" resultMap="resultList">
+        select
+        <include refid="select"></include>
+        from cardbaglog where deleteTime is null
+        <include refid="query"/>
+    </select>
+
+    <select id="count" resultType="long">
+        select
+        count(*)
+        from cardbaglog where deleteTime is null
+        <include refid="query"/>
+    </select>
+
+    <select id="loadAll" resultMap="resultList">
+        select
+        <include refid="select"></include>
+        from cardbaglog where deleteTime is null
+        <include refid="query"/>
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="findById" resultMap="resultList">
+        SELECT
+        <include refid="select"></include>
+        from cardbaglog where deleteTime is null  and id  = #{id}
+    </select>
+
+
+    <resultMap id="resultList" type="com.webdrp.entity.Cardbaglog" >
+        <id column="id" property="id" />
+        <result  column="orignUserId" property="orignUserId"/>
+        <result  column="toUserId" property="toUserId"/>
+        <result  column="number" property="number"/>
+        <result  column="note" property="note"/>
+        <result  column="createTime" property="createTime"/>
+        <result  column="updateTime" property="updateTime"/>
+
+    </resultMap>
+</mapper>

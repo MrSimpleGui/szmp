@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>会员卡包</title>
+	<link rel="stylesheet" href="dist/lib/weui.min.css" th:href="@{/dist/lib/weui.min.css}" />
+	<link rel="stylesheet" href="dist/css/jquery-weui.min.css" th:href="@{/dist/css/jquery-weui.min.css}" />
+	<script type="text/javascript" src="dist/lib/jquery-2.1.4.js" th:src="@{/dist/lib/jquery-2.1.4.js}"></script>
+	<link rel="stylesheet" href="css/header.min.css" th:href="@{/css/header.min.css}"/>
+	<link rel="stylesheet" href="css/toRecord.css" th:href="@{/css/toRecord.css}" />
+	<script  type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		ctxPath = /*[[@{/}]]*/ '';
+		/*]]>*/
+	</script>
+	<style>
+		.cardPkg{
+			width: 90vw;
+			height: 40vw;
+			background-color: white;
+			margin: 0 auto;
+			z-index: 10;
+			margin-top: -20vw;
+			box-shadow:2px 2px 2px 2px #d5d5d5;
+			border-radius: 2vw;
+			display: flex;
+			flex: 1;
+		}
+		.cardImg{
+			flex: 1;
+			max-width: 45vw;
+			box-sizing: border-box;
+			padding: 2vw;
+		}
+		.cardImg img {
+			width: 100%;
+			height: auto;
+			margin-top: 5vw;
+			border-radius: 2vw;
+		}
+		.cardText{
+			flex: 1;
+			max-width: 45vw;
+			box-sizing: border-box;
+			padding: 5.5vw 2vw;
+		}
+		.cardTitle{
+			font-size: 3.5vw;
+		}
+		.cardNumber{
+			font-size: 3vw;
+		}
+		.cardDesc{
+			color: grey;
+			font-size: 3vw;
+		}
+		.labelNumber{
+
+		}
+		.numberSelect{
+			flex: 1;
+			border: 1px solid #b9aaaa;
+			margin-right: 3vw;
+			width: 20vw;
+		}
+		.addUser > img{
+			width: 100%;
+			height: 100%;
+		}
+		.searchUser{
+			width: 90vw;
+			margin: 0 auto;
+			background-color: white;
+			position: absolute;
+			z-index: 40;
+			left: 5vw;
+			box-sizing: border-box;
+			top: 70vw;
+			height: 80vw;
+			box-shadow:2px 2px 2px 2px #757171;
+			border-radius: 2vw;
+			display: none;
+
+		}
+		.searchUserHeader{
+			background-color: #ff706c;
+			display: flex;
+			height: 12vw;
+			text-align: center;
+			border-top-left-radius: 2vw;
+			border-top-right-radius: 2vw;
+		}
+		.searchUserHeaderTitle{
+			flex: 4;
+			line-height: 12vw;
+			color: white;
+			font-size: 4vw;
+		}
+		.searchUserHeaderCloseBtn{
+			flex: 1;
+			height: 12vw;
+			line-height: 12vw;
+		}
+		.weui-cell:before {
+			content: " ";
+			position: absolute;
+			left: 0;
+			top: 0;
+			right: 0;
+			height: 1px;
+			border-top: none;
+			color: #e5e5e5;
+			-webkit-transform-origin: 0 0;
+			transform-origin: 0 0;
+			-webkit-transform: scaleY(.5);
+			transform: scaleY(.5);
+			left: 15px;
+			z-index: 2;
+		}
+		.searchUserResultList{
+			width: 100%;
+			display: flex;
+			height: 30vw;
+		}
+		.userCard{
+			flex: 1;
+			height: 30vw;
+			text-align: center;
+		}
+		.userImg{
+			height: 20vw;
+		}
+		.userImg >img{
+			width: 15vw;
+			height: 15vw;
+			border-radius: 50%;
+			margin-top: 5vw;
+
+		}
+		.userName{
+			color: darkgray;
+		}
+		.confirmUser{
+			width: 100%;
+			text-align: center;
+			margin-top: 5vw;
+		}
+		.mengban{
+			width: 100vw;
+			height: 100vh;
+			position: absolute;
+			background-color: #0000008f;
+			z-index: 22;
+			opacity: 1;
+			top:0;
+			left: 0;
+			display: none;
+		}
+
+
+
+	</style>
+
+</head>
+<body>
+<div class="header">
+	<div class="goback">
+		<a href="javascript:history.back(-1)">
+			<img class="goback-img" src="img/goback.png" th:src="@{/img/goback.png}" />
+		</a>
+	</div>
+	<div class="header-title">我的卡包</div>
+	<div class="gohome"></div>
+</div>
+<div class="record-wallet" style="height: 35vw">
+</div>
+
+<div class="cardPkg">
+	<div class="cardImg">
+		<img src="" th:src="@{/img/card/card1.jpg}">
+	</div>
+	<div class="cardText">
+		<p class="cardTitle">小野民宿尊享卡</p>
+		<p class="cardNumber">剩余数量：<span th:text="${cardbag.number}"></span></p>
+		<p class="cardDesc">说明：可转赠他人使用，好友使用后可获得小野民宿低至0元入住权益！</p>
+	</div>
+</div>
+
+<div style="margin-top: 2vw;box-sizing: border-box;padding: 5vw 5vw">
+	<p style="margin-top: 2vw">
+		使用数量
+	</p>
+	<div style="text-align: center;margin-top: 1.5vw">
+		<div class="numberSelect" >
+			<input type="radio" name="number" value="1" id="1d" style="display: none">
+			<label for="1d" class="labelNumber">1</label>
+		</div>
+	</div>
+	<p style="margin-top: 2vw">
+		选择代理人
+	</p>
+	<div style="text-align: center;margin-top: 1.5vw;margin-top: 10vw">
+		<div class="addUser" style="width: 15vw;height: 15vw;margin: 0 auto;box-sizing: border-box;">
+			<img src="" th:src="@{/img/card/add.png}" onclick="closeSearchUser()"/>
+		</div>
+	</div>
+</div>
+
+
+<div class="mengban" id="mengban">
+
+</div>
+<div class="searchUser" id="searchUser">
+	<div class="searchUserHeader">
+		<div class="searchUserHeaderCloseBtn">
+		</div>
+		<div class="searchUserHeaderTitle">添加转送人</div>
+		<div class="searchUserHeaderCloseBtn" onclick="closeSearchUser()">
+			<svg t="1587658238744" style="margin-top: 2.4vw" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1604" width="7vw" height="7vw"><path d="M512 65C265.146 65 65 265.146 65 512c0 246.854 200.146 447 447 447 246.854 0 447-200.146 447-447C959 265.146 758.854 65 512 65zM512 929.2C281.952 929.2 94.8 742.048 94.8 512S281.952 94.8 512 94.8 929.2 281.952 929.2 512 742.048 929.2 512 929.2z" p-id="1605" fill="#ffffff"></path><path d="M683.35 320.257 511.971 491.636 340.65 320.257 320.25 340.687 491.6 512.022 320.264 683.342 340.65 703.729 511.971 532.408 683.35 703.742 703.736 683.342 532.414 512.022 703.75 340.643Z" p-id="1606" fill="#ffffff"></path></svg>
+		</div>
+	</div>
+	<div class="weui-cell weui-cell_vcode" style="margin-top: 5vw;border-top: none">
+		<div class="weui-cell__hd">
+			<label class="weui-label" style="color: #484848">赠送人ID：</label>
+		</div>
+		<div class="weui-cell__bd" style="border-bottom: 1px solid darkgray;margin-right: 3vw">
+			<input class="weui-input" type="number" placeholder="赠送人ID" id="sendToUserId">
+		</div>
+		<div class="weui-cell__ft" style="margin-right: 4vw">
+			<a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary" style="background-color: #ff706c;color: white;border: none" onclick="findUserById()">搜索</a>
+		</div>
+	</div>
+	<div class="searchUserResultList" id="userCard">
+<!--		<div class="userCard" id="userCard">-->
+<!--			<div class="userImg">-->
+<!--				<img th:src="@{/img/icon/anroid.png}"/>-->
+<!--			</div>-->
+<!--			<p class="userName">天使</p>-->
+<!--		</div>-->
+<!--		<div class="userCard">-->
+<!--			<div class="userImg">-->
+<!--				<img th:src="@{/img/icon/anroid.png}"/>-->
+<!--			</div>-->
+<!--			<p class="userName">天使</p>-->
+<!--		</div>-->
+	</div>
+	<div class="confirmUser" style="display: none" id="confirmUser">
+		<a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary" style="background-color: #ff706c;color: white;border: none" onclick="sendToThis()">赠送1个卡包</a>
+	</div>
+</div>
+
+
+<div class="searchUser" id="openVip">
+	<div class="searchUserHeader">
+		<div class="searchUserHeaderCloseBtn">
+		</div>
+		<div class="searchUserHeaderTitle">填写会员信息</div>
+		<div class="searchUserHeaderCloseBtn" onclick="openVip()">
+			<svg t="1587658238744" style="margin-top: 2.4vw" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1604" width="7vw" height="7vw"><path d="M512 65C265.146 65 65 265.146 65 512c0 246.854 200.146 447 447 447 246.854 0 447-200.146 447-447C959 265.146 758.854 65 512 65zM512 929.2C281.952 929.2 94.8 742.048 94.8 512S281.952 94.8 512 94.8 929.2 281.952 929.2 512 742.048 929.2 512 929.2z" p-id="1605" fill="#ffffff"></path><path d="M683.35 320.257 511.971 491.636 340.65 320.257 320.25 340.687 491.6 512.022 320.264 683.342 340.65 703.729 511.971 532.408 683.35 703.742 703.736 683.342 532.414 512.022 703.75 340.643Z" p-id="1606" fill="#ffffff"></path></svg>
+		</div>
+	</div>
+	<div class="weui-cell weui-cell_vcode" style="margin-top: 6vw;border-top: none">
+		<div class="weui-cell__hd">
+			<label class="weui-label" style="color: #484848">手机号：</label>
+		</div>
+		<div class="weui-cell__bd" style="border-bottom: 1px solid darkgray;margin-right: 3vw">
+			<input class="weui-input" type="tel" placeholder="注册手机号" id="vipUserTel">
+		</div>
+	</div>
+	<div class="weui-cell weui-cell_vcode" style="margin-top: 6vw;border-top: none">
+		<div class="weui-cell__hd">
+			<label class="weui-label" style="color: #484848">姓名：</label>
+		</div>
+		<div class="weui-cell__bd" style="border-bottom: 1px solid darkgray;margin-right: 3vw">
+			<input class="weui-input" type="text" placeholder="姓名" id="vipUserName">
+		</div>
+	</div>
+
+	<div class="confirmUser" style="width: 80%;margin: 10vw auto 5vw auto;font-size: 4vw">
+		<a href="javascript:;" class="weui-btn weui-btn_plain-primary" style="font-size: 4vw;color: #ff7103;border: 1px #ff7103 solid;" id="openVipAction">开通会员权益</a>
+	</div>
+</div>
+
+
+<div class="weui-cells weui-cells_form" >
+
+</div>
+<div class="bt-record" style="display: flex">
+	<div style="flex: 1;margin-right: 6vw">
+		<a href="javascript:;" class="weui-btn weui-btn_plain-primary" style="font-size: 4vw;color: #ff7103;border: 1px #ff7103 solid;" id="toSend" onclick="closeSearchUser()">赠送卡包</a>
+	</div>
+	<div style="flex: 1">
+		<a href="javascript:;" class="weui-btn weui-btn_plain-primary" style="font-size: 4vw;color: rgba(255,86,75,1);border: 1px rgba(255,86,75,1) solid;" id="toUse" onclick="openVip()">使用卡包</a>
+	</div>
+</div>
+
+</body>
+<script type="text/javascript" th:src="@{/dist/js/jquery-weui.js}"></script>
+<script>
+	function openSelecthtml() {
+
+	}
+	function closeSearchUser() {
+		$("#searchUser").toggle()
+		$("#mengban").toggle()
+	}
+
+	$("#mengban").click(function () {
+		$("#searchUser").hide();
+		$("#mengban").toggle()
+		$("#openVip").hide();
+	})
+
+	function openVip() {
+		$("#openVip").toggle()
+		$("#mengban").toggle()
+	}
+	
+	$("#openVipAction").click(function () {
+		var telephone = $("#vipUserTel").val();
+		var vipName = $("#vipUserName").val();
+		if (telephone.length < 11){
+			$.toast("手机号码不正确", "text");
+			$("#vipUserTel").focus();
+			return;
+		}
+
+		if ('' === vipName){
+			$.toast("请填写姓名", "text");
+			$("#vipUserName").focus();
+			return;
+		}
+
+		$.post(ctxPath + "wechat/api/useCardBag", { "telephone": telephone,"ttName":vipName},
+				function(data){
+					if (data.status){
+						$.toast("开通成功", "text");
+						location.reload()
+						return
+					}else{
+						$.toast(data.errorMsg, "text");
+					}
+
+				}, "json");
+	})
+
+	function findUserById() {
+		$("#confirmUser").hide();
+	   var searchUserId = $("#sendToUserId").val();
+		$.get(ctxPath + "wechat/api/findUserById", { searchUserId: searchUserId },
+				function(data){
+					if (data.status){
+						$("#userCard").html('<div class="userCard" id="userCard">\n' +
+								'<div class="userImg">' +
+								'<img src="'+data.data.user.headImg+'"/>' +
+								'</div>' +
+								'<p class="userName">'+data.data.user.nickname+'</p>' +
+								'</div>')
+						$("#confirmUser").show();
+						return
+					}else{
+						$.toast(data.errorMsg, "text");
+					}
+					// location.reload()
+				});
+	}
+	
+	function sendToThis() {
+		var searchUserId = $("#sendToUserId").val();
+		if (searchUserId === undefined){
+			return
+		}
+		$.post(ctxPath + "wechat/api/senCardToUser", { "toId": searchUserId},
+				function(data){
+					if (data.status){
+						$.toast("赠送成功", "text");
+						location.reload()
+						return
+					}else{
+						$.toast(data.errorMsg, "text");
+					}
+				}, "json");
+
+	}
+	
+</script>
+
+</html>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.IncomeCommissionMapper">
+    <insert id="insert" parameterType="com.webdrp.entity.IncomeCommission"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into incomecommission(
+            id,incomeId,orderId,note
+        )
+        values(
+            #{id},#{incomeId},#{orderId},#{note}
+        )
+    </insert>
+    <!--sql片段，时间格式化-->
+    <sql id="select">
+         id,incomeId,orderId,note,DATE_FORMAT(createTime,'%Y-%m-%d %H:%i:%s')as createTime,DATE_FORMAT(updateTime,'%Y-%m-%d %H:%i:%s')as updateTime
+    </sql>
+
+    <sql id="query">
+        <if test="entity.id!=null">
+            and id = #{entity.id}
+        </if>
+        <if test="entity.incomeId!=null">
+            and incomeId = #{entity.incomeId}
+        </if>
+        <if test="entity.orderId!=null">
+            and orderId = #{entity.orderId}
+        </if>
+        <if test="entity.note!=null">
+            and note = #{entity.note}
+        </if>
+    </sql>
+
+    <delete id="delete" parameterType="com.webdrp.entity.IncomeCommission">
+        delete from incomecommission where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.webdrp.entity.IncomeCommission">
+        update incomecommission
+        <set>
+            <if test="id!=null">
+                id = #{id},
+            </if>
+            <if test="incomeId!=null">
+                incomeId = #{incomeId},
+            </if>
+            <if test="orderId!=null">
+                orderId = #{orderId},
+            </if>
+            <if test="note!=null">
+                note = #{note},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findAll" resultMap="resultList">
+        select
+        <include refid="select"></include>
+        from incomecommission where deleteTime is null
+        <include refid="query"/>
+    </select>
+
+    <select id="count" resultType="long">
+        select
+        count(*)
+        from incomecommission where deleteTime is null
+        <include refid="query"/>
+    </select>
+
+    <select id="loadAll" resultMap="resultList">
+        select
+        <include refid="select"></include>
+        from incomecommission where deleteTime is null
+        <include refid="query"/>
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="findById" resultMap="resultList">
+        SELECT
+        <include refid="select"></include>
+        from incomecommission where deleteTime is null and id = #{id}
+    </select>
+
+
+    <resultMap id="resultList" type="com.webdrp.entity.IncomeCommission" >
+        <id column="id" property="id" />
+        <result  column="incomeId" property="incomeId"/>
+        <result  column="orderId" property="orderId"/>
+        <result  column="note" property="note"/>
+        <result  column="createTime" property="createTime"/>
+        <result  column="updateTime" property="updateTime"/>
+    </resultMap>
+</mapper>
