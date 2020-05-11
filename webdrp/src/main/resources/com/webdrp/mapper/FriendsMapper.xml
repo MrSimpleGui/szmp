@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.FriendsMapper">
+    <insert id="insert" parameterType="com.webdrp.entity.Friends"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into friends(
+            message,
+            richUserId
+            )
+            values(
+            #{message},
+            #{richUserId}
+            )
+    </insert>
+
+    <select id="findById" parameterType="int" resultType="com.webdrp.entity.Friends">
+        SELECT *
+        FROM friends
+        WHERE id = #{id} AND deleteTime IS NULL
+    </select>
+
+    <update id="delete" parameterType="com.webdrp.entity.Friends">
+        update friends
+        <set>
+            deleteTime=#{deleteTime}
+        </set>
+        where id=#{id}
+    </update>
+
+
+    <insert id="addFriendsImage">
+        INSERT  INTO  friendsImage (friendsId,imageId)VALUES (#{friendsId},#{imageId})
+    </insert>
+
+    <delete id="deleteCommodityImageByCommodityId" parameterType="com.webdrp.entity.Friends">
+         delete from friendsImage
+        where friendsId = #{id}
+    </delete>
+
+    <select id="loadAllCount" parameterType="com.webdrp.entity.dto.FriendsDto" resultType="long">
+        SELECT count(*)
+        FROM friends
+        WHERE deleteTime IS NULL
+        <if test="id!=null">
+            AND id=#{id}
+        </if>
+    </select>
+
+    <select id="loadAll" resultMap="resuleMapAll">
+        SELECT
+        a.id AS id,
+        a.createTime AS createTime,
+        a.message AS message,
+        a.richUserId AS richUserId,
+        r.nickname AS nickName,
+        r.username AS userName,
+        l.id AS lid,
+        r1.nickname AS lnickname,
+        r1.username AS lusername,
+        a.id AS lfriendsId,
+        c.id AS cid,
+        r2.id AS `from`,
+        r2.nickname AS fromnickname,
+        r2.username AS fromusername,
+        r3.id AS `to`,
+        r3.nickname AS tonickname,
+        r3.username AS tousername,
+        c.message AS cmessage,
+        a.id AS cfriendsId,
+        i.id AS image_id,
+        i.fullUrl AS fullUrl
+        FROM
+        friends AS a LEFT JOIN comment AS c ON a.id = c.friendsId
+        LEFT JOIN `like` AS l ON a.id = l.friendsId
+        LEFT JOIN member AS r ON a.richUserId = r.id
+        LEFT JOIN member AS r1 ON r1.id = l.richUserId
+        LEFT JOIN member AS r2 ON c.from = r2.id
+        LEFT JOIN member AS r3 ON c.to = r3.id
+        LEFT JOIN friendsImage AS fm ON a.id = fm.friendsId
+        LEFT JOIN image  AS i ON fm.imageId = i.id
+        WHERE <!--a.id = l.friendsId AND a.id = c.friendsId-->
+        a.deleteTime IS NUll AND l.deleteTime IS NUll AND c.deleteTime IS NUll AND r.deleteTime IS NUll
+        AND r1.deleteTime IS NUll AND r2.deleteTime IS NUll AND r3.deleteTime IS NUll
+        <if test="entity.id != null">
+            AND id=#{entity.id}
+        </if>
+        ORDER BY a.createTime DESC
+        <!--Limit #{pager.beginIndex} , #{pager.pageSize} -->
+    </select>
+
+    <resultMap id="resultMap" type="com.webdrp.entity.Friends">
+        <id column="id" property="id"/>
+        <result column="message" property="message"/>
+        <result column="richUserId" property="richUserId"/>
+        <result column="createTime" property="createTime"/>
+        <result column="updateTime" property="updateTime"/>
+
+    </resultMap>
+
+    <resultMap id="resuleMapAll" type="com.webdrp.entity.vo.FriendsVo" extends="resultMap">
+        <result column="username" property="userName"/>
+        <result column="nickname" property="nickName"/>
+
+
+        <collection property="images" ofType="com.webdrp.entity.Image">
+            <id column="image_id" property="id"/>
+            <result column="fullUrl" property="fullUrl"/>
+        </collection>
+
+
+        <collection property="likeVos" ofType="com.webdrp.entity.vo.LikeVo">
+            <id column="lid" property="id"/>
+            <result column="lrichUserId" property="richUserId"/>
+            <result column="lusername" property="userName"/>
+            <result column="lnickname" property="nickName"/>
+            <result column="lfriendsId" property="friendsId"/>
+
+        </collection>
+
+        <collection property="commentVos" ofType="com.webdrp.entity.vo.CommentVo">
+            <id column="cid" property="id"/>
+            <result column="from" property="from"/>
+            <result column="fromusername" property="fromUserName"/>
+            <result column="fromnickname" property="fromNickName"/>
+            <result column="to" property="to"/>
+            <result column="tousername" property="toUserName"/>
+            <result column="tonickname" property="toNickName"/>
+            <result column="cmessage" property="message"/>
+            <result column="cfriendsId" property="friendsId"/>
+
+        </collection>
+
+
+
+    </resultMap>
+</mapper>
+

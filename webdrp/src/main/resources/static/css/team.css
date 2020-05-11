@@ -1,0 +1,96 @@
+body {
+	background-color: #F8F8F8;
+}
+
+.teamTab{
+	display: flex;
+	width: 100%;
+	position: sticky;
+	background-color: white;
+	height: 10vw;
+	line-height: 10vw;
+	top: 13vw;
+}
+.teamItem{
+	flex: 1;
+	text-align: center;
+	color: gray;
+}
+
+.teamList{
+	background-color: #F8F8F8;
+}
+
+.teamCard{
+	width: 100%;
+	box-sizing: border-box;
+	/*border: 1px dashed #ff8e05;*/
+}
+
+.teamCell{
+	display: flex;
+	background-color: white;
+	border-bottom: 1px solid #F8F8F8;
+}
+
+.teamCellIcon{
+	
+}
+.teamCellIcon-img{
+	width: 18vw;
+	height: 18vw;
+	padding: 2vw;
+	margin-left: 3vw;
+}
+.teamUserData{
+	flex: 1;
+	line-height: 1.4;
+}
+
+.userData{
+	box-sizing: border-box;
+	padding: 4vw;
+	padding-left: 1vw;
+}
+
+.weui-navbar__item.weui-bar__item--on {
+    color: white;
+    /*background-image: linear-gradient(to right, #ff8e05, #ff5502);*/
+   background-color: #ff8e05;
+}
+
+.weui-navbar {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    position: sticky;
+    z-index: 500;
+    top: 12.99vw;
+    width: 100%;
+    /*background-color: #fafafa;*/
+    background-color: white;
+}
+.weui-navbar+.weui-tab__bd {
+    padding-top: 0px;
+}
+.weui-navbar__item:after {
+    content: " ";
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 1px;
+    bottom: 0;
+     border-right:none; 
+    color: #ccc;
+    -webkit-transform-origin: 100% 0;
+    transform-origin: 100% 0;
+    -webkit-transform: scaleX(.5);
+    transform: scaleX(.5);
+}
+.userData>p{
+	font-size: 3.5vw;
+}
+
+.divMoreData{
+	margin: 10vw;
+}

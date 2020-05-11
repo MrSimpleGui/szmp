@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.MerchantAnalysisMapper">
+    <insert id="insert" parameterType="com.webdrp.entity.MerchantAnalysis"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into merchantanalysis(id,
+        richUserId,managerId,dayCount,sumCount,teamCount,vipCount
+        )
+        values(#{id} ,
+            #{richUserId},#{managerId},#{dayCount},#{sumCount},#{teamCount},#{vipCount}
+        )
+    </insert>
+    <!--sql片段，时间格式化-->
+    <sql id="select">
+          id,
+          richUserId,managerId,dayCount,sumCount,teamCount,vipCount,
+          DATE_FORMAT(createTime,'%Y-%m-%d %h:%i:%s')as createTime,
+          DATE_FORMAT(updateTime,'%Y-%m-%d %h:%i:%s')as updateTime
+    </sql>
+
+    <delete id="delete" parameterType="com.webdrp.entity.MerchantAnalysis">
+        delete from merchantanalysis where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.webdrp.entity.MerchantAnalysis">
+        update merchantanalysis
+        <set>
+            <if test="id!=null">
+                id = #{id},
+            </if>
+            <if test="richUserId!=null">
+                richUserId = #{richUserId},
+            </if>
+            <if test="managerId!=null">
+                managerId = #{managerId},
+            </if>
+            <if test="dayCount!=null">
+                dayCount = #{dayCount},
+            </if>
+            <if test="sumCount!=null">
+                sumCount = #{sumCount},
+            </if>
+            <if test="teamCount!=null">
+                teamCount = #{teamCount},
+            </if>
+            <if test="vipCount!=null">
+                vipCount = #{vipCount},
+            </if>
+            <if test="deleteTime!=null">
+                deleteTime = #{deleteTime},
+            </if>
+
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findAll" resultMap="resultList">
+        select
+        <include refid="select"></include>
+        from merchantanalysis where deleteTime is NULL
+        <if test="id!=null">
+            and id = #{id}
+        </if>
+
+
+    </select>
+
+    <select id="findById" resultMap="resultList">
+        SELECT
+        <include refid="select"></include>
+        from merchantanalysis where deleteTime IS NULL  and id  = #{id}
+    </select>
+
+    <select id="findByRichUserId" resultMap="resultList">
+        SELECT
+        <include refid="select"></include>
+        from merchantanalysis where deleteTime IS NULL  and richUserId  = #{richUserId} limit 1
+    </select>
+
+    <select id="findByManagerId" resultMap="resultList">
+        SELECT
+        <include refid="select"></include>
+        from merchantanalysis where deleteTime IS NULL  and managerId  = #{managerId}
+    </select>
+
+    <select id="countByManagerId" resultType="int">
+        SELECT
+            ifnull(sum(sumCount),0)
+        from merchantanalysis
+             inner join member on merchantanalysis.richUserId = member.id
+        where merchantanalysis.deleteTime IS NULL
+        and grade = 2
+        and managerId  = #{managerId}
+
+    </select>
+
+    <select id="countManagerTeamUser" resultType="int">
+        SELECT
+            ifnull(sum(teamCount),0)
+        from merchantanalysis
+             inner join member on merchantanalysis.richUserId = member.id
+        where merchantanalysis.deleteTime IS NULL
+        and grade = 2
+        and managerId  = #{managerId}
+
+    </select>
+
+
+
+
+
+     <select id="countDayByManagerId" resultType="int">
+         SELECT
+             ifnull(sum(dayCount),0)
+         from merchantanalysis
+                  inner join member on merchantanalysis.richUserId = member.id
+         where merchantanalysis.deleteTime IS NULL
+           and grade = 2
+           and managerId  = #{managerId}
+    </select>
+
+
+
+
+
+
+    <resultMap id="resultList" type="com.webdrp.entity.MerchantAnalysis" >
+        <id column="id" property="id" />
+        <result  column="richUserId" property="richUserId"/>
+        <result  column="managerId" property="managerId"/>
+        <result  column="dayCount" property="dayCount"/>
+        <result  column="sumCount" property="sumCount"/>
+        <result  column="teamCount" property="teamCount"/>
+        <result  column="vipCount" property="vipCount"/>
+        <result  column="createTime" property="createTime"/>
+        <result  column="updateTime" property="updateTime"/>
+    </resultMap>
+</mapper>
+

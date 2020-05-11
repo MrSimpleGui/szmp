@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.AddressConfigMapper">
+    <cache type="com.webdrp.config.MybatisRedisCache"/>
+    <insert id="insert" parameterType="com.webdrp.entity.AddressConfig"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into address_config(id,
+        code,
+        `name`,
+        pcode,
+        grade
+        )
+        values(#{id} ,
+        #{code},
+        #{name},
+        #{pcode},
+        #{grade})
+    </insert>
+    <!--sql片段，时间格式化-->
+    <sql id="select">
+          id,
+        code,
+        `name`,
+        pcode,
+        grade,DATE_FORMAT(createTime,'%Y-%m-%d %h:%i:%s')as createTime,DATE_FORMAT(updateTime,'%Y-%m-%d %h:%i:%s')as updateTime
+    </sql>
+
+    <select id="findAll" resultMap="resultList">
+        select
+         <include refid="select"/>
+         from address_config
+         where pcode = #{entity.pcode}
+    </select>
+
+
+
+    <resultMap id="resultList" type="com.webdrp.entity.AddressConfig" >
+        <id column="id" property="id" />
+        <result  column="name" property="name"/>
+        <result  column="code" property="code"/>
+        <result  column="pcode" property="pcode"/>
+        <result  column="grade" property="grade"/>
+        <result  column="createTime" property="createTime"/>
+        <result  column="updateTime" property="updateTime"/>
+    </resultMap>
+</mapper>
+

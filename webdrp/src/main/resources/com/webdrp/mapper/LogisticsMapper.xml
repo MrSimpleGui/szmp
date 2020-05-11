@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.LogisticsMapper">
+    <insert id="insert" parameterType="com.webdrp.entity.Logistics"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into logistics(
+        `number`,
+        orderId,
+        richUserId,
+        result
+        )
+        VALUE(
+        #{number},
+        #{orderId},
+        #{richUserId},
+        #{result}
+        )
+    </insert>
+
+
+    <update id="update" parameterType="com.webdrp.entity.Logistics">
+        UPDATE logistics
+        <set>
+
+            <if test="result !=null">
+                `result` = #{result},
+            </if>
+
+        </set>
+        where id = #{id} and deleteTime is NULL
+    </update>
+
+    <select id="findById" parameterType="int" resultType="com.webdrp.entity.Logistics">
+        SELECT
+          l.id AS  id,
+          l.number AS number,
+          DATE_FORMAT(l.createTime,'%Y-%m-%d %H:%i:%s')as createTime,
+          DATE_FORMAT(l.updateTime,'%Y-%m-%d %H:%i:%s')as updateTime,
+          l.orderId AS orderId,
+          l.richUserId AS richUserId,
+          l.result AS result
+           FROM logistics l
+           where l.id = #{id} and l.deleteTime is NULL
+    </select>
+
+    <select id="findByNumber" parameterType="java.lang.String" resultType="com.webdrp.entity.Logistics">
+        SELECT
+          l.id AS  id,
+          l.number AS number,
+          DATE_FORMAT(l.createTime,'%Y-%m-%d %H:%i:%s')as createTime,
+          DATE_FORMAT(l.updateTime,'%Y-%m-%d %H:%i:%s')as updateTime,
+          l.orderId AS orderId,
+          l.richUserId AS richUserId,
+          l.result AS result
+         FROM logistics  l
+         where l.`number` = #{number} and l.deleteTime is NULL
+    </select>
+</mapper>
+

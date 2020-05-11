@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title th:text="${product.name}"></title>
+	<link rel="stylesheet" href="dist/lib/weui.min.css" th:href="@{/dist/lib/weui.min.css}"/>
+	<link rel="stylesheet" href="dist/css/jquery-weui.min.css"  th:href="@{/dist/css/jquery-weui.min.css}"/>
+	<link rel="stylesheet" href="css/productDetail.css" th:href="@{/css/productDetail.css}" />
+	<script type="text/javascript" src="dist/lib/jquery-2.1.4.js" th:src="@{/dist/lib/jquery-2.1.4.js}"></script>
+	<link rel="stylesheet" href="css/header.min.css" th:href="@{/css/header.min.css}" />
+	<script  type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		ctxPath = /*[[@{/}]]*/ '';
+		/*]]>*/
+	</script>
+</head>
+
+<body>
+
+<div class="header">
+	<div class="goback">
+		<a href="javascript:history.back(-1)">
+			<img class="goback-img" src="img/goback.png" th:src="@{/img/goback.png}"/>
+		</a>
+	</div>
+	<div class="header-title">产品详情</div>
+	<div class="gohome"></div>
+</div>
+
+<!--banner-->
+<div class="swiper-container" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
+	<div class="swiper-wrapper">
+		<div class="swiper-slide" th:each="item : ${product.images}"><img src="testimg/001.jpg" th:src="${item.fullUrl}" alt=""></div>
+	</div>
+	<div class="swiper-pagination"></div>
+</div>
+<div class="product-price">
+	<font class="price-unit">￥</font>
+	<font class="price">
+		<i th:text="${minPrice}+'~'+${maxPrice}">~888</i>
+	</font>
+	<font class="price-unit-cn">元</font>
+</div>
+<div class="product-title">
+	<p>
+		<i>
+			<svg t="1581767335913" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2655" width="20" height="20"><path d="M423.477333 938.666667S45.045333 855.424 214.186667 442.282667c0 0 38.4 45.909333 33.12 68 0 0 30.101333-104.277333 95.072-166.570667C398.165333 290.186667 454.848 139.712 402.570667 85.333333c0 0 258.933333 54.378667 287.754666 326.378667 0 0 33.12-86.666667 101.12-95.232 0 0-20.906667 47.616 0 119.04 0 0 214.485333 367.146667-155.157333 491.242667 0 0 110.805333-125.813333-124.181333-341.717334 0 0-55.402667 115.626667-88.533334 156.373334-0.096 0.106667-92.522667 103.722667-0.096 197.248z" p-id="2656" fill="#ff0000"></path></svg>
+			<!--<svg t="1581767335913" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2655" width="25" height="25"><path d="M423.477333 938.666667S45.045333 855.424 214.186667 442.282667c0 0 38.4 45.909333 33.12 68 0 0 30.101333-104.277333 95.072-166.570667C398.165333 290.186667 454.848 139.712 402.570667 85.333333c0 0 258.933333 54.378667 287.754666 326.378667 0 0 33.12-86.666667 101.12-95.232 0 0-20.906667 47.616 0 119.04 0 0 214.485333 367.146667-155.157333 491.242667 0 0 110.805333-125.813333-124.181333-341.717334 0 0-55.402667 115.626667-88.533334 156.373334-0.096 0.106667-92.522667 103.722667-0.096 197.248z" p-id="2656" fill="#d81e06"></path></svg>-->
+			<!--<svg t="1581767163463" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="972" width="25" height="25"><path d="M300.091415 302.729405H179.5932L117.100802 946.628935h789.428677l-62.462421-643.89953h-120.508206v77.960616c0 13.759519-11.151506 24.911025-24.901033 24.911025h-24.911025c-13.759519 0-24.911025-11.151506-24.911024-24.911025v-77.960616H374.864459v77.960616c0 13.759519-11.151506 24.911025-24.911025 24.911025h-24.901033c-13.759519 0-24.911025-11.151506-24.911024-24.911025v-77.960616h-0.049962z m0-74.723082v-2.837838C300.091415 101.472706 394.249693 0.149886 511.800152 0.149886c117.570444 0 211.708737 101.322821 211.708738 225.018599v2.837838h165.753742c12.820235 0.009992 23.55206 9.752571 24.781124 22.512852L986.198794 994.022834a24.901032 24.901032 0 0 1-24.781124 27.319191H62.232596c-7.024649 0-13.71955-2.977732-18.445949-8.173774A24.908027 24.908027 0 0 1 37.44148 994.022834l72.155038-743.503659c1.229064-12.76028 11.950897-22.502859 24.791116-22.512852h165.733758-0.029977z m348.704385 0v-2.837838c0-83.586331-61.952809-150.295517-136.995648-150.295517-74.992877 0-136.985655 66.709186-136.985655 150.295517v2.837838H648.7958z m0 0" fill="#d81e06" p-id="973"></path></svg>-->
+		</i>
+		<font th:text="${product.name}">官方男鞋专业跑步鞋Zante系列 MZANPSE缓震</font>
+	</p>
+</div>
+<div class="product-others">
+	<div class="product-other">
+		<svg t="1581768518604" class="icon" style="transform: translate(0px, 18%);" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1707" width="16" height="16">
+			<path d="M511.412622 78.239945C274.270621 78.853929 81.830727 272.300756 82.44471 509.442758c0.626263 237.139955 194.072067 429.581895 431.213046 428.967912 237.132792-0.626263 429.569616-194.07309 428.956655-431.213046C942.001451 270.054599 748.554624 77.625962 511.412622 78.239945zM513.512447 883.07334c-206.635197 0.528026-375.190101-167.141718-375.730407-373.775892-0.528026-206.639291 167.141718-375.177821 373.775892-375.71915 206.639291-0.540306 375.177821 167.129438 375.71915 373.763612C887.818411 713.977108 720.148667 882.532011 513.512447 883.07334z" p-id="1708" fill="#0d9ff1"></path>
+			<path d="M744.822626 335.228971c-64.389496-53.508681-145.945977-82.873476-229.640144-82.651418-83.815941 0.221034-165.214832 30.002314-229.196029 83.8405l-6.777357 5.647627 0.26913 106.169041c0.405229 151.569044 90.50734 288.413735 229.554186 348.663958l7.489578 3.266393 7.735172-3.314489c138.688689-60.938907 228.042763-198.272739 227.637534-349.84383l-0.270153-106.166995L744.822626 335.228971zM517.440919 758.546186l-1.042749 0.490164-1.031493-0.490164c-120.106472-56.04955-197.941188-177.899736-198.285019-310.410726l-0.23536-88.49245 0.923022-0.715291c55.986105-44.134173 126.110209-68.548212 197.413162-68.735477 71.291696-0.183172 141.513014 23.863501 197.732433 67.705008l0.957815 0.711198 0.221034 88.496543C714.439642 579.649749 637.227096 701.894931 517.440919 758.546186z" p-id="1709" fill="#0d9ff1"></path>
+			<path d="M627.946732 570.694797l-91.270726 0 0-58.763358 53.863768 0c9.382695 0 17.020652-7.823176 17.020652-17.451464s-7.638981-17.463744-17.020652-17.463744l-53.863768 0 0-60.089563 68.895113 0c9.382695 0 16.996093-7.835456 16.996093-17.476023 0-9.628288-7.614421-17.451464-16.996093-17.451464l-176.868243 0c-9.382695 0-17.020652 7.823176-17.020652 17.451464 0 9.640568 7.638981 17.476023 17.020652 17.476023l73.92978 0 0 153.768129-33.968649 0L468.664006 484.876246c0-9.640568-7.614421-17.476023-16.996093-17.476023s-17.020652 7.835456-17.020652 17.476023l0 85.818551-32.200376 0c-9.382695 0-17.021675 7.835456-17.021675 17.46272 0 9.628288 7.638981 17.463744 17.021675 17.463744l225.499847 0c9.382695 0 17.020652-7.835456 17.020652-17.463744C644.967384 578.529229 637.328403 570.694797 627.946732 570.694797z" p-id="1710" fill="#0d9ff1"></path>
+		</svg>
+		正品保证
+	</div>
+	<div class="product-other">
+		<svg t="1581768880160" class="icon" style="transform: translate(0px, 18%);" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2232" width="16" height="16">
+			<path d="M512 0C448 0 384 12.8 326.4 32 320 38.4 320 44.8 320 51.2c0 6.4 12.8 12.8 19.2 6.4C390.4 38.4 454.4 25.6 512 25.6c268.8 0 486.4 217.6 486.4 486.4s-217.6 486.4-486.4 486.4S25.6 780.8 25.6 512c0-6.4-6.4-12.8-12.8-12.8S0 505.6 0 512c0 281.6 230.4 512 512 512s512-230.4 512-512S793.6 0 512 0z" p-id="2233" fill="#8a8a8a"></path>
+			<path d="M243.2 761.6c12.8 0 25.6-12.8 25.6-25.6L268.8 563.2c0 0 0-6.4 6.4-6.4L384 454.4c12.8-12.8 25.6-38.4 25.6-57.6l0-70.4c0-12.8 6.4-25.6 19.2-25.6l281.6 0c12.8 0 19.2 12.8 19.2 25.6l0 409.6c0 12.8 12.8 25.6 25.6 25.6s25.6-12.8 25.6-25.6L780.8 332.8c0-44.8-32-76.8-70.4-76.8L428.8 256C390.4 256 358.4 288 358.4 332.8l0 64c0 6.4-6.4 19.2-6.4 19.2L236.8 518.4C224 531.2 217.6 544 217.6 563.2l0 172.8C217.6 748.8 230.4 761.6 243.2 761.6z" p-id="2234" fill="#8a8a8a"></path>
+			<path d="M460.8 601.6l0-121.6c0-12.8-6.4-19.2-19.2-19.2 0 0 0 0 0 0-12.8 0-19.2 6.4-19.2 19.2l0 89.6L339.2 569.6C332.8 569.6 320 576 320 588.8c0 12.8 6.4 19.2 19.2 19.2L460.8 608z" p-id="2235" fill="#8a8a8a"></path>
+			<path d="M294.4 761.6c0 38.4 32 64 64 64 32 0 51.2-19.2 64-44.8L576 780.8c6.4 25.6 32 44.8 64 44.8 38.4 0 64-32 64-64 0-38.4-32-64-64-64-32 0-51.2 19.2-64 44.8L422.4 742.4c-6.4-25.6-32-44.8-64-44.8C326.4 691.2 294.4 723.2 294.4 761.6z" p-id="2236" fill="#8a8a8a"></path>
+		</svg>
+		顺丰包邮
+	</div>
+</div>
+<!--banner end-->
+
+
+<!--tabbar-->
+<div class="weui-tabbar" style="position: fixed;background: white;border-top: none;" id="tabbarBt">
+	<a href="index.html" class="weui-tabbar__item" th:href="@{/wechat/h5/index}">
+		<!--<span class="weui-badge" style="position: absolute;top: -.4em;right: 1em;">8</span>-->
+		<div class="weui-tabbar__icon">
+			<img src="dist/demos/images/icon_nav_button.png" th:src="@{/img/icon2/index-1.png}" alt="">
+		</div>
+		<p class="weui-tabbar__label">首页</p>
+	</a>
+	<a href="javascript:;" class="weui-tabbar__item">
+		<div class="weui-tabbar__icon">
+			<img src="dist/demos/images/icon_nav_dialog.png" th:src="@{/img/icon/share.png}" alt="">
+		</div>
+		<p class="weui-tabbar__label">分享</p>
+	</a>
+	<a href="javascript:;" class="weui-tabbar__item buyNow open-popup" id="selectPackage">
+		<p>立即购买</p>
+	</a>
+</div>
+<!--tabbar end-->
+
+<div class="product-context" th:utext="${product.context}">
+
+</div>
+
+<!--套餐选择-->
+<div id="packages" class='weui-popup__container popup-bottom'>
+	<div class="weui-popup__overlay"></div>
+	<div class="weui-popup__modal" style="background-color: white;">
+		<div class="toolbar">
+			<div class="toolbar-inner">
+				<a href="javascript:;" class="picker-button close-popup" id="closePackageSelect">关闭</a>
+				<h1 class="title">套餐选择</h1>
+			</div>
+		</div>
+		<div class="modal-content">
+			<div class="weui-cells weui-cells_checkbox">
+				<label class="weui-cell weui-check__label" for="s11" th:each="iitem : ${product.commodityStyleVoList}" th:for="${iitem.id}">
+					<div class="weui-cell__hd">
+						<input type="radio" class="weui-check" name="package1" id="s11" checked="checked" th:id="${iitem.id}" th:value="${iitem.id}">
+						<i class="weui-icon-checked"></i>
+					</div>
+					<div class="weui-cell__bd">
+						<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+							<div class="weui-media-box__hd">
+								<img class="weui-media-box__thumb" src="testimg/002.jpg" th:src="${iitem.images[0].fullUrl}">
+							</div>
+							<div class="weui-media-box__bd">
+								<h4 class="weui-media-box__title" th:text="${iitem.name}">产品名</h4>
+								<p class="weui-media-box__desc">价格￥<font style="color: red" th:text="${iitem.price}"></font></p>
+							</div>
+						</a>
+					</div>
+				</label>
+			</div>
+
+			<div class="weui-cell" style="background-color: white;">
+				<div class="weui-cell__bd">
+					<p>购买数量</p>
+				</div>
+				<div class="weui-cell__ft">
+					<div class="weui-count">
+						<a class="weui-count__btn weui-count__decrease"></a>
+						<input class="weui-count__number" type="number" disabled="disabled" value="1" style="width: 2.3rem;"  id="buyCount"/>
+						<a class="weui-count__btn weui-count__increase"></a>
+					</div>
+				</div>
+			</div>
+			<div style="height: 20vw;"></div>
+			<div class="tabBar">
+				<div class="bt-pay1" id="selectPackageToCollect">
+					加入购物车
+				</div>
+				<div class="bt-pay2" id="selectPackageToPay">
+					去支付
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+</div>
+<!--套餐选择 end-->
+<!--占位符-->
+<div style="height: 100px;"></div>
+<!--占位符 end-->
+
+</body>
+<!--轮播JS-->
+<script type='text/javascript' src='dist/js/swiper.js' th:src="@{/dist/js/swiper.js}" charset='utf-8'></script>
+<!--选择器-->
+<script src="dist/js/jquery-weui.js" th:src="@{/dist/js/jquery-weui.js}"></script>
+<script type="text/javascript" src="js/productDetail.js" th:src="@{/js/productDetail.js}"></script>
+</html>

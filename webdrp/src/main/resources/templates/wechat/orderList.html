@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>我的订单</title>
+		<link rel="stylesheet" href="dist/lib/weui.min.css" th:href="@{/dist/lib/weui.min.css}" />
+		<link rel="stylesheet" href="dist/css/jquery-weui.min.css"  th:href="@{/dist/css/jquery-weui.min.css}"/>
+		<script type="text/javascript" src="dist/lib/jquery-2.1.4.js" th:src="@{/dist/lib/jquery-2.1.4.js}"></script>
+		<link rel="stylesheet" href="css/orderList.css" th:href="@{/css/orderList.css}" />
+		<script  type="text/javascript" th:inline="javascript">
+			/*<![CDATA[*/
+			ctxPath = /*[[@{/}]]*/ '';
+			/*]]>*/
+		</script>
+	</head>
+
+	<body>
+		<div class="orderList" id="orderList">
+<!--			<div class="orderCard">-->
+<!--				<a href="orderDetail.html" th:href="@{/wechat/h5/orderDetail?id=12}">-->
+<!--					<div class="orderCell order-buttom-border">-->
+<!--						<div class="orderLabel orderTitle">订单号</div>-->
+<!--						<div class="labelTitle orderTitle">d121312312312123112</div>-->
+<!--					</div>-->
+<!--					<div class="orderCell">-->
+<!--						<div class="orderLabel">商品名称</div>-->
+<!--						<div class="labelTitle goods-card-title ">new Balance NB 官方男鞋专业跑步鞋Zante系 白色44码方男鞋专业跑步鞋Zante系 白色44码</div>-->
+<!--					</div>-->
+<!--					<div class="orderCell">-->
+<!--						<div class="orderLabel">下单时间</div>-->
+<!--						<div class="labelTitle">2018-09-09 11:11:11</div>-->
+<!--					</div>-->
+<!--					<div class="orderCell">-->
+<!--						<div class="orderLabel">价格</div>-->
+<!--						<div class="labelTitle">-->
+<!--							<font class="price-unit">￥</font>-->
+<!--							<font class="subprice">688</font>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--					<div class="orderCell order-buttom-border">-->
+<!--						<div class="orderLabel">订单状态</div>-->
+<!--						<div class="labelTitle">-->
+<!--							未支付-->
+<!--						</div>-->
+<!--					</div>-->
+<!--				</a>-->
+<!--				<div class=" text-right" style="margin-top: 2vw;">-->
+<!--					<a href="orderDetail.html" class="weui-btn weui-btn_mini weui-btn_primary" style="background-color:#ff5502 ;">去支付</a>-->
+<!--				</div>-->
+<!--			</div>-->
+		</div>
+
+		<!--加载更多-->
+		<div class="weui-loadmore" id="weui-loadmore">
+			<i class="weui-loading"></i>
+			<span class="weui-loadmore__tips">正在加载</span>
+		</div>
+
+		<!--空数据页	-->
+		<div class="weui-loadmore weui-loadmore_line" id="noData">
+			<span class="weui-loadmore__tips">暂无更多数据</span>
+		</div>
+		<!--空数据页	end-->
+
+		<!--底部 占位-->
+		<div style="height: 100px;"></div>
+		<!--tabbar-->
+		<div class="weui-tabbar" style="position: fixed;">
+			<a href="index.html" class="weui-tabbar__item" th:href="@{/wechat/h5/index}">
+				<!--<span class="weui-badge" style="position: absolute;top: -.4em;right: 1em;">8</span>-->
+				<div class="weui-tabbar__icon">
+					<img src="dist/demos/images/icon_nav_search_bar.png" th:src="@{/img/icon2/index-1.png}"  alt="">
+				</div>
+				<p class="weui-tabbar__label">商城</p>
+			</a>
+			<a href="javascript:;" class="weui-tabbar__item weui-bar__item--on">
+				<div class="weui-tabbar__icon">
+					<img src="dist/demos/images/icon_nav_msg.png" th:src="@{/img/icon2/order.png}" alt="">
+				</div>
+				<p class="weui-tabbar__label">订单</p>
+			</a>
+			<a href="javascript:;" class="weui-tabbar__item" th:href="@{/wechat/h5/shoppingCart}">
+				<div class="weui-tabbar__icon">
+					<img src="img/icon2/cart.png" alt="" th:src="@{/img/icon2/cart-1.png}">
+				</div>
+				<p class="weui-tabbar__label">购物车</p>
+			</a>
+			<a href="personal.html" class="weui-tabbar__item" th:href="@{/wechat/h5/personal}">
+				<div class="weui-tabbar__icon">
+					<img src="dist/demos/images/icon_nav_cell.png" th:src="@{/img/icon2/user-1.png}" alt="">
+				</div>
+				<p class="weui-tabbar__label">个人中心</p>
+			</a>
+		</div>
+		<!--tabbar end-->
+
+	</body>
+	<script type="text/javascript" src="dist/js/jquery-weui.js" th:src="@{/dist/js/jquery-weui.js}"></script>
+	<script type="text/javascript" th:src="@{/js/orderList.js}"></script>
+</html>

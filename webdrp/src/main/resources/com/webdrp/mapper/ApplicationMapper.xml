@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.ApplicationMapper">
+    <cache type="com.webdrp.config.MybatisRedisCache"/>
+    <insert id="insert" parameterType="com.webdrp.entity.Application"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into application(id,
+        realname,
+        tel,
+        csid,
+        sex,
+        wechat,
+        age,
+        signnum,
+        hascard,
+        csname,
+        richuserid,
+        note,
+        nickname,
+        applicationType,
+        applicationStatus)
+        values(#{id} ,
+        #{realName},
+        #{tel},
+        #{csid},
+        #{sex},
+        #{wechat},
+        #{age},
+        #{signNum},
+        #{hasCard},
+        #{csname},
+        #{richuserId},
+        #{note},
+        #{nickname},
+        #{applicationType},
+        #{applicationStatus}
+        )
+    </insert>
+    <!--sql片段，时间格式化-->
+    <sql id="select">
+          id,
+        realname,
+        tel,
+        csid,
+        sex,
+        wechat,
+        age,
+        signnum,
+        hascard,
+        csname,
+        richuserid,
+        note,
+        nickname,
+        applicationType,
+        applicationStatus,DATE_FORMAT(createTime,'%Y-%m-%d %h:%i:%s')as createTime,DATE_FORMAT(updateTime,'%Y-%m-%d %h:%i:%s')as updateTime
+    </sql>
+
+    <delete id="delete" parameterType="com.webdrp.entity.Application">
+        update application set deleteTime = NOW() where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.webdrp.entity.Application">
+        update application
+        <set>
+            <if test="id!=null">
+                id = #{id},
+            </if>
+            <if test="realName!=null">
+                realname = #{realName},
+            </if>
+            <if test="tel!=null">
+                tel = #{tel},
+            </if>
+            <if test="csid!=null">
+                csid = #{csid},
+            </if>
+            <if test="sex!=null">
+                sex = #{sex},
+            </if>
+            <if test="wechat!=null">
+                wechat = #{wechat},
+            </if>
+            <if test="age!=null">
+                age = #{age},
+            </if>
+            <if test="signNum!=null">
+                signnum = #{signNum},
+            </if>
+            <if test="hasCard!=null">
+                hascard = #{hasCard},
+            </if>
+            <if test="csname!=null">
+                csname = #{csname},
+            </if>
+            <if test="richuserId!=null">
+                richuserid = #{richuserId},
+            </if>
+            <if test="note!=null">
+                note = #{note},
+            </if>
+            <if test="nickname!=null">
+                nickname = #{nickname},
+            </if>
+            <if test="applicationType!=null">
+                applicationType = #{applicationType},
+            </if>
+            <if test="applicationStatus!=null">
+                applicationStatus = #{applicationStatus},
+            </if>
+            <if test="deleteTime!=null">
+                deleteTime = #{deleteTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findAll" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from application where deleteTime is NULL
+    </select>
+
+    <select id="findById" resultMap="resultList">
+        SELECT
+        <include refid="select"></include>
+         from application where deleteTime IS NULL  and id  = #{id}
+    </select>
+
+    <select id="loadAll" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from application
+        where deleteTime is null
+        <include refid="query"/>
+        order by id desc
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="findByRichUserId" parameterType="com.webdrp.entity.Application" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from application
+        where deleteTime is null
+        and richuserid = #{richuserId}
+        and applicationType = #{applicationType}
+        order by createTime desc
+    </select>
+
+    <select id="count" resultType="long">
+        select count(*)
+        from application
+        <include refid="query"/>
+    </select>
+
+    <sql id="query">
+        <if test="entity.id != null">
+            AND id=#{entity.id}
+        </if>
+        <if test="entity.realname != null">
+            AND realname=#{entity.realname}
+        </if>
+        <if test="entity.tel != null">
+            AND tel=#{entity.tel}
+        </if>
+        <if test="entity.csid != null">
+            AND csid=#{entity.csid}
+        </if>
+        <if test="entity.sex != null">
+            AND sex=#{entity.sex}
+        </if>
+        <if test="entity.wechat != null">
+            AND wechat=#{entity.wechat}
+        </if>
+        <if test="entity.age != null">
+            AND age=#{entity.age}
+        </if>
+        <if test="entity.signNum != null">
+            AND signnum=#{entity.signNum}
+        </if>
+        <if test="entity.hasCard != null">
+            AND hascard=#{entity.hasCard}
+        </if>
+        <if test="entity.csname != null">
+            AND csname=#{entity.csname}
+        </if>
+        <if test="entity.richuserId != null">
+            AND richuserid=#{entity.richuserId}
+        </if>
+        <if test="entity.note != null">
+            AND note=#{entity.note}
+        </if>
+        <if test="entity.nickname != null">
+            AND nickname=#{entity.nickname}
+        </if>
+        <if test="entity.applicationType != null">
+            AND applicationType=#{entity.applicationType}
+        </if>
+        <if test="entity.applicationStatus != null">
+            AND applicationStatus=#{entity.applicationStatus}
+        </if>
+    </sql>
+
+    <resultMap id="resultList" type="com.webdrp.entity.Application" >
+        <id column="id" property="id" />
+        <result  column="realname" property="realName"/>
+        <result  column="tel" property="tel"/>
+        <result  column="csid" property="csid"/>
+        <result  column="sex" property="sex"/>
+        <result  column="wechat" property="wechat"/>
+        <result  column="age" property="age"/>
+        <result  column="signnum" property="signNum"/>
+        <result  column="hascard" property="hasCard"/>
+        <result  column="csname" property="csname"/>
+        <result  column="richuserid" property="richuserId"/>
+        <result  column="note" property="note"/>
+        <result  column="nickname" property="nickname"/>
+        <result  column="applicationType" property="applicationType"/>
+        <result  column="applicationStatus" property="applicationStatus"/>
+        <result  column="createTime" property="createTime"/>
+        <result  column="updateTime" property="updateTime"/>
+    </resultMap>
+</mapper>
+

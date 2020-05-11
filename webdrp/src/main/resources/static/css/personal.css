@@ -1,0 +1,107 @@
+body {
+	background-color: #F8F8F8;
+}
+.personalData{
+	background-image: linear-gradient(to right, #ff8e05 , #ff5502);
+	height: 40vw;
+	display: flex;
+}
+.userData{
+	flex: 3;
+	color: white;
+	/*text-align: center;*/
+}
+
+
+
+.headImg{
+	/*flex: 2;*/
+	line-height: 40vw;
+}
+.headImg>img{
+	object-fit: cover;
+	width: 24vw;
+	height: 24vw;
+	margin: 8vw 4vw 8vw 8vw;
+	border-radius: 50%;
+}
+
+.list-block{
+	width: 100%;
+}
+
+.user-wallet{
+	background-color: white;
+	display: flex;
+	width: 98%;
+	box-sizing: border-box;
+	margin: 1vw;
+	padding: 1vw;
+}
+
+
+.wallet{
+	-webkit-flex: 1;
+	flex: 1;
+	text-align: center;
+}
+.wallet-number{
+	font-size: 4vw;
+	color: gray;
+}
+.data-float{
+	font-size: 3vw;
+}
+
+/*服务*/
+.service{
+	
+	/*display: flex;*/
+	width: 98%;
+	box-sizing: border-box;
+	margin: 0 1vw 1vw 1vw;
+	padding:0 1vw 1vw 1vw;
+	
+}
+.service-item{
+	background-color: white;
+	display: flex;
+	box-sizing: border-box;
+	margin-top: 2vw;
+	color: black;
+	text-decoration: none;
+}
+.service-img{
+	height: 12vw;	
+}
+
+.service-img-icon {
+	width: 8vw;
+	height: 8vw;
+	object-fit: cover;
+	margin:2vw;
+}
+
+.service-title{
+	-moz-box-flex: 1;
+	-webkit-flex: 1;
+	flex: 1;
+	line-height: 12vw;
+	text-indent: 2vw;
+}
+.weui-tabbar__item.weui-bar__item--on .weui-tabbar__label {
+    color: #ff7103;
+}
+
+.buyBanner{
+	width: 100%;
+	height: auto;
+	/*object-fit: cover;*/
+}
+
+.buyBannerDiv{
+	width: 98%;
+	box-sizing: border-box;
+	margin: 1vw;
+	padding: 1vw;
+}

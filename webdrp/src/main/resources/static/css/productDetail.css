@@ -1,0 +1,167 @@
+body {
+	background-color: #F8F8F8;
+}
+.swiper-slide{
+	height: 50vw;
+}
+
+/*2：1比例轮播图*/
+.swiper-slide>img {
+	/*保证比例不变形*/
+	object-fit: cover;
+	width: 100%;
+	height: 50vw;
+}
+
+.swiper-pagination>span {
+	width: 10vw;
+	border-radius: 2px;
+}
+
+
+/*轮播图点点点*/
+
+.swiper-pagination-bullet-active {
+	opacity: 1;
+	background: #8e1312;
+	height: 3px;
+}
+.swiper-pagination-bullet{
+	height: 3px;
+}
+
+.weui-tabbar:before {
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 1px;
+    border-top: none;
+    color: #c0bfc4;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(.5);
+    transform: scaleY(.5);
+}
+.buyNow{
+	-webkit-box-flex: 5;
+    -webkit-flex: 5;
+    flex: 5;
+    /*background-color: red;*/
+    font-size: 20px;
+    text-align: center;
+    line-height: 2.1;
+    color: white;
+	background-image: linear-gradient(to right, #ff8e05, #ff5502);
+    
+}
+.product-price{
+	width: 100%;
+	/*background-color: red;*/
+	color: white;
+	text-indent: 10px;
+	/*padding: 0 2%;*/
+	background-image: linear-gradient(to right, #ff7c00, red);
+}
+.price-unit {
+	font-size: 10px;
+}
+.price{
+	font-size: 24px;
+}
+.price-unit-cn{
+	font-size: 16px;
+}
+.product-others{
+	display: flex;
+	background-color: white;
+	font-size: 10px;
+	text-align: center;
+	margin-top: 1vw;
+	padding: 0.5vw 0;
+}
+.product-other{
+	-moz-box-flex: 1;
+	-ms-flex: 1;
+	flex: 1;
+	box-sizing: border-box;
+}
+.product-other:nth-child(odd){
+	border-right: 1px solid #F8F8F8;
+}
+
+.product-context img {
+	width: 100%;
+	vertical-align:top;
+}
+
+.product-context>img {
+	width: 100%;
+}
+
+
+.product-title{
+	background-color: white;
+	padding: 1vw 1%;
+	text-indent: 10px;
+}
+.product-context{
+	margin-top: 1vw;
+}
+.allPackages{
+	color: black;
+	margin: 0 2vw;
+	margin:2vw 0;
+}
+.allPackages>a {
+	color:black;
+	text-decoration: none;
+	border: 1px solid black;
+	margin: 5px 10px;
+}
+.weui-popup__modal{
+	min-height: 90vw;
+}
+.package{
+	
+}
+.tabBar{
+	position: absolute;
+	bottom: 1vw;
+	width: 100%;
+}
+.tabBar-btn{
+	width: 100%;
+	background-color: red;
+	color: white;
+	margin: 1vw 5vw;
+}
+.bt-pay{
+	background-color:red;
+	color: white;
+	width: 96%;
+	margin: 2vw 2%;
+	text-align: center;
+	padding: 1.5vw 0;
+}
+
+.bt-pay1 {
+	background-color: #FF7103;
+	color: white;
+	width: 45%;
+	margin: 2vw 1% 2vw 3%;
+	text-align: center;
+	padding: 1.5vw 0;
+	display: inline-block;
+}
+
+.bt-pay2 {
+	background-color: red;
+	color: white;
+	width: 45%;
+	margin: 2vw 3% 2vw 1%;
+	text-align: center;
+	padding: 1.5vw 0;
+	display: inline-block;
+}

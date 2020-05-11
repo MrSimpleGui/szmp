@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.CommodityStyleMapper">
+    <cache type="com.webdrp.config.MybatisRedisCache"/>
+    <insert id="insert" parameterType="com.webdrp.entity.CommodityStyle"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into commodityStyle(
+        commodityId,
+        `name`,
+        price,
+        stock,
+        normalPrice,
+        cost)
+        values(
+        #{commodityId},
+        #{name},
+        #{price},
+        #{stock},
+        #{normalPrice},
+        #{cost} )
+    </insert>
+
+    <update id="update" parameterType="com.webdrp.entity.CommodityStyle">
+        update commodityStyle
+        <set>
+            <!-- 不更新所属商品 -->
+            <!--<if test="commodityId != null">
+                commodityId=#{commodityId},
+            </if>-->
+            <if test="name != null">
+                name=#{name},
+            </if>
+            <if test="price != null">
+                price=#{price},
+            </if>
+            <if test="stock!=null">
+                stock=#{stock},
+            </if>
+
+            <if test="normalPrice != null">
+                normalPrice = #{normalPrice},
+            </if>
+            <if test="cost!=null">
+                cost=#{cost},
+            </if>
+            <if test="deleteTime != null">
+                deleteTime = #{deleteTime}
+            </if>
+        </set>
+        where id = #{id} AND deleteTime IS NULL
+    </update>
+
+    <update id="delete" parameterType="com.webdrp.entity.CommodityStyle">
+        update  commodityStyle
+        <set>
+            deleteTime = #{deleteTime}
+        </set>
+        where id = #{id} AND deleteTime IS NULL
+    </update>
+
+    <select id="findAll" parameterType="com.webdrp.entity.CommodityStyle" resultType="com.webdrp.entity.CommodityStyle">
+        select * from commodityStyle
+
+        where  deleteTime IS NULL
+    </select>
+
+    <!-- 暂定-->
+    <select id="loadAll" resultType="com.webdrp.entity.CommodityStyle">
+        select * from commodityStyle
+        where deleteTime IS NULL
+        <if test="entity.commodityId != null">
+            AND commodityId = #{entity.commodityId}
+        </if>
+        order by createTime desc
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="count" resultType="long">
+        select count(*) from commodityStyle
+
+        where  deleteTime IS NULL
+        <if test="entity.commodityId != null">
+            AND commodityId = #{entity.commodityId}
+        </if>
+    </select>
+
+
+    <!--通过商品id查找商品款式-->
+    <select id="loadCommodityStyleByCommodityId" parameterType="com.webdrp.entity.CommodityStyle"
+            resultType="com.webdrp.entity.CommodityStyle">
+        select * from commodityStyle
+        where commodityId = #{commodityId} AND deleteTime IS NULL
+    </select>
+
+    <select id="findById" parameterType="int" resultType="com.webdrp.entity.CommodityStyle">
+
+        select * from commodityStyle
+
+        where id = #{id} and deleteTime IS NULL
+    </select>
+
+
+    <!--根据id删除商品款式-->
+    <update id="deleteById" parameterType="com.webdrp.entity.CommodityStyle">
+        update commodityStyle
+        <set>
+            deleteTime = #{deleteTime}
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--根据商品的id删除-->
+    <update id="deleteByCommodityId" parameterType="com.webdrp.entity.CommodityStyle">
+        update commodityStyle
+        <set>
+            deleteTime = #{deleteTime}
+        </set>
+        where commodityId = #{commodityId}
+    </update>
+
+    <insert id="addCommodityStyleImage">
+        INSERT  INTO  commodityStyleImage (commodityStyleId,imageId)VALUES (#{commodityStyleId},#{imageId})
+    </insert>
+
+    <delete id="deleteCommodityStyleImageByCommodityStyleId" parameterType="com.webdrp.entity.CommodityStyle">
+        delete from commodityStyleImage
+
+        where commodityStyleId = #{id}
+    </delete>
+
+    <select id="findCommodityStyleImageByCommodityStyleId" parameterType="int" resultType="com.webdrp.entity.Image">
+        SELECT c.* FROM commodityStyle a, commodityStyleImage b ,image c
+        WHERE a.id = b.commodityStyleId AND b.imageId = c.id
+        AND a.deleteTime IS  NULL  AND  a.id = #{commodityStyleId}
+    </select>
+
+
+    <select id="findAllById" parameterType="integer" resultMap="resultAllList">
+        SELECT
+            cs.*,
+            image.id AS iid,
+            image.imageType,
+            image.fullUrl,
+            image.createTime as icreateTime
+        FROM
+            commodityStyle cs
+        LEFT JOIN commodityStyleImage csi ON cs.id = csi.commodityStyleId
+        LEFT JOIN image ON csi.imageId = image.id
+        WHERE
+            cs.id = #{id}
+    </select>
+
+    <select id="findLowestPriceByCommodityId" resultType="java.lang.Double">
+        select min(price)
+        from commoditystyle
+        where deleteTime is null
+        and commodityId = #{commodityId}
+    </select>
+
+    <resultMap id="resultAllList" type="com.webdrp.entity.vo.CommodityStyleVo">
+        <id column="id" property="id"/>
+        <result column="commodityId" property="commodityId"/>
+        <result column="name" property="name"/>
+        <result column="price" property="price"/>
+        <result column="stock" property="stock"/>
+        <result column="normalPrice" property="normalPrice"/>
+        <result column="cost" property="cost"/>
+        <result column="createTime" property="createTime"/>
+        <result column="updateTime" property="updateTime"/>
+        <result column="normalPrice" property="normalPrice"/>
+        <collection property="images" ofType="com.webdrp.entity.Image">
+            <id column="iid" property="id"/>
+            <id column="imageType" property="imageType"/>
+            <id column="fullUrl" property="fullUrl"/>
+            <id column="icreateTime" property="createTime"/>
+        </collection>
+    </resultMap>
+</mapper>
+

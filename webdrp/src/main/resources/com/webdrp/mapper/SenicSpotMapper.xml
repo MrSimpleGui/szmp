@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.SenicSpotMapper">
+    <insert id="insert" parameterType="com.webdrp.entity.SenicSpot"
+            useGeneratedKeys="true" keyProperty="id">
+         insert into senicspot(id,
+         senicId,
+         `name`,
+         longitude,
+         latitude
+         )
+         values(#{id},
+         #{senicId},
+         #{name},
+         #{longitude},
+         #{latitude}
+         )
+    </insert>
+    <!--sql片段，时间格式化-->
+    <sql id="select">
+          id,senicId,name,longitude,latitude,DATE_FORMAT(createTime,'%Y-%m-%d %h:%i:%s')as createTime,DATE_FORMAT(updateTime,'%Y-%m-%d %h:%i:%s')as updateTime
+    </sql>
+
+    <delete id="delete" parameterType="com.webdrp.entity.SenicSpot">
+        delete from senicspot where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.webdrp.entity.SenicSpot">
+        update senicspot
+        <set>
+            <if test="id!=null">
+                id = #{id},
+            </if>
+            <if test="senicId!=null">
+                senicId = #{senicId},
+            </if>
+            <if test="longitude!=null">
+                longitude = #{longitude},
+            </if>
+            <if test="latitude!=null">
+                latitude = #{latitude},
+            </if>
+            <if test="name!=null">
+                `name` = #{name},
+            </if>
+            <if test="createTime!=null">
+                createTime = #{createTime},
+            </if>
+            <if test="updateTime!=null">
+                updateTime = #{updateTime},
+            </if>
+            <if test="deleteTime!=null">
+                deleteTime = #{deleteTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findAll" resultMap="resultList">
+        select
+        <include refid="select"></include>
+        from senicspot where deleteTime is NULL
+        <if test="id!=null">
+            and id = #{id}
+        </if>
+    </select>
+
+    <select id="findById" resultMap="resultList">
+        SELECT
+        <include refid="select"></include>
+        from senicspot where deleteTime IS NULL  and id  = #{id}
+    </select>
+
+    <select id="findBySenicId" parameterType="string" resultMap="resultList">
+        select
+        <include refid="select"></include>
+        from senicspot
+        where   deleteTime IS NULL
+        and senicId = #{value}
+        limit 1
+    </select>
+
+
+    <!--longitude,-->
+    <!--latitude-->
+
+    <resultMap id="resultList" type="com.webdrp.entity.SenicSpot" >
+        <id column="id" property="id" />
+        <result  column="senicId" property="senicId"/>
+        <result  column="name" property="name"/>
+        <result  column="longitude" property="longitude"/>
+        <result  column="latitude" property="latitude"/>
+        <result  column="createTime" property="createTime"/>
+        <result  column="updateTime" property="updateTime"/>
+    </resultMap>
+</mapper>
+

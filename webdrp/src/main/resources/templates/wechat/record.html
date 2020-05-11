@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>提现记录</title>
+		<link rel="stylesheet" href="dist/lib/weui.min.css" th:href="@{/dist/lib/weui.min.css}" />
+		<link rel="stylesheet" href="dist/css/jquery-weui.min.css" th:href="@{/dist/css/jquery-weui.min.css}" />
+		<script type="text/javascript" src="dist/lib/jquery-2.1.4.js" th:src="@{/dist/lib/jquery-2.1.4.js}"></script>
+		<link rel="stylesheet" href="css/header.min.css" th:href="@{/css/header.min.css}"/>
+		<link rel="stylesheet" href="css/income.css" th:href="@{/css/income.css}" />
+		<script  type="text/javascript" th:inline="javascript">
+			/*<![CDATA[*/
+			ctxPath = /*[[@{/}]]*/ '';
+			/*]]>*/
+		</script>
+	</head>
+
+	<body>
+		<div class="header">
+			<div class="goback">
+				<a href="javascript:history.back(-1)">
+					<img class="goback-img" src="img/goback.png" th:src="@{/img/goback.png}" />
+				</a>
+			</div>
+			<div class="header-title">提现记录</div>
+			<div class="gohome"></div>
+		</div>
+
+		<div class="incomeList" id="incomeList">
+
+		</div>
+		<!--加载更多-->
+		<div class="weui-loadmore" id="weui-loadmore">
+			<i class="weui-loading"></i>
+			<span class="weui-loadmore__tips">正在加载</span>
+		</div>
+		<!--加载更多 end-->
+		<!--空数据页	-->
+		<div class="weui-loadmore weui-loadmore_line" id="noData">
+			<span class="weui-loadmore__tips">暂无更多数据</span>
+		</div>
+		<!--空数据页	end-->
+
+	</body>
+	<script type="text/javascript" src="dist/js/jquery-weui.js" th:src="@{/dist/js/jquery-weui.js}"></script>
+	<script type="text/javascript" th:src="@{/js/record.js}"></script>
+<!--	<script>-->
+<!--		$("#noData").hide()-->
+<!--		var kk = 0;-->
+
+<!--		function getListData() {-->
+<!--			// 模拟数据-->
+<!--			for(var i = 0; i < 10; i++) {-->
+<!--				kk++;-->
+<!--				console.log(kk)-->
+<!--				$("#incomeList").append('<div class="incomeCard">' +-->
+<!--					'<div class="incomeCardCell">' +-->
+<!--					'<div class="incomeItem incomePrice">' +-->
+<!--					'<font class="price">'+kk+'.00元</font>' +-->
+<!--					'</div>' +-->
+<!--					'</div>' +-->
+<!--					'<div class="recordCardCell">' +-->
+<!--					'<div class="recordItem">' +-->
+<!--					'<p>状&nbsp;&nbsp;&nbsp;态</p>' +-->
+<!--					'</div>' +-->
+<!--					'<div class="recordItemData">' +-->
+<!--					'<p class="colorGreen">成功/失败</p>' +-->
+<!--					'</div>' +-->
+<!--					'</div>' +-->
+<!--					'<div class="recordCardCell">' +-->
+<!--					'<div class="recordItem">' +-->
+<!--					'<p>姓&nbsp;&nbsp;&nbsp;名</p>' +-->
+<!--					'</div>' +-->
+<!--					'<div class="recordItemData">' +-->
+<!--					'<p>张张张</p>' +-->
+<!--					'</div>' +-->
+<!--					'</div>' +-->
+<!--					'<div class="recordCardCell">' +-->
+<!--					'<div class="recordItem">' +-->
+<!--					'<p>支付宝帐号</p>' +-->
+<!--					'</div>' +-->
+<!--					'<div class="recordItemData">' +-->
+<!--					'<p>kkk99213122133123</p>' +-->
+<!--					'</div>' +-->
+<!--					'</div>' +-->
+<!--					'<div class="recordCardCell">' +-->
+<!--					'<div class="recordItem">' +-->
+<!--					'<p>发起时间</p>' +-->
+<!--					'</div>' +-->
+<!--					'<div class="recordItemData">' +-->
+<!--					'<span>2018-09-09 11:11:11</span>' +-->
+<!--					'</div>' +-->
+<!--					'</div>' +-->
+<!--					'</div>');-->
+<!--				loading = false-->
+<!--				if(kk == 20) {-->
+<!--					$("#noData").show()-->
+<!--					loading = true-->
+<!--				}-->
+<!--			}-->
+<!--		}-->
+<!--		getListData()-->
+<!--	</script>-->
+<!--	<script>-->
+<!--		var loading = false;-->
+<!--		$("#weui-loadmore").hide();-->
+<!--		$(document.body).infinite().on("infinite", function() {-->
+<!--			if(loading)-->
+<!--				return;-->
+<!--			$("#weui-loadmore").show()-->
+<!--			getListData()-->
+<!--			$("#weui-loadmore").hide();-->
+<!--		});-->
+<!--	</script>-->
+
+</html>

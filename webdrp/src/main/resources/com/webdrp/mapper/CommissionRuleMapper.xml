@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.CommissionRuleMapper">
+
+    <insert id="insert" parameterType="com.webdrp.entity.CommissionRule"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into commissionrule(id,
+        gradeRank,
+        modeId,
+        type,
+        firstLevel,
+        secondLevel,
+        teamReward,
+        sidewayCommission,
+        sidewayNumber,
+        commissionProp)
+        values(#{id},
+        #{gradeRank},
+        #{modeId},
+        #{type},
+        #{firstLevel},
+        #{secondLevel},
+        #{teamReward},
+        #{sidewayCommission},
+        #{sidewayNumber},
+        #{commissionProp} )
+    </insert>
+
+    <update id="deleteByModeId">
+        update commissionrule
+        <set>
+            deleteTime = #{deleteTime}
+        </set>
+        where modeId = #{modeId}
+    </update>
+
+    <update id="deleteByGradeRank">
+        update commissionrule
+        <set>
+            deleteTime = #{deleteTime}
+        </set>
+        where gradeRank = #{gradeRank}
+    </update>
+
+    <!--sql片段，时间格式化-->
+    <sql id="select">
+          id,gradeRank,modeId,type,firstLevel,secondLevel,teamReward,sidewayCommission,sidewayNumber,commissionProp,DATE_FORMAT(createTime,'%Y-%m-%d %H:%i:%s')as createTime,DATE_FORMAT(updateTime,'%Y-%m-%d %H:%i:%s')as updateTime
+    </sql>
+
+    <update id="delete" parameterType="com.webdrp.entity.CommissionRule">
+        update commissionrule
+        <set>
+            deleteTime = #{deleteTime}
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="update" parameterType="com.webdrp.entity.CommissionRule">
+        update commissionrule
+        <set>
+            <if test="id!=null">
+                id = #{id},
+            </if>
+            <if test="gradeRank!=null">
+                gradeRank = #{gradeRank},
+            </if>
+            <if test="modeId!=null">
+                modeId = #{modeId},
+            </if>
+            <if test="type!=null">
+                type = #{type},
+            </if>
+            <if test="firstLevel!=null">
+                firstLevel = #{firstLevel},
+            </if>
+            <if test="secondLevel!=null">
+                secondLevel = #{secondLevel},
+            </if>
+            <if test="teamReward!=null">
+                teamReward = #{teamReward},
+            </if>
+            <if test="sidewayCommission!=null">
+                sidewayCommission = #{sidewayCommission},
+            </if>
+            <if test="sidewayNumber!=null">
+                sidewayNumber = #{sidewayNumber},
+            </if>
+            <if test="commissionProp!=null">
+                commissionProp = #{commissionProp},
+            </if>
+            <if test="createTime!=null">
+                createTime = #{createTime},
+            </if>
+            <if test="updateTime!=null">
+                updateTime = #{updateTime},
+            </if>
+            <if test="deleteTime!=null">
+                deleteTime = #{deleteTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findAll" resultMap="resultList">
+        select
+        <include refid="select"></include>
+        from commissionrule where deleteTime is NULL
+        <if test="entity.id!=null">
+            and id = #{entity.id}
+        </if>
+        <if test="entity.gradeRank!=null">
+            and gradeRank = #{entity.gradeRank}
+        </if>
+        <if test="entity.modeId!=null">
+            and modeId = #{entity.modeId}
+        </if>
+        <if test="entity.type!=null">
+            and type = #{entity.type}
+        </if>
+        <if test="entity.firstLevel!=null">
+            and firstLevel = #{entity.firstLevel}
+        </if>
+        <if test="entity.secondLevel!=null">
+            and secondLevel = #{entity.secondLevel}
+        </if>
+        <if test="entity.teamReward!=null">
+            and teamReward = #{entity.teamReward}
+        </if>
+        <if test="entity.sidewayCommission!=null">
+            and sidewayCommission = #{entity.sidewayCommission}
+        </if>
+        <if test="entity.sidewayNumber!=null">
+            and sidewayNumber = #{entity.sidewayNumber}
+        </if>
+        <if test="entity.commissionProp!=null">
+            and commissionProp = #{entity.commissionProp}
+        </if>
+        <if test="entity.createTime!=null">
+            and createTime = #{entity.createTime}
+        </if>
+        <if test="entity.updateTime!=null">
+            and updateTime = #{entity.updateTime}
+        </if>
+        <if test="entity.deleteTime!=null">
+            and deleteTime = #{entity.deleteTime}
+        </if>
+    </select>
+
+    <select id="findById" resultMap="resultList">
+        SELECT
+        <include refid="select"></include>
+        from commissionrule where deleteTime IS NULL  and id  = #{id}
+    </select>
+
+    <select id="count" resultType="long">
+        select
+        count(*)
+        from commissionrule
+        where deleteTime is NULL
+        <include refid="query"/>
+    </select>
+
+    <select id="loadAll" resultMap="resultVo">
+        select
+        <include refid="select"/>
+        from commissionrule
+        where deleteTime is NULL
+        <include refid="query"/>
+        order by createTime desc
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="findRuleByModeIds" resultType="com.webdrp.entity.CommissionRule">
+        select
+        <include refid="select"/>
+        from commissionrule
+        where deleteTime is NULL
+        and modeId in
+        <foreach collection="modeIdList" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <sql id="query">
+        <if test="entity.id!=null">
+            and id = #{entity.id}
+        </if>
+        <if test="entity.gradeRank!=null">
+            and gradeRank = #{entity.gradeRank}
+        </if>
+        <if test="entity.modeId!=null">
+            and modeId = #{entity.modeId}
+        </if>
+        <if test="entity.type!=null">
+            and type = #{entity.type}
+        </if>
+        <if test="entity.firstLevel!=null">
+            and firstLevel = #{entity.firstLevel}
+        </if>
+        <if test="entity.secondLevel!=null">
+            and secondLevel = #{entity.secondLevel}
+        </if>
+        <if test="entity.teamReward!=null">
+            and teamReward = #{entity.teamReward}
+        </if>
+        <if test="entity.sidewayCommission!=null">
+            and sidewayCommission = #{entity.sidewayCommission}
+        </if>
+        <if test="entity.sidewayNumber!=null">
+            and sidewayNumber = #{entity.sidewayNumber}
+        </if>
+        <if test="entity.commissionProp!=null">
+            and commissionProp = #{entity.commissionProp}
+        </if>
+        <if test="entity.createTime!=null">
+            and createTime = #{entity.createTime}
+        </if>
+        <if test="entity.updateTime!=null">
+            and updateTime = #{entity.updateTime}
+        </if>
+    </sql>
+
+    <resultMap id="resultList" type="com.webdrp.entity.CommissionRule" >
+        <id column="id" property="id" />
+        <result  column="gradeRank" property="gradeRank"/>
+        <result  column="modeId" property="modeId"/>
+        <result  column="type" property="type"/>
+        <result  column="firstLevel" property="firstLevel"/>
+        <result  column="secondLevel" property="secondLevel"/>
+        <result  column="teamReward" property="teamReward"/>
+        <result  column="sidewayCommission" property="sidewayCommission"/>
+        <result  column="sidewayNumber" property="sidewayNumber"/>
+        <result  column="commissionProp" property="commissionProp"/>
+        <result  column="createTime" property="createTime"/>
+        <result  column="updateTime" property="updateTime"/>
+    </resultMap>
+
+    <resultMap id="resultVo" type="com.webdrp.entity.vo.CommissionRuleVo" extends="resultList">
+        <association property="gradeName" javaType="string" column="gradeRank"
+                select="com.webdrp.mapper.GradeMapper.findGradeNameByGradeRank"/>
+    </resultMap>
+
+</mapper>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>小野集市</title>
+    <link rel="stylesheet" href="dist/lib/weui.min.css" th:href="@{/dist/lib/weui.min.css}"/>
+    <link rel="stylesheet" href="dist/css/jquery-weui.min.css"  th:href="@{/dist/css/jquery-weui.min.css}"/>
+    <!--自定义样式-->
+    <link rel="stylesheet" href="css/v1/index.css" th:href="@{/css/v1/index.css}"/>
+    <!--轮播依赖-->
+    <script type="text/javascript" src="dist/lib/jquery-2.1.4.js" th:src="@{/dist/lib/jquery-2.1.4.js}"></script>
+    <script type="text/javascript" src="dist/js/jquery-weui.js" th:src="@{/dist/js/jquery-weui.js}"></script>
+    <link rel="stylesheet" href="css/header.min.css" th:href="@{/css/header.min.css}"/>
+    <script  type="text/javascript" th:inline="javascript">
+      /*<![CDATA[*/
+      ctxPath = /*[[@{/}]]*/ '';
+      /*]]>*/
+    </script>
+  </head>
+
+  <body>
+    <!--banner-->
+    <div class="swiper-container swiper1" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
+      <div class="swiper-wrapper swp_1">
+
+      </div>
+      <div class="swiper-pagination swp1"></div>
+    </div>
+    <!--banner end-->
+
+    <!--分类 category-->
+    <div class="weui-grids" style="background-color: white;">
+      <ul class="swiperMenu">
+      </ul>
+    </div>
+    <!--category end -->
+
+
+    <!--advertising Map-->
+    <div class="swiper-container swiper2" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
+      <div class="swiper-wrapper swp_2">
+    
+      </div>
+      <div class="swiper-pagination swp2"></div>
+    </div>
+    <!-- <img class="advertisingMapImg" src="img/icon/advertisingMap.png"> -->
+    <!--advertising Map end-->
+
+    <!--goods list-->
+    <div class="goods-lists clearfix">
+      <div class="goods-list clearfix" id="goodsList">
+      </div>
+    </div>
+    <!--goods list end-->
+
+    <!--加载更多-->
+    <div class="weui-loadmore" id="weui-loadmore">
+      <i class="weui-loading"></i>
+      <span class="weui-loadmore__tips">正在加载</span>
+    </div>
+
+    <div style="height: 100px;"></div>
+
+    <!--tabbar-->
+    <div class="weui-tabbar" style="position: fixed;">
+      <a href="javascript:;" class="weui-tabbar__item weui-bar__item--on">
+        <div class="weui-tabbar__icon">
+          <img src="dist/demos/images/icon_nav_search_bar.png" th:src="@{/img/icon2/index.png}" alt="">
+        </div>
+        <p class="weui-tabbar__label">首页</p>
+      </a>
+      <a href="" th:href="@{/wechat/h5/orderList}" class="weui-tabbar__item">
+        <div class="weui-tabbar__icon">
+          <img src="dist/demos/images/icon_nav_msg.png" th:src="@{/img/icon2/order-1.png}" alt="">
+        </div>
+        <p class="weui-tabbar__label">订单</p>
+      </a>
+      <a href="javascript:;" class="weui-tabbar__item" th:href="@{/wechat/h5/shoppingCart}">
+        <div class="weui-tabbar__icon">
+          <img src="img/icon2/cart.png" alt="" th:src="@{/img/icon2/cart-1.png}">
+        </div>
+        <p class="weui-tabbar__label">购物车</p>
+      </a>
+      <a href="personal.html" th:href="@{/wechat/h5/personal}" class="weui-tabbar__item">
+        <div class="weui-tabbar__icon">
+          <img src="dist/demos/images/icon_nav_cell.png" th:src="@{/img/icon2/user-1.png}" alt="">
+        </div>
+        <p class="weui-tabbar__label">个人中心</p>
+      </a>
+    </div>
+    <!--tabbar end-->
+  </body>
+  <script type='text/javascript' src='dist/js/swiper.js' charset='utf-8' th:src="@{/dist/js/swiper.js}"></script>
+  <script type="text/javascript" src="dist/js/jquery-weui.js" th:src="@{/dist/js/jquery-weui.js}"></script>
+  <script type="text/javascript" src="js/v1/index.js" th:src="@{/js/v1/index.js}"></script>
+
+</html>

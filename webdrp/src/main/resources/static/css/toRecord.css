@@ -1,0 +1,33 @@
+body {
+	background-color: white;
+}
+
+.record-wallet{
+	background-image: linear-gradient(to right, #ff8e05 , #ff5502);
+	height: 40vw;
+	display: flex;
+	margin-top: -1vw;
+	line-height: 40vw;
+	text-align: center;
+}
+
+.record-title{
+	flex: 1;
+	color: white;
+	font-size: 5vw;
+}
+.record-data{
+	flex: 2;
+	color: white;
+	font-size: 16vw;
+	text-align: left;
+}
+.price-float{
+	font-size: 10vw;
+}
+.bt-record{
+	width: 100%;
+	padding: 10vw 10vw 20vw 10vw;
+	box-sizing: border-box;
+	background-color: white;
+}

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.ConfigMapper">
+    <insert id="insert" parameterType="com.webdrp.entity.Config"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into config(id,
+
+        )
+        values(#{id} ,
+
+        )
+    </insert>
+    <!--sql片段，时间格式化-->
+    <sql id="select">
+          id,configKey,status,val,val1,note,note1,note2,DATE_FORMAT(createTime,'%Y-%m-%d %H:%i:%s')as createTime,DATE_FORMAT(updateTime,'%Y-%m-%d %H:%i:%s')as updateTime
+    </sql>
+
+    <!--<delete id="delete" parameterType="com.webdrp.entity.Image">-->
+        <!--delete from config where id = #{id}-->
+    <!--</delete>-->
+
+    <update id="update" parameterType="com.webdrp.entity.Config">
+        update config
+        <set>
+            <if test="id!=null">
+                id = #{id},
+            </if>
+            <if test="configKey!=null">
+                configKey = #{configKey},
+            </if>
+            <if test="status!=null">
+                status = #{status},
+            </if>
+            <if test="val!=null">
+                 val = #{val},
+            </if>
+            <if test="val1!=null">
+                 val1 = #{val1},
+            </if>
+            <if test="note!=null">
+                note = #{note},
+            </if>
+            <if test="note1!=null">
+                note1 = #{note1},
+            </if>
+            <if test="note2!=null">
+                note2 = #{note2},
+            </if>
+            <if test="deleteTime!=null">
+                deleteTime = #{deleteTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateKefu" parameterType="com.webdrp.entity.Config">
+         update config set note = #{note} where  configKey = #{configKey}
+    </update>
+
+    <update id="updateDownload">
+        update config
+        <set>
+            <if test="configKey!=null">
+                configKey = #{configKey},
+            </if>
+            <if test="status!=null">
+                status = #{status},
+            </if>
+            <if test="val!=null">
+                val = #{val},
+            </if>
+            <if test="val1!=null">
+                val1 = #{val1},
+            </if>
+            <if test="note!=null">
+                note = #{note},
+            </if>
+            <if test="note1!=null">
+                note1 = #{note1},
+            </if>
+            <if test="note2!=null">
+                note2 = #{note2},
+            </if>
+            <if test="deleteTime!=null">
+                deleteTime = #{deleteTime},
+            </if>
+        </set>
+        where deleteTime is null
+        and configKey = #{configKey}
+    </update>
+
+    <select id="findKefu" resultType="com.webdrp.entity.Config">
+        SELECT
+        <include refid="select"/>
+        from config where deleteTime IS NULL  and configKey  = #{configKey}
+    </select>
+
+    <select id="findCanPay" parameterType="com.webdrp.entity.Config" resultType="com.webdrp.entity.Config">
+        SELECT
+        <include refid="select"/>
+        from config where deleteTime IS NULL  and configKey  = #{configKey}
+    </select>
+
+    <select id="findAll" resultMap="resultList">
+        select
+        <include refid="select"></include>
+        from config where deleteTime is NULL
+
+
+
+    </select>
+
+    <select id="findByKey" resultMap="resultList">
+        SELECT
+        <include refid="select"></include>
+         from config where deleteTime IS NULL  and configKey  = #{configKey}
+    </select>
+
+    <select id="findByKeyOne" resultMap="resultList">
+        SELECT
+        <include refid="select"></include>
+        from config where deleteTime IS NULL  and configKey  = #{configKey} limit 1
+    </select>
+
+    <update id="updateByKey">
+
+    </update>
+
+
+    <resultMap id="resultList" type="com.webdrp.entity.Config" >
+        <id column="id" property="id" />
+        <result column="configKey" property="configKey"/>
+        <result column="status" property="status"/>
+        <result column="val" property="val"/>
+        <result column="val1" property="val1"/>
+        <result column="note" property="note"/>
+        <result column="note1" property="note1"/>
+        <result column="note2" property="note2"/>
+        <result  column="createTime" property="createTime"/>
+        <result  column="updateTime" property="updateTime"/>
+    </resultMap>
+</mapper>
+

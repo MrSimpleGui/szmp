@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.MenuMapper">
+    <insert id="insert" parameterType="com.webdrp.entity.Menu"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into menu(id,
+        pid,
+        name,
+        sort,
+        imgUrl,
+        publish,
+        `type`)
+        values(#{id},
+        #{pid},
+        #{name},
+        #{sort},
+        #{imgUrl},
+        #{publish},
+        #{type})
+    </insert>
+
+    <update id="deleteBatchByIds" parameterType="list">
+        update menu
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="deleteTime=case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id=#{item.id} then #{item.deleteTime}
+                </foreach>
+            </trim>
+        </trim>
+        where deleteTime is null
+        and id in
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <!--sql片段，时间格式化-->
+    <sql id="select">
+          id,pid,name,sort,imgUrl,publish,`type`,DATE_FORMAT(createTime,'%Y-%m-%d %H:%i:%s')as createTime,DATE_FORMAT(updateTime,'%Y-%m-%d %H:%i:%s')as updateTime
+    </sql>
+
+    <update id="delete" parameterType="com.webdrp.entity.Menu">
+        update  menu
+        SET deleteTime=#{deleteTime}
+        where id = #{id}
+    </update>
+
+    <update id="update" parameterType="com.webdrp.entity.Menu">
+        update menu
+        <set>
+            <if test="id!=null">
+                id = #{id},
+            </if>
+            <if test="pid!=null">
+                pid = #{pid},
+            </if>
+            <if test="name!=null">
+                name = #{name},
+            </if>
+            <if test="sort!=null">
+                sort = #{sort},
+            </if>
+            <if test="imgUrl!=null">
+                imgUrl = #{imgUrl},
+            </if>
+            <if test="createTime!=null">
+                createTime = #{createTime},
+            </if>
+            <if test="updateTime!=null">
+                updateTime = #{updateTime},
+            </if>
+            <if test="publish!=null">
+                publish = #{publish},
+            </if>
+            <if test="type!=null">
+                type = #{type},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="publishByMenuIds">
+        update menu
+        set publish = #{publish}
+        where deleteTime is null
+        and id in
+        <foreach collection="menuIdList" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="findAll" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from menu
+        where deleteTime is NULL
+        <include refid="query"/>
+        order by createTime desc
+    </select>
+
+    <select id="count" resultType="long">
+        select
+        count(*)
+        from menu
+        where deleteTime is NULL
+        <if test="entity.pid==null">
+            and pid is null
+        </if>
+        <include refid="query"/>
+    </select>
+
+    <select id="loadAll" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from menu
+        where deleteTime is NULL
+        <if test="entity.pid==null">
+            and pid is null
+        </if>
+        <include refid="query"/>
+        order by createTime desc
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="findById" resultMap="resultList">
+        SELECT
+        <include refid="select"/>
+        from menu
+        where deleteTime IS NULL
+        and id = #{id}
+    </select>
+
+    <select id="findFirstMenu" resultType="com.webdrp.entity.Menu">
+        select
+        <include refid="select"/>
+        from menu
+        where deleteTime is null
+        and pid is null
+        <include refid="query"/>
+        order by sort desc
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="findSecondMenu" resultType="com.webdrp.entity.Menu">
+        select
+        <include refid="select"/>
+        from menu
+        where deleteTime is null
+        and `type` = 0
+        <include refid="query"/>
+        order by sort desc
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="findMenuByPidWithPublish" resultType="com.webdrp.entity.Menu">
+        select
+        <include refid="select"/>
+        from menu
+        where deleteTime is null
+        and publish = #{publish}
+        and pid = #{pid}
+        order by sort desc
+    </select>
+
+    <select id="findFunctionMenu" resultType="com.webdrp.entity.Menu">
+        select
+        <include refid="select"/>
+        from menu
+        where deleteTime is null
+        and publish = 1
+        and `type` != 0
+        order by sort desc
+    </select>
+
+    <select id="findMenuByPid" resultType="com.webdrp.entity.Menu">
+        select
+        <include refid="select"/>
+        from menu
+        where deleteTime is null
+        order by sort desc
+    </select>
+
+    <select id="findAllFirstMenu" resultType="com.webdrp.entity.Menu">
+        select
+        <include refid="select"/>
+        from menu
+        where deleteTime is NULL
+        and pid is null
+        <include refid="query"/>
+        order by createTime desc
+    </select>
+
+    <select id="findNameById" resultType="java.lang.String">
+        select name
+        from menu
+        where deleteTime is null
+        and id = #{id}
+    </select>
+
+    <sql id="query">
+        <if test="entity.id!=null">
+            and id = #{entity.id}
+        </if>
+        <if test="entity.pid!=null">
+            and pid = #{entity.pid}
+        </if>
+        <if test="entity.name!=null">
+            and name = #{entity.name}
+        </if>
+        <if test="entity.sort!=null">
+            and sort = #{entity.sort}
+        </if>
+        <if test="entity.imgUrl!=null">
+            and imgUrl = #{entity.imgUrl}
+        </if>
+        <if test="entity.publish!=null">
+            AND publish=#{entity.publish}
+        </if>
+        <if test="entity.type!=null">
+            AND type=#{entity.type}
+        </if>
+    </sql>
+
+    <resultMap id="resultList" type="com.webdrp.entity.Menu" >
+        <id column="id" property="id" />
+        <result column="pid" property="pid" />
+        <result column="name" property="name" />
+        <result column="sort" property="sort" />
+        <result column="imgUrl" property="imgUrl" />
+        <result column="publish" property="publish" />
+        <result column="type" property="type" />
+        <result  column="createTime" property="createTime"/>
+        <result  column="updateTime" property="updateTime"/>
+    </resultMap>
+
+
+</mapper>

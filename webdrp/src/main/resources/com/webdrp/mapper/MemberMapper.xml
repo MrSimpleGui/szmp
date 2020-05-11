@@ -1,0 +1,616 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.MemberMapper">
+    <insert id="insert" parameterType="com.webdrp.entity.Member"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into member(id,
+        zid,
+        jid,
+        status,
+        nickname,
+        wallet,
+        grade,
+        headImg,
+        openid,
+        openidwx,
+        openid1,
+        openid1wx,
+        isSubscribe,
+        sex,
+        city,
+        country,
+        province,
+        cityId,
+        path,
+        unionId)
+        values(#{id} ,
+        #{zid} ,
+        #{jid} ,
+        #{status} ,
+        #{nickname} ,
+        #{wallet} ,
+        #{grade},
+        #{headImg},
+        #{openid},
+        #{openidwx},
+        #{openid1},
+        #{openid1wx},
+        #{isSubscribe},
+        #{sex},
+        #{city},
+        #{country},
+        #{province},
+        #{cityId},
+        #{path},
+        #{unionId})
+    </insert>
+
+    <insert id="register" parameterType="com.webdrp.entity.Member"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into member(id,
+        zid,
+        jid,
+        status,
+        nickname,
+        wallet,
+        grade,
+        username,
+        password,
+        unionId
+        )
+        values(#{id} ,
+        #{zid} ,
+        #{jid} ,
+        #{status} ,
+        #{nickname} ,
+        #{wallet} ,
+        #{grade},
+        #{username},
+        #{password},
+        unionId
+        )
+    </insert>
+
+    <sql id="select">
+        id,
+        zid,
+        jid,
+        status,
+        nickname,
+        wallet,
+        DATE_FORMAT(createTime,'%Y-%m-%d %H:%i:%s')as createTime,
+        DATE_FORMAT(updateTime,'%Y-%m-%d %H:%i:%s')as updateTime,
+        grade,
+        headImg,
+        openid,
+        openidwx,
+         openid1,
+        openid1wx,
+        isSubscribe,
+        sex,
+        city,
+        country,
+        username,
+        password,
+        province,
+        phone,
+        realName,
+        address,
+        cityId,
+        path,
+        zfb,
+        zfbname,
+        unionId
+    </sql>
+
+    <sql id="selectToC">
+        id,
+        zid,
+        jid,
+        status,
+        nickname,
+        wallet,
+        DATE_FORMAT(createTime,'%Y-%m-%d %H:%i:%s')as createTime,
+        DATE_FORMAT(updateTime,'%Y-%m-%d %H:%i:%s')as updateTime,
+        grade,
+        headImg,
+        openid,
+        openidwx,
+         openid1,
+        openid1wx,
+        isSubscribe,
+        sex,
+        city,
+        country,
+        username,
+        password,
+        province,
+        phone,
+        realName,
+        address,
+        cityId
+    </sql>
+
+    <delete id="delete" parameterType="com.webdrp.entity.Member">
+        delete from member where id = #{id}
+    </delete>
+
+
+    <select id="countFirst" resultType="long">
+        select count(*) from member where zid = #{richUserId}
+    </select>
+
+     <select id="findFirst" resultMap="resultList">
+        select
+        <include refid="selectToC"/>
+        from member where zid = #{richUserId}
+        order by member.id DESC
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+    <select id="countSecond" resultType="long">
+        select count(*) from member where zid in (
+            select id from member where zid = #{value}
+        )
+    </select>
+
+     <select id="findSecond" resultMap="resultList">
+        select
+        <include refid="selectToC"/>
+        from member where zid in(
+            select id from member where zid = #{richUserId}
+        )
+        order by member.id DESC
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="countThird" resultType="long">
+        select count(*) from member where zid in (
+            select id from member where zid in (
+                select id from member where zid = #{value}
+            )
+        )
+    </select>
+
+    <select id="findThird" resultMap="resultList">
+        select
+        <include refid="selectToC"/>
+        from member where id in(
+        select id from member where zid in (
+                select id from member where zid in (
+                    select id from member where zid = #{richUserId}
+                )
+            )
+        )
+        order by member.id DESC
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+
+
+    <update id="update" parameterType="com.webdrp.entity.Member">
+        update member
+        <set>
+            <if test="zid!=null">
+                zid = #{zid},
+            </if>
+            <if test="jid!=null">
+                jid = #{jid},
+            </if>
+            <if test="username!=null">
+                username = #{username},
+            </if>
+            <if test="password!=null">
+                password = #{password},
+            </if>
+            <if test="status!=null">
+                status = #{status},
+            </if>
+            <if test="nickname!=null">
+                nickname = #{nickname},
+            </if>
+            <if test="wallet!=null">
+                wallet = #{wallet},
+            </if>
+            <if test="deleteTime!=null">
+                deleteTime = #{deleteTime},
+            </if>
+            <if test="openid!=null">
+                openid = #{openid},
+            </if>
+            <if test="openid1!=null">
+                openid1 = #{openid1},
+            </if>
+            <if test="zfb!=null">
+                zfb = #{zfb},
+            </if>
+            <if test="zfbname!=null">
+                zfbname = #{zfbname},
+            </if>
+            <if test="grade!=null">
+                grade = #{grade},
+            </if>
+            <if test="phone!=null">
+                phone = #{phone},
+            </if>
+            <if test="isSubscribe!=null">
+                isSubscribe = #{isSubscribe},
+            </if>
+            <if test="realName!=null">
+                realName = #{realName},
+            </if>
+            <if test="address!=null">
+                address = #{address},
+            </if>
+            <if test="cityId!=null">
+                cityId = #{cityId},
+            </if>
+
+            <if test="path!=null and path != ''">
+                path = #{path},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findAll" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from member where deleteTime IS NULL
+        and path = ''
+       <include refid="query"/>
+    </select>
+
+    <select id="findById" resultMap="resultList">
+        SELECT
+        <include refid="select"/>
+        from member
+        where deleteTime IS NULL
+        and id  = #{id}
+    </select>
+    
+    <select id="findByUserName" parameterType="string" resultType="com.webdrp.entity.Member">
+        SELECT
+        <include refid="select"/>
+        FROM member
+        WHERE member.username = #{value}
+        and deleteTime is NULL
+    </select>
+    
+    <select id="findByOpenId" parameterType="string" resultType="com.webdrp.entity.Member">
+         SELECT
+        <include refid="select"/>
+        FROM member
+        WHERE member.openid = #{value}
+        and deleteTime is NULL
+    </select>
+
+    <select id="findByOpenId1" parameterType="string" resultType="com.webdrp.entity.Member">
+        SELECT
+        <include refid="select"/>
+        FROM member
+        WHERE member.openid1 = #{value}
+        and deleteTime is NULL
+    </select>
+
+    <select id="count" resultType="long">
+        select count(*)
+        from member
+        where deleteTime IS NULL
+        <include refid="query"/>
+    </select>
+
+    <select id="loadAll" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from member
+        where deleteTime IS NULL
+        <include refid="query"/>
+        order by member.id DESC
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="findSysRichUser" resultMap="resultListCity">
+        select
+        <include refid="select"/>
+        from member
+        where deleteTime IS NULL
+        <include refid="query"/>
+        order by member.id DESC
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+
+    <select id="findTeamUserByPage" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from member where FIND_IN_SET(#{id},path)
+        order by member.id DESC
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="findTeamMemberVoByPage" resultMap="superior">
+        select
+        <include refid="select"/>
+        from member where FIND_IN_SET(#{id},path)
+        order by member.id DESC
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="findByIds" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from member where
+        id in
+        <foreach  item="item" collection="array" index="index"  open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <update id="updateUserNameAndPassword">
+        update member set `username` = #{username},`password`=#{password} where id = #{id}
+    </update>
+
+    
+    <select id="countByDate" resultType="integer">
+        SELECT  count(*) from member where createTime BETWEEN  #{start} and #{end}
+    </select>
+
+    <update id="updateWallet" parameterType="com.webdrp.entity.Member">
+           update member SET  wallet = #{wallet} where id = #{id}
+    </update>
+
+    <update id="setRichUserStatus" parameterType="com.webdrp.entity.Member">
+          update  member set status = #{status} where id = #{id}
+    </update>
+
+    <select id="findMaxId" resultType="long">
+        SELECT  max(id) from member
+    </select>
+    
+    <update id="updateAddress"  parameterType="com.webdrp.entity.Member">
+          update member SET  address = #{address},realName = #{realName},phone = #{phone}   where id = #{id}
+    </update>
+    
+    <update id="updateRichUserGrade"  parameterType="com.webdrp.entity.Member">
+           update member SET  grade = #{grade}  where id = #{id}
+    </update>
+
+
+    <select id="findJianDian" parameterType="integer" resultType="com.webdrp.entity.Member">
+        SELECT  * from member where jid = #{value} and grade > 0;
+    </select>
+
+    <update id="updateJianDian" parameterType="com.webdrp.entity.Member">
+          update member SET  jid = #{jid}  where id = #{id}
+    </update>
+
+    <update id="setAutoInAddId" parameterType="long">
+        alter table member AUTO_INCREMENT=#{value};
+    </update>
+
+    <update id="updateOpenId" parameterType="com.webdrp.entity.Member">
+          UPDATE member set openId = #{openId} where id = #{id}
+    </update>
+
+    <update id="updateImageUrl"  parameterType="com.webdrp.entity.Member">
+          UPDATE member set openidwx = #{openidwx} where id = #{id}
+    </update>
+
+    <select id="findTeamUserCount" resultType="int">
+        select count(*) from member where FIND_IN_SET(#{id},path)
+    </select>
+
+    <select id="findTeamUser" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from member where FIND_IN_SET(#{id},path)
+    </select>
+
+    <select id="findTeamVipUserCount" resultType="int">
+        select count(*) from member where FIND_IN_SET(#{id},path) and member.grade = 1
+    </select>
+
+    <select id="findAllCityUser" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from member
+        where grade in (2,3)
+    </select>
+
+
+
+    <select id="findTeamUserOrderCount" resultType="int">
+        select count(*) from `order` where `order`.richUserId in (
+            select id from member where FIND_IN_SET(#{entity.id},path)
+        )
+        and `order`.`status` = 2
+        <if test="startTime!=null and startTime != ''">
+            and `order`.createTime > #{startTime}
+        </if>
+    </select>
+
+    <select id="findTeamUserOrderCountV1" resultType="int">
+        select count(*) from `order` where `order`.richUserId in (
+            select id from member where FIND_IN_SET(#{entity.id},path)
+        )
+        and `order`.`status` = 2
+    </select>
+
+
+    <select id="findTeamUserOrderCountFirst" resultType="int">
+        select count(*) from `order` where `order`.richUserId in (
+            select id from member where zid = #{entity.id}
+        )
+        and `order`.`status` = 2
+    </select>
+
+
+
+    <select id="findTeamUserDayCount" resultType="int">
+        select count(*) from `order` where `order`.richUserId in (
+            select id from member where FIND_IN_SET(#{entity.id},path)
+        )
+                                       and `order`.`status` = 2
+                                       and `order`.updateTime BETWEEN #{startTime} and #{endTime};
+    </select>
+
+    <select id="findSuperiorListByIds" resultMap="superior">
+        select
+        <include refid="select"/>
+        from member where
+        id in
+        <foreach  item="item" collection="array" index="index"  open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="findSuperiorById" resultType="com.webdrp.entity.Member">
+        select id, nickname
+        from member
+        where deleteTime is null
+        and id = #{id}
+    </select>
+
+    <select id="findRecommendById" resultType="com.webdrp.entity.Member">
+        select id, nickname
+        from member
+        where deleteTime is null
+        and id = #{id}
+    </select>
+
+    <select id="findSuperiorByPage" resultMap="superior">
+        select
+        <include refid="select"/>
+        from member
+        where deleteTime IS NULL
+        <include refid="query"/>
+        order by member.id DESC
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="findNicknameById" resultType="java.lang.String">
+        select nickname
+        from member
+        where deleteTime IS NULL
+        and id = #{id}
+    </select>
+
+    <update id="clearOneQrCode">
+        update member set openidwx = null where id = #{id}
+    </update>
+
+    <update id="clearAllQrCode">
+        update member set openidwx = null where id > 0
+    </update>
+
+    <update id="updateUnionId">
+        update member set unionId = #{unionId} where id = #{id}
+    </update>
+
+    <update id="updateNickname">
+        update member set nickname = #{nickname} where id = #{id}
+    </update>
+
+
+    <resultMap id="resultList" type="com.webdrp.entity.Member" >
+        <id column="id" property="id" />
+        <result  column="zid" property="zid"/>
+        <result  column="jid" property="jid"/>
+        <result  column="username" property="username"/>
+        <result  column="password" property="password"/>
+        <result  column="status" property="status"/>
+        <result  column="nickname" property="nickname"/>
+        <result  column="openid" property="openid"/>
+        <result  column="headImg" property="headImg"/>
+        <result  column="openidwx" property="openidwx"/>
+        <result  column="openid1" property="openid1"/>
+        <result  column="openid1wx" property="openid1wx"/>
+        <result  column="zfb" property="zfb"/>
+        <result  column="zfbname" property="zfbname"/>
+        <result  column="wallet" property="wallet"/>
+        <result  column="createTime" property="createTime"/>
+        <result  column="updateTime" property="updateTime"/>
+        <result  column="deleteTime" property="deleteTime"/>
+        <result  column="grade" property="grade"/>
+        <result  column="isSubscribe" property="isSubscribe"/>
+        <result  column="sex" property="sex"/>
+        <result  column="city" property="city"/>
+        <result  column="province" property="province"/>
+        <result  column="country" property="country"/>
+        <result  column="phone" property="phone"/>
+        <result  column="realName" property="realName"/>
+        <result  column="address" property="address"/>
+        <result  column="cityId" property="cityId"/>
+        <result  column="path" property="path"/>
+        <result  column="unionId" property="unionId"/>
+    </resultMap>
+
+    <resultMap id="resultListCity" extends="resultList" type="com.webdrp.entity.vo.MemberSysVo">
+        <association property="merchantAnalysis" column="id" select="com.webdrp.mapper.MerchantAnalysisMapper.findByRichUserId"/>
+        <association property="topUser" column="jid" select="findById"/>
+
+    </resultMap>
+
+    <resultMap id="superior" type="com.webdrp.entity.vo.MemberSuperiorVo" extends="resultList">
+        <association property="superior" column="zid" select="findSuperiorById"/>
+        <association property="income" column="id" javaType="double"
+                                            select="com.webdrp.mapper.IncomeMapper.sumIncomeByMemberId"/>
+        <association property="withdrawal" column="id" javaType="double"
+                                            select="com.webdrp.mapper.RecordMapper.sumRecordByRichUserId"/>
+    </resultMap>
+
+    <sql id="query">
+        <if test="entity.id!=null">
+            and id = #{entity.id}
+        </if>
+        <if test="entity.zid!=null">
+            and zid = #{entity.zid}
+        </if>
+        <if test="entity.jid!=null">
+            and jid = #{entity.jid}
+        </if>
+        <if test="entity.username!=null">
+            and username = #{entity.username}
+        </if>
+        <if test="entity.password!=null">
+            and password = #{entity.password}
+        </if>
+        <if test="entity.status!=null">
+            and status = #{entity.status}
+        </if>
+        <if test="entity.nickname!=null">
+            and nickname = #{entity.nickname}
+        </if>
+        <if test="entity.wallet!=null">
+            and wallet = #{entity.wallet}
+        </if>
+        <if test="entity.createTime!=null">
+            and createTime = #{entity.createTime}
+        </if>
+        <if test="entity.updateTime!=null">
+            and updateTime = #{entity.updateTime}
+        </if>
+        <if test="entity.grade!=null">
+            and grade = #{entity.grade}
+        </if>
+        <if test="entity.isSubscribe!=null">
+            and isSubscribe = #{entity.isSubscribe}
+        </if>
+        <if test="entity.phone!=null">
+            and isSubscribe = #{entity.phone}
+        </if>
+        <if test="entity.realName!=null">
+            and realName = #{entity.realName}
+        </if>
+        <if test="entity.address!=null">
+            and address = #{entity.address}
+        </if>
+        <if test="entity.cityId!=null">
+            and cityId = #{entity.cityId}
+        </if>
+
+    </sql>
+</mapper>
+

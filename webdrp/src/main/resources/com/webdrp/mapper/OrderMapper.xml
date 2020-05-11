@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.OrderMapper">
+    <cache type="com.webdrp.config.MybatisRedisCache"/>
+    <insert id="insert" parameterType="com.webdrp.entity.Order"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into `order`(
+        richUserId,
+        openId,
+        subPrice,
+        status,
+        `name`,
+        nameItem,
+        `type`,
+        zfbOrderId,
+        address,
+        phone,
+        takeName,
+        wechatOrderId,
+        rebate,
+        userOrder,
+        jiandian,
+        orderType,cardType
+        )
+        values(
+        #{richUserId},
+        #{openId},
+        #{subPrice},
+        #{status},
+        #{name},
+        #{nameItem},
+        #{type},
+        #{zfbOrderId},
+        #{address},
+        #{phone},
+        #{takeName},
+        #{wechatOrderId},
+        #{rebate},
+        #{userOrder},
+        #{jiandian},
+        #{orderType},
+        #{cardType}
+        )
+    </insert>
+
+    <update id="updateWechatOrderId" parameterType="com.webdrp.entity.Order">
+        update `order`
+        set    wechatOrderId=#{wechatOrderId}
+        where id = #{id} AND deleteTime IS NULL
+
+    </update>
+
+    <update id="updateOrderStatus"  parameterType="com.webdrp.entity.Order">
+        update `order`
+        set    `status`=#{status}
+        where id = #{id} AND deleteTime IS NULL
+    </update>
+
+
+
+    <update id="cancelOrderByOrderIdAndRichUserId">
+        update `order`
+        set deleteTime = now()
+        where id = #{id} and richUserId = #{richUserId}
+        and `status` != #{status}
+    </update>
+
+    <select id="sumOrderMoney" parameterType="com.webdrp.entity.Order" resultType="double">
+        SELECT  ifnull(sum(subPrice),0) from `order` where deleteTime is null
+        and status = #{status}
+    </select>
+
+    <update id="updatezfbOrder" parameterType="com.webdrp.entity.Order">
+          update  `order` set zfbOrderId = #{zfbOrderId} where id = #{id}
+    </update>
+
+    <select id="findByzfbOrderId" parameterType="string" resultType="com.webdrp.entity.Order">
+        select * from `order` where zfbOrderId = #{value}
+    </select>
+
+    <update id="update" parameterType="com.webdrp.entity.Order">
+        update `order`
+        <set>
+            <if test="richUserId != null">
+                richUserId=#{richUserId},
+            </if>
+            <if test="openId != null">
+                openId=#{openId},
+            </if>
+            <if test="subPrice != null">
+                subPrice=#{subPrice},
+            </if>
+            <if test="status!=null">
+                status=#{status},
+            </if>
+            <if test="name!=null">
+                `name`=#{name},
+            </if>
+            <if test="nameItem != null">
+                nameItem =#{nameItem},
+            </if>
+            <if test="wuliuId != null">
+                wuliuId=#{wuliuId},
+            </if>
+            <if test="type!=null">
+                `type`=#{type},
+            </if>
+            <if test="zfbOrderId!=null">
+                zfbOrderId=#{zfbOrderId},
+            </if>
+            <if test="address != null">
+                address=#{address},
+            </if>
+            <if test="phone!=null">
+                phone=#{phone},
+            </if>
+            <if test="takeName != null">
+                takeName=#{takeName},
+            </if>
+            <if test="wechatOrderId!=null">
+                wechatOrderId=#{wechatOrderId},
+            </if>
+            <if test="rebate!=null">
+                rebate=#{rebate},
+            </if>
+            <if test="jiandian!=null">
+                jiandian=#{jiandian},
+            </if>
+            <if test="orderType != null">
+                orderType=#{orderType},
+            </if>
+            <if test="deleteTime != null">
+                deleteTime = #{deleteTime}
+            </if>
+        </set>
+        where id = #{id} AND deleteTime IS NULL
+    </update>
+
+    <update id="delete" parameterType="com.webdrp.entity.Order">
+        update  `order`
+        SET deleteTime=#{deleteTime}
+        where id = #{id}
+    </update>
+
+    <select id="findAll" parameterType="com.webdrp.entity.Order" resultType="com.webdrp.entity.Order">
+         select * from `order`
+         where deleteTime IS NULL
+         order by createTime desc
+    </select>
+
+    <!-- 暂定-->
+    <select id="loadAll" resultType="com.webdrp.entity.Order">
+        select * from `order`
+        where deleteTime IS NULL
+        <include refid="query1"/>
+        order by createTime desc
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="count" resultType="long">
+        select count(*) from `order`
+        where  deleteTime IS NULL
+        <include refid="query1"/>
+    </select>
+
+    <select id="queryById" parameterType="integer" resultType="com.webdrp.entity.Order" useCache="false">
+        SELECT  * from `order` where id = #{value}   and  deleteTime IS NULL
+    </select>
+
+
+    <select id="findById" parameterType="int" resultMap="resultMapAll" useCache="false">
+        select
+            o.id as id,
+            o.richUserId as richUserId,
+            o.openId as openId,
+            o.subPrice as subPrice,
+            o.`status` as `status`,
+            o.`name` as `name`,
+            o.`nameItem` as `nameItem`,
+            o.`type` as `type`,
+            o.`zfbOrderId` as `zfbOrderId`,
+            o.`address` as `address`,
+            o.`phone` as `phone`,
+            o.`wuliuId` as `wuliuId`,
+            o.`takeName` as `takeName`,
+            o.`wechatOrderId` as `wechatOrderId`,
+            o.`rebate` as `rebate`,
+            o.`jiandian` as `jiandian`,
+            o.`orderType` as `orderType`,
+            o.`cardType` as `cardType`,
+            DATE_FORMAT(o.createTime,'%Y-%m-%d %H:%i:%s')as createTime,
+            DATE_FORMAT(o.updateTime,'%Y-%m-%d %H:%i:%s')as updateTime,
+            o.`userOrder` as `userOrder`,
+            od.id as did,
+            od.orderId as orderId,
+            od.commodityId as commodityId,
+            od.commodityStyleId as commodityStyleId,
+            od.imageUrl as imageUrl,
+            od.count as `dcount`,
+            od.`name` as `dname`,
+            od.`nameItem` as `dnameItem`,
+            od.`subPrice` as `dsubPrice`,
+            od.`openId` as `dopenId`,
+            od.`richUserId` as `drichUserId`,
+            od.`nickName` as `nickName`,
+            od.`price` as `dprice`,
+            od.`createTime` as `dcreateTime`,
+            od.`updateTime` as `dupdateTime`
+        FROM
+            `order` AS o
+        LEFT JOIN orderDetail AS od ON o.id = od.orderId
+        WHERE o.deleteTime is NULL AND o.id = #{id}
+    </select>
+
+
+    <select id="findByWechatIdAndOrderId"  parameterType="integer" resultType="com.webdrp.entity.Order" useCache="false">
+        select * from `order`
+        where  deleteTime IS NULL
+        AND id = #{id}  AND richUserId = #{richUserId}
+    </select>
+
+    <select id="findByWechatOrderIdAndOrderId" resultType="com.webdrp.entity.Order" useCache="false">
+        select * from `order`
+        where  deleteTime IS NULL
+        AND id = #{id}  AND wechatOrderId = #{wechatOrderId}
+    </select>
+
+
+
+    <select id="findAllAndDetail" resultMap="orderVo">
+        SELECT
+        o.id as id,
+        o.richUserId as richUserId,
+        o.openId as openId,
+        o.subPrice as subPrice,
+        o.`status` as `status`,
+        o.`name` as `name`,
+        o.`nameItem` as `nameItem`,
+        o.`type` as `type`,
+        o.`zfbOrderId` as `zfbOrderId`,
+        o.`address` as `address`,
+        o.`phone` as `phone`,
+        o.`wuliuId` as `wuliuId`,
+        o.`takeName` as `takeName`,
+        o.`wechatOrderId` as `wechatOrderId`,
+        o.`rebate` as `rebate`,
+        o.`jiandian` as `jiandian`,
+        o.`orderType` as `orderType`,
+        o.`cardType` as `cardType`,
+        DATE_FORMAT(o.createTime,'%Y-%m-%d %H:%i:%s')as createTime,
+        DATE_FORMAT(o.updateTime,'%Y-%m-%d %H:%i:%s')as updateTime,
+        o.`userOrder` as `userOrder`
+        FROM
+        `order` AS o
+        WHERE o.deleteTime is NULL
+        <include refid="query"/>
+        ORDER  BY o.id  DESC
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="findAllAndDetailCount" parameterType="com.webdrp.entity.dto.OrderDto" resultType="long">
+        SELECT
+        count(DISTINCT (o.id))
+        FROM
+        `order` AS o
+        WHERE o.deleteTime is NULL
+        <include refid="query"/>
+        ORDER  BY o.createTime  DESC
+    </select>
+
+    <select id="exportOrderData" parameterType="com.webdrp.entity.dto.OrderDto" resultType="com.webdrp.entity.vo.OrderVo">
+        SELECT
+        a.id AS  id,
+        b.id AS richUserId,
+        b.nickName AS nickName,
+        a.subPrice AS subPrice,
+        a.name AS name,
+        a.nameItem AS nameItem,
+        a.wuliuId AS wuliuId,
+        a.address AS address,
+        a.phone AS phone,
+        a.takeName AS takeName,
+        a.rebate AS rebate,
+        a.jiandian AS jiandian,
+        a.userOrder AS userOrder,
+        c.count AS detailCount,
+        c.subPrice AS detailSubPrice,
+        c.name AS detailName,
+        c.nameItem AS detailNameItem
+        FROM `order` a, member b,orderDetail c
+        WHERE a.richUserId = b.id AND c.orderId = a.id
+        AND a.deleteTime IS NULL AND b.deleteTime IS NULL AND c.deleteTime IS NULL
+        AND a.status = 2
+        <if test='startTime != null and startTime != ""'>
+            AND a.createTime &gt;= #{startTime}
+        </if>
+        <if test='endTime != null and endTime != ""'>
+            AND a.createTime &lt;= #{endTime}
+        </if>
+        <if test='wuliuId == null or wuliuId == ""'>
+            and wuliuId = ""
+        </if>
+        <if test='wuliuId != null and wuliuId != ""'>
+            and wuliuId != ""
+        </if>
+        ORDER  BY a.createTime
+    </select>
+
+
+    <update id="batchUpdateWuliuId" parameterType="java.util.List">
+        update `order`
+        set wuliuId =
+        <foreach collection="list" item="item" index="index" separator=" "  open="case ID" close="end">
+            WHEN #{item.id} then #{item.wuliuId}
+        </foreach>
+        where id in
+        <foreach collection="list" index="index" item="item"  separator="," open="(" close=")">
+            #{item.id,jdbcType=BIGINT}
+        </foreach>
+    </update>
+
+    <update id="updateType" parameterType="com.webdrp.entity.Order">
+        update `order` set `type` = #{type} where id = #{id}
+    </update>
+
+    <select id="findCountOrderData" parameterType="com.webdrp.entity.dto.OrderDto" resultType="int">
+          select  ifnull(count(*),0) from `order` where
+          createTime between #{startTime} and #{endTime}
+          <if test="status != null">
+              and `status` = #{status}
+          </if>
+          <if test="type != null">
+            and `type` = #{type}
+          </if>
+    </select>
+
+    <select id="findSumOrderPrice" parameterType="com.webdrp.entity.dto.OrderDto" resultType="double">
+        select  ifnull(sum(subPrice),0.0) from `order` where
+        createTime between #{startTime} and #{endTime}
+        <if test="status != null">
+            and `status` = #{status}
+        </if>
+        <if test="type != null">
+            and `type` = #{type}
+        </if>
+    </select>
+
+    <select id="findUserOrderCount" resultType="java.lang.Integer">
+        select  ifnull(count(*),0)
+        from `order`
+        where richUserId = #{richUserId}
+        <if test="status != null">
+            and `status` = #{status}
+        </if>
+    </select>
+
+    <resultMap id="resultMap" type="com.webdrp.entity.Order">
+        <id column="id" property="id"/>
+        <result column="richUserId" property="richUserId"/>
+        <result column="openId" property="openId"/>
+        <result column="subPrice" property="subPrice"/>
+        <result column="status" property="status"/>
+        <result column="name" property="name"/>
+        <result column="nameItem" property="nameItem"/>
+        <result column="type" property="type"/>
+        <result column="zfbOrderId" property="zfbOrderId"/>
+        <result column="address" property="address"/>
+        <result column="phone" property="phone"/>
+        <result column="wuliuId" property="wuliuId"/>
+        <result column="takeName" property="takeName"/>
+        <result column="wechatOrderId" property="wechatOrderId"/>
+        <result column="rebate" property="rebate"/>
+        <result column="jiandian" property="jiandian"/>
+        <result column="orderType" property="orderType"/>
+        <result column="createTime" property="createTime"/>
+        <result column="updateTime" property="updateTime"/>
+        <result column="userOrder" property="userOrder"/>
+        <result column="cardType" property="cardType"/>
+    </resultMap>
+
+    <resultMap id="resultMapAll" type="com.webdrp.entity.vo.OrderVo" extends="resultMap">
+        <collection property="orderDetails" ofType="com.webdrp.entity.OrderDetail">
+            <id column="did" property="id"/>
+            <result column="orderId" property="orderId"/>
+            <result column="commodityId" property="commodityId"/>
+            <result column="commodityStyleId" property="commodityStyleId"/>
+            <result column="imageUrl" property="imageUrl"/>
+            <result column="dcount" property="count"/>
+            <result column="dname" property="name"/>
+            <result column="dnameItem" property="nameItem"/>
+            <result column="dsubPrice" property="subPrice"/>
+            <result column="dopenId" property="openId"/>
+            <result column="drichUserId" property="richUserId"/>
+            <result column="nickName" property="nickName"/>
+            <result column="dprice" property="price"/>
+            <result column="dcreateTime" property="createTime"/>
+            <result column="dupdateTime" property="updateTime"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="orderVo" type="com.webdrp.entity.vo.OrderVo" extends="resultMap">
+        <association property="nickName" javaType="string" column="richUserId"
+                     select="com.webdrp.mapper.MemberMapper.findNicknameById"/>
+        <collection property="orderDetails" ofType="com.webdrp.entity.OrderDetail"
+                    select="com.webdrp.mapper.OrderDetailMapper.findByOrderId" column="id"/>
+    </resultMap>
+
+    <sql id="query">
+        <if test="entity.id != null">
+            AND o.id=#{entity.id}
+        </if>
+        <if test="entity.richUserId != null">
+            AND o.richUserId=#{entity.richUserId}
+        </if>
+        <if test="entity.openId != null">
+            AND  o.openId=#{entity.openId}
+        </if>
+        <if test="entity.subPrice != null">
+            AND o.subPrice=#{entity.subPrice}
+        </if>
+        <if test="entity.status!=null">
+            AND o.status=#{entity.status}
+        </if>
+        <if test="entity.name!=null">
+            AND  o.`name`=#{entity.name}
+        </if>
+        <if test="entity.nameItem != null">
+            AND o.nameItem =#{entity.nameItem}
+        </if>
+
+        <if test="entity.wuliuId != null">
+            AND o.wuliuId=#{entity.wuliuId}
+        </if>
+
+        <if test="entity.type!=null">
+            AND o.`type`=#{entity.type}
+        </if>
+
+        <if test="entity.zfbOrderId!=null">
+            AND o.zfbOrderId=#{entity.zfbOrderId}
+        </if>
+        <if test="entity.address != null">
+            AND o.address=#{entity.address}
+        </if>
+        <if test="entity.phone!=null">
+            AND o.phone=#{entity.phone}
+        </if>
+        <if test="entity.takeName != null">
+            AND o.takeName=#{entity.takeName}
+        </if>
+        <if test="entity.wechatOrderId!=null">
+            AND o.wechatOrderId=#{entity.wechatOrderId}
+        </if>
+        <if test="entity.rebate!=null">
+            AND o.rebate=#{entity.rebate}
+        </if>
+        <if test="entity.jiandian!=null">
+            AND o.jiandian=#{entity.jiandian}
+        </if>
+        <if test="entity.orderType != null">
+            AND o.orderType=#{entity.orderType}
+        </if>
+        <if test="entity.userOrder != null">
+            AND o.userOrder  LIKE CONCAT('%',#{entity.userOrder},'%')
+        </if>
+    </sql>
+
+
+    <sql id="query1">
+        <if test="entity.id != null">
+            AND id=#{id}
+        </if>
+        <if test="entity.richUserId != null">
+            AND richUserId=#{entity.richUserId}
+        </if>
+        <if test="entity.openId != null">
+            AND  openId=#{entity.openId}
+        </if>
+        <if test="entity.subPrice != null">
+            AND subPrice=#{entity.subPrice}
+        </if>
+        <if test="entity.status!=null">
+            AND status=#{entity.status}
+        </if>
+        <if test="entity.name!=null">
+            AND  `name`=#{entity.name}
+        </if>
+        <if test="entity.nameItem != null">
+            AND nameItem =#{entity.nameItem}
+        </if>
+
+        <if test="entity.wuliuId != null">
+            AND wuliuId=#{entity.wuliuId}
+        </if>
+
+        <if test="entity.type!=null">
+            AND `type`=#{entity.type}
+        </if>
+
+        <if test="entity.zfbOrderId!=null">
+            AND zfbOrderId=#{entity.zfbOrderId}
+        </if>
+        <if test="entity.address != null">
+            AND address=#{entity.address}
+        </if>
+        <if test="entity.phone!=null">
+            AND phone=#{entity.phone}
+        </if>
+        <if test="entity.takeName != null">
+            AND takeName=#{entity.takeName}
+        </if>
+        <if test="entity.wechatOrderId!=null">
+            AND wechatOrderId=#{entity.wechatOrderId}
+        </if>
+        <if test="entity.rebate!=null">
+            AND rebate=#{entity.rebate}
+        </if>
+        <if test="entity.jiandian!=null">
+            AND jiandian=#{entity.jiandian}
+        </if>
+        <if test="entity.orderType != null">
+            AND orderType=#{entity.orderType}
+        </if>
+        <if test="entity.userOrder != null">
+            AND orderType=#{entity.userOrder}
+        </if>
+    </sql>
+</mapper>
+

@@ -1,0 +1,74 @@
+.buttonIcon {
+  display: inline-block;
+  width: 6vw;
+  height: 6vw;
+  /* vertical-align: middle; */
+  float: left;
+  margin: 2vw 0 0 5vw;
+}
+
+.rightUp {
+  z-index: 1220;
+  width: 20vw;
+  height: 20vw;
+  float: right;
+  transform: translate(-5vw);
+}
+
+.coverText1 {
+  z-index: 1220;
+  float: right;
+  transform: translateY(20vw);
+  color: #FFFFFF;
+  font-size: 5vw;
+}
+
+.coverText2 {
+  z-index: 1220;
+  float: right;
+  transform: translate(7vw, 22vw);
+  color: #FFFFFF;
+  font-size: 5vw;
+}
+
+.anroidButton {
+  width: 70vw;
+  height: 11vw;
+  background-image: linear-gradient(to right, #ff8e05, #ff5502);
+  margin: 15vw auto 0 auto;
+  border-radius: 1.5vw;
+  text-align: center;
+  overflow: hidden;
+}
+
+.anroidButtonText {
+  line-height: 11vw;
+  color: #FFFFFF;
+  display: inline-block;
+  font-size: 4vw;
+}
+
+.iosButton {
+  width: 70vw;
+  height: 11vw;
+  background-image: linear-gradient(to right, #ff8e05, #ff5502);
+  margin: 10vw auto;
+  border-radius: 1.5vw;
+  text-align: center;
+  overflow: hidden;
+}
+
+.iosButtonText {
+  line-height: 11vw;
+  color: #FFFFFF;
+  display: inline-block;
+  font-size: 4vw;
+}
+
+#cover {
+  background-color: #000000;
+  opacity: 0.5;
+  position: fixed;
+  z-index: 1100;
+  display: none;
+}

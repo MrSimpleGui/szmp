@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.PropcardMapper">
+    <cache type="com.webdrp.config.MybatisRedisCache"/>
+    <insert id="insert" parameterType="com.webdrp.entity.Propcard"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into propcard(
+        richUserId,
+        `name`,
+        `count`,
+        commodityId,
+        commodityStyleId,
+        `type`)
+        values(
+        #{richUserId},
+        #{name},
+        #{count},
+        #{commodityId},
+        #{commodityStyleId},
+        #{type}
+        )
+    </insert>
+
+    <sql id="select">
+          id,richUserId,`name`,`count`,commodityId,commodityStyleId,`type`,DATE_FORMAT(createTime,'%Y-%m-%d %H:%i:%s')as createTime,DATE_FORMAT(updateTime,'%Y-%m-%d %H:%i:%s')as updateTime
+    </sql>
+
+    <update id="update" parameterType="com.webdrp.entity.Propcard">
+        update propcard
+        <set>
+            <if test="richUserId != null">
+                richUserId=#{richUserId},
+            </if>
+            <if test="name != null">
+                `name`=#{name},
+            </if>
+            <if test="count!=null">
+                `count`=#{count},
+            </if>
+            <if test="commodityId != null">
+                commodityId=#{commodityId},
+            </if>
+            <if test="commodityStyleId != null">
+                commodityStyleId=#{commodityStyleId},
+            </if>
+            <if test="type!=null">
+                type=#{type},
+            </if>
+            <if test="createTime != null">
+                createTime = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                updateTime = #{updateTime},
+            </if>
+            <if test="deleteTime != null">
+                deleteTime = #{deleteTime}
+            </if>
+        </set>
+        where id = #{id} AND deleteTime IS NULL
+    </update>
+
+    <update id="delete" parameterType="com.webdrp.entity.Propcard">
+        update  propcard
+        SET deleteTime = #{deleteTime}
+        where id = #{id}
+    </update>
+
+    <select id="findAll" parameterType="com.webdrp.entity.Propcard" resultType="com.webdrp.entity.Propcard">
+        select * from propcard
+        where deleteTime IS NULL
+    </select>
+
+    <!-- 暂定-->
+    <select id="loadAll" resultType="com.webdrp.entity.Propcard">
+        select * from propcard
+        where  deleteTime IS NULL
+        <include refid="query"/>
+        ORDER  BY  createTime DESC
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="count" resultType="long">
+        select count(*) from propcard
+        where  deleteTime IS NULL
+    </select>
+
+    <select id="findByUserAndStyle" resultType="com.webdrp.entity.Propcard">
+        select <include refid="select"/>
+        from propcard
+        where deleteTime is null
+        <include refid="query"/>
+    </select>
+
+    <select id="findVoByMemberId" resultMap="voList">
+        select <include refid="select"/>
+        from propcard
+        where deleteTime is null
+        and richUserId = #{richUserId}
+    </select>
+
+    <sql id="query">
+        <if test="entity.id!=null">
+            and id = #{entity.id}
+        </if>
+        <if test="entity.richUserId!=null">
+            and richUserId = #{entity.richUserId}
+        </if>
+        <if test="entity.name!=null">
+            and name = #{entity.name}
+        </if>
+        <if test="entity.count!=null">
+            and `count` = #{entity.count}
+        </if>
+        <if test="entity.commodityId!=null">
+            and commodityId = #{entity.commodityId}
+        </if>
+        <if test="entity.commodityStyleId!=null">
+            and commodityStyleId = #{entity.commodityStyleId}
+        </if>
+        <if test="entity.type!=null">
+            and type = #{entity.type}
+        </if>
+    </sql>
+
+    <resultMap id="resultList" type="com.webdrp.entity.Propcard" >
+        <id column="id" property="id" />
+        <result column="richUserId" property="richUserId" />
+        <result column="name" property="name" />
+        <result column="count" property="count" />
+        <result column="commodityId" property="commodityId" />
+        <result column="commodityStyleId" property="commodityStyleId" />
+        <result column="type" property="type" />
+        <result  column="createTime" property="createTime"/>
+        <result  column="updateTime" property="updateTime"/>
+    </resultMap>
+
+    <resultMap id="voList" type="com.webdrp.entity.vo.PropcardVo">
+        <association property="commodity" javaType="com.webdrp.entity.Commodity"
+        column="commodityId" select="com.webdrp.mapper.CommodityMapper.findById"/>
+    </resultMap>
+
+</mapper>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>确认订单</title>
+	<link rel="stylesheet" href="dist/lib/weui.min.css" th:href="@{/dist/lib/weui.min.css}"/>
+	<link rel="stylesheet" href="dist/css/jquery-weui.min.css" th:href="@{/dist/css/jquery-weui.min.css}" />
+	<script type="text/javascript" src="dist/lib/jquery-2.1.4.js" th:src="@{/dist/lib/jquery-2.1.4.js}"></script>
+	<link rel="stylesheet" href="css/prepay.css" th:href="@{/css/prepay.css}" />
+	<link rel="stylesheet" href="css/header.min.css" th:href="@{/css/header.min.css}" />
+	<script  type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		ctxPath = /*[[@{/}]]*/ '';
+		cartIds = [[${cardIds}]];
+		/*]]>*/
+	</script>
+
+</head>
+
+<body>
+<div class="header">
+	<div class="goback">
+		<a href="javascript:history.back(-1)">
+			<img class="goback-img" src="img/goback.png"  th:src="@{/img/goback.png}"/>
+		</a>
+	</div>
+	<div class="header-title">确认订单</div>
+	<div class="gohome"></div>
+</div>
+
+<!--地址选择-->
+<div class="address-tabs">
+	<div class="address-icon">
+		<svg t="1581777196791" class="icon" style="transform: translate(2vw, 23%);width: 9vw;height: 9vw;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3181">
+			<path d="M535.395431 2.19957c-174.765866-3.999219-329.535638 146.771334-325.536419 319.537591 0 63.987502 44.991213 168.767038 111.778168 275.746143 67.986721 106.779145 117.776997 177.76528 173.766062 252.750635 9.998047 12.997461 22.995509 19.996095 39.992189 19.996094 15.996876 0 30.993946-7.998438 39.992189-19.996094 55.989065-74.985354 106.779145-145.771529 173.766061-252.750635 66.986917-106.779145 111.778168-211.758641 111.778168-275.746143 3.999219-172.766257-148.770943-323.536809-325.536418-319.537591z m200.760788 498.502637c-42.991603 80.984183-102.779926 171.766452-177.76528 274.746338-4.999024 6.998633-13.997266 10.997852-22.995508 10.997852-7.998438 0-17.996485-2.999414-21.995704-10.997852-149.770748-203.960164-243.552431-377.726225-243.552432-453.511423 0-71.98594 25.994923-133.773872 77.984769-184.763914s114.777583-76.984964 187.763328-76.984964c72.985745 0 135.773482 25.994923 187.763327 76.984964C776.148409 187.963288 802.143331 249.951181 802.143331 321.937122c0 38.792423-21.995704 97.780902-65.987112 178.765085z" fill="#f4510c" p-id="3182"></path>
+			<path d="M933.917594 839.236087c-14.997071-14.997071-34.993165-26.994728-59.988283-35.99297s-53.989455-12.997461-84.983402-12.997462v0.999805h-1.199766c-11.997657-0.999805-20.995899 7.998438-21.995704 19.996094 0 11.997657 8.998243 21.995704 20.9959 21.995704l26.794766 0.799844c54.789299 4.399141 81.384105 26.194884 90.182387 35.193126 8.998243 8.998243 12.997461 16.99668 12.997461 24.995119 0 18.99629-31.993751 41.991798-100.780316 58.988478-70.986136 17.996485-172.766257 28.994337-282.544816 28.994337-114.777583 0-208.759227-10.198008-283.54462-29.194298-70.986136-18.99629-102.779926-41.991798-102.779926-58.988478 0-14.997071 5.998828-26.994728 17.996485-34.993166 15.796915-9.798086 41.391916-17.396602 75.785198-20.396016 1.599688 0.399922 3.399336 0.599883 5.198985 0.599883l31.993751-1.99961c11.997657-0.999805 20.995899-10.997852 19.996095-22.995508 0-10.997852-10.997852-19.996095-21.995704-19.996095v-0.199961c-61.987893 0.999805-106.779145 10.997852-134.773677 28.994337-25.195079 16.99668-37.192736 39.992189-37.192736 70.986136 0 23.995313 14.997071 45.991017 41.991798 62.987697 21.995704 14.997071 52.98965 26.994728 92.781879 36.992775 74.985354 19.996095 180.764694 29.994142 294.542472 29.994142 114.777583 0 218.557313-9.998047 292.542863-29.794181 39.992189-9.998047 70.986136-21.995704 92.781878-36.992775 26.994728-16.99668 40.991994-38.992384 40.991994-62.987697 0.199961-19.996095-8.798282-37.99258-25.794962-54.98926zM448.012498 334.3347c0-46.390939 37.592658-83.983597 83.983597-83.983597s83.983597 37.592658 83.983596 83.983597-37.592658 83.983597-83.983596 83.983597c-46.390939-0.199961-83.983597-37.592658-83.983597-83.983597" fill="#f4510c" p-id="3183"></path>
+		</svg>
+	</div>
+	<div class="address-data">
+		<p>
+			<font class="name" id="takeName" th:text="${takeName}">张小明</font>
+			<font class="phone" id="takeTel" th:text="${phone}">13800138000</font>
+		</p>
+		<p class="address" id="takeAddress" th:text="${address}">
+			地址地址地址地址地址地址地址地址地址地址地址
+		</p>
+		<p th:if="${!hasAddress}" class="noAdddress" id="noAddress">
+			请添加收货地址~
+		</p>
+
+	</div>
+	<div class="change" id="addressChange">
+		<svg t="1581777947172" class="icon" style="transform: translate(4px, 66%);width: 6vw;height: 6vw;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5915">
+			<path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#bfbfbf" p-id="5916"></path>
+		</svg>
+	</div>
+</div>
+<!--地址选择 end-->
+
+<!--产品数据-->
+<div class="products" th:each="package : ${packages}">
+	<div class="product-img">
+		<img class="product-img-data" src="testimg/001.jpg" th:src="${package.imageUrl}" />
+	</div>
+	<div class="productPacakge">
+		<p class="packageName" th:text="${package.name}">new Balance NB白色44码</p>
+		<div class="packageNameItem" th:text="${package.nameItem}">承祖古方膏药 10贴版</div>
+		<p class="price">
+			<font class="price-unit">￥</font><font id="packagePrice" th:text="${package.price}"></font>
+		</p>
+		<p class="buyCount" th:text="'x ' + ${package.inventory}">x10</p>
+	</div>
+</div>
+<!--产品数据 end-->
+
+<!--配送数据-->
+<div class="products-express">
+	<p>配送方式：
+		<font style="color: gray;">普通配送</font>
+	</p>
+	<p>运费：
+		<font style="color: gray;" th:if="${noExpress}">免邮</font>
+		<font style="color: gray;" th:if="${!noExpress}" th:text="${express} + '元'"></font>
+	</p>
+</div>
+<!--配送数据-->
+
+<!--底部tab-->
+<div style="height: 100px;"></div>
+<div class="weui-tabbar" style="position: fixed;background: white;border-top: none;text-align: right;" id="tabbarBt2">
+	<div class="tab-price-data">
+		<p class="priceData" th:text="'共'+${count}+'件，合计'+${subPrice}+'元'"></p>
+	</div>
+	<div class="buyNow">
+		<a href="javascript:;" class="open-popup goToPay" id="selectPackage">
+			立即支付
+		</a>
+	</div>
+</div>
+<!--底部tab end-->
+
+<div id="addresPickPage" class='weui-popup__container'>
+	<div class="weui-popup__overlay"></div>
+	<div class="weui-popup__modal" style="background-color: #F8F8F8;">
+		<div style="width: 100%;height: 13vw;"></div>
+
+		<div>
+			<div class="address-tabs">
+				<div class="address-data">
+					<p>
+						<font class="name" id="takeName1" th:text="${takeName}">张小明</font>
+						<font class="phone" id="takeTel1" th:text="${phone}">13800138000</font>
+					</p>
+					<p class="address" id="takeAddress1" th:text="${address}">
+						广东省 官方男鞋专业跑步鞋Z2号
+					</p>
+				</div>
+			</div>
+			<div class="weui-cells weui-cells_form">
+				<div style="width: 100%;text-align: center;margin: 4vw 0;">
+					请选择收货地址
+				</div>
+				<div class="weui-cell">
+					<div class="weui-cell__hd">
+						<label class="weui-label">手机号<font style="color: red">*</font></label>
+					</div>
+					<div class="weui-cell__bd">
+						<input class="weui-input" id="newTel" type="tel" placeholder="请输入手机号">
+					</div>
+				</div>
+				<div class="weui-cell">
+					<div class="weui-cell__hd">
+						<label class="weui-label">收货人<font style="color: red">*</font></label>
+					</div>
+					<div class="weui-cell__bd">
+						<input class="weui-input" id="newName" type="text" placeholder="姓名">
+					</div>
+				</div>
+
+				<div class="weui-cell">
+					<div class="weui-cell__hd"><label class="weui-label">省市/区<font style="color: red">*</font></label></div>
+					<div class="weui-cell__bd">
+						<input class="weui-input" id="city-picker" type="text" value="湖北省 武汉市 武昌区">
+					</div>
+				</div>
+				<div class="weui-cells__title">详细地址<font style="color: red">*</font></div>
+				<div class="weui-cells weui-cells_form">
+					<div class="weui-cell">
+						<div class="weui-cell__bd">
+							<textarea id="addresDetail" class="weui-textarea" placeholder="请输入详细地址" rows="3"></textarea>
+							<div class="weui-textarea-counter"><span>0</span>/200</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="citySelect">
+			<div>
+				<a href="javascript:;" class="weui-btn weui-btn_primary" id="confirmCity">确定</a>
+				<a href="javascript:;" class="weui-btn weui-btn_plain-default close-popup" id="useHisAddress" >使用旧地址</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+<script src="dist/js/jquery-weui.js" th:src="@{/dist/js/jquery-weui.js}"></script>
+<script src="dist/js/city-picker.js" th:src="@{/dist/js/city-picker.js}"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="js/prepayCart.js" th:src="@{/js/prepayCart.js}"></script>
+
+</html>

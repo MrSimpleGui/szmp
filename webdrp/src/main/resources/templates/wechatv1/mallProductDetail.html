@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <title th:text="${product?.name}"></title>
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="dist/lib/weui.min.css" th:href="@{/dist/lib/weui.min.css}"/>
+    <link rel="stylesheet" href="dist/css/jquery-weui.min.css" th:href="@{/dist/css/jquery-weui.min.css}"/>
+    <link rel="stylesheet" href="css/v1/mallProductDetail.css" th:href="@{/css/v1/mallProductDetail.css}"/>
+    <script type="text/javascript" src="dist/lib/jquery-2.1.4.js" th:src="@{/dist/lib/jquery-2.1.4.js}"></script>
+    <link rel="stylesheet" href="css/header.min.css" th:href="@{/css/header.min.css}"/>
+    <script  type="text/javascript" th:inline="javascript">
+      /*<![CDATA[*/
+      ctxPath = /*[[@{/}]]*/ '';
+      /*]]>*/
+    </script>
+  </head>
+
+  <body>
+
+    <div class="header">
+      <div class="goback">
+        <a href="javascript:history.back(-1)">
+          <img class="goback-img" src="img/goback.png" th:src="@{/img/goback.png}"/>
+        </a>
+      </div>
+      <div class="header-title">产品详情</div>
+      <div class="gohome"></div>
+    </div>
+
+    <!--banner-->
+    <div class="swiper-container" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide" th:each="item : ${product.images}"><img src="testimg/001.jpg" th:src="${item.fullUrl}" alt=""></div>
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+    <!--banner end-->
+    <!--title-->
+    <div class="product-title">
+      <font class="productName" th:text="${product?.name}"></font>
+    </div>
+
+    <div class="product-price">
+      <font class="price-unit">￥</font>
+      <font class="price">
+        <i class="minPrice" th:text="${minPrice}">
+
+        </i>
+        <!-- <i>~</i>
+        <i class="maxPrice">
+    
+        </i> -->
+      </font>
+      <!-- <font class="price-right">浙江金华 免邮费</font> -->
+      <!-- <font class="price-unit-cn">元</font> -->
+    </div>
+    <!--title end-->
+
+    <!--  服务 栏 -->
+    <div class="product-others_1">
+      <div class="line"></div>
+      <a href="javascript:;" class="open-popup firstPopup" data-target="#half2">
+        <div class="product-other firstMarkDownButton">
+          <div class="product-other-text1">服务</div>
+          <div class="product-other-text3 firstMarkDownText">产品服务</div>
+          <div class="product-other-text4">></div>
+        </div>
+      </a>
+      <div class="line"></div>
+    </div>
+    <!--  服务 栏 end-->
+
+    <!-- 服务弹窗 -->
+    <div id="half2" class='weui-popup__container popup-bottom'>
+      <div class="weui-popup__overlay" id="overlay1"></div>
+      <div class="weui-popup__modal">
+        <div class="toolbar">
+          <div class="toolbar-inner">
+            <a href="javascript:;" class="picker-button " id="clostPopup2">关闭</a>
+            <h1 class="title">服务</h1>
+          </div>
+        </div>
+        <div class="modal-content modal-content1">
+          <div class="firstMarkDownContent" th:utext="${product?.service}"></div>
+        </div>
+      </div>
+    </div>
+    <!-- 服务弹窗 end -->
+
+    <!-- 选择 和 参数 栏 -->
+    <div class="product-others_2">
+      <a href="javascript:;" class="open-popup secondPopup" data-target="#packages">
+        <div class="product-other secondMarkDownButton">
+          <div class="product-other-text1">选择</div>
+          <div class="product-other-text3 secondMarkDownText" th:text="${product?.commodityStyleVoList[0]?.name}"></div>
+          <div class="product-other-text4">></div>
+        </div>
+      </a>
+      <div class="line"></div>
+      <a href="javascript:;" class="open-popup thirdPopup" data-target="#half4">
+        <div class="product-other thirdMarkDownButton">
+          <div class="product-other-text1">参数</div>
+          <div class="product-other-text3 thirdMarkDownText">产品参数</div>
+          <div class="product-other-text4">></div>
+        </div>
+      </a>
+    </div>
+    <!-- 选择 和 参数 栏 end-->
+
+    <!-- 选择弹窗 -->
+    <div id="half3" class='weui-popup__container popup-bottom'>
+      <div class="weui-popup__overlay" id="overlay2"></div>
+      <div class="weui-popup__modal">
+        <div class="toolbar">
+          <div class="toolbar-inner">
+            <a href="javascript:;" class="picker-button " id="clostPopup3">关闭</a>
+            <h1 class="title">选择</h1>
+          </div>
+        </div>
+        <div class="modal-content">
+          <div class="">
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 选择弹窗 end -->
+
+    <!-- 参数弹窗 -->
+    <div id="half4" class='weui-popup__container popup-bottom'>
+      <div class="weui-popup__overlay" id="overlay3"></div>
+      <div class="weui-popup__modal">
+        <div class="toolbar">
+          <div class="toolbar-inner">
+            <a href="javascript:;" class="picker-button " id="clostPopup4">关闭</a>
+            <h1 class="title">参数</h1>
+          </div>
+        </div>
+        <div class="modal-content modal-content2">
+          <div class="thirdMarkDownContent" th:utext="${product?.specification}">
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 参数弹窗 end -->
+
+    <!-- 产品详情 -->
+    <div class="goodsInfoTitle">
+      ——&nbsp;产品详情&nbsp;——
+    </div>
+
+    <!--产品详情 富文本-->
+    <div class="markdownContent" style="" th:utext="${product?.context}"></div>
+    <!--富文本 end-->
+
+    <!--tabbar-->
+    <div class="weui-tabbar" style="position: fixed;background: white;border-top: none;" id="tabbarBt">
+      <!-- <a href="onlineShoppingMall.html" class="weui-tabbar__item">
+        <div class="weui-tabbar__icon">
+          <img src="img/onlineShoppingMall/mall.png" alt="">
+        </div>
+        <p class="weui-tabbar__label weui-tabbar__label_color">店铺</p>
+      </a> -->
+      <a href="shoppingCart" class="weui-tabbar__item" th:href="@{/wechat/h5/shoppingCart}">
+        <!--<span class="weui-badge" style="position: absolute;top: -.4em;right: 1em;">8</span>-->
+        <div class="weui-tabbar__icon">
+          <img src="img/onlineShoppingMall/cart.png" alt="" th:src="@{/img/onlineShoppingMall/cart.png}">
+        </div>
+        <p class="weui-tabbar__label">购物车</p>
+      </a>
+      <a href="javascript:;" class="weui-tabbar__item shareLink">
+        <div class="weui-tabbar__icon">
+          <img src="img/onlineShoppingMall/share.png" alt="" th:src="@{/img/onlineShoppingMall/share.png}">
+        </div>
+        <p class="weui-tabbar__label">分享</p>
+      </a>
+      <a href="javascript:;" class="weui-tabbar__item buyNow1 open-popup" id="selectPackage1">
+        <p>加入购物车</p>
+      </a>
+      <a href="javascript:;" class="weui-tabbar__item buyNow2 open-popup" id="selectPackage2">
+        <p>立即购买</p>
+      </a>
+    </div>
+    <!--tabbar end-->
+
+    <div class="product-context">
+
+    </div>
+
+    <!--套餐选择-->
+    <div id="packages" class='weui-popup__container popup-bottom'>
+      <div class="weui-popup__overlay" id="overlay2"></div>
+      <div class="weui-popup__modal" style="background-color: white;">
+        <div class="toolbar">
+          <div class="toolbar-inner">
+            <a href="javascript:;" class="picker-button close-popup" id="closePackageSelect">关闭</a>
+            <h1 class="title">套餐选择</h1>
+          </div>
+        </div>
+        <div class="modal-content">
+          <div class="weui-cells weui-cells_checkbox">
+            <label class="weui-cell weui-check__label" for="s11" th:each="iitem : ${product.commodityStyleVoList}" th:for="${iitem.id}">
+              <div class="weui-cell__hd">
+                <input type="radio" class="weui-check" name="package1" id="s11" checked="checked" th:id="${iitem.id}" th:value="${iitem.id}">
+                <i class="weui-icon-checked"></i>
+              </div>
+              <div class="weui-cell__bd">
+                <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                  <div class="weui-media-box__hd">
+                    <img class="weui-media-box__thumb" src="testimg/002.jpg" th:src="${iitem.images[0].fullUrl}">
+                  </div>
+                  <div class="weui-media-box__bd">
+                    <h4 class="weui-media-box__title" th:text="${iitem.name}">产品名</h4>
+                    <p class="weui-media-box__desc">价格￥<font style="color: red" th:text="${iitem.price}"></font></p>
+                  </div>
+                </a>
+              </div>
+            </label>
+          </div>
+
+          <div class="weui-cell" style="background-color: white;">
+            <div class="weui-cell__bd">
+              <p>购买数量</p>
+            </div>
+            <div class="weui-cell__ft">
+              <div class="weui-count">
+                <a class="weui-count__btn weui-count__decrease"></a>
+                <input class="weui-count__number" type="number" disabled="disabled" value="1" style="width: 2.3rem;" id="buyCount" />
+                <a class="weui-count__btn weui-count__increase"></a>
+              </div>
+            </div>
+          </div>
+          <div style="height: 20vw;"></div>
+          <div class="tabBar">
+            <div class="bt-pay1" id="selectPackageToCollect">
+              加入购物车
+            </div>
+            <div class="bt-pay2" id="selectPackageToPay">
+              支付
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!--套餐选择 end-->
+
+    <!-- 分享 -->
+    <!-- <img class="backIcon" src="img/icon/backto2.png" style="display: none;width: 40px;height: 40px;position: fixed;top: 4%;left: 3%;"> -->
+    <div id="qrcode" style="display: none;"></div>
+
+    <div class="cover" style="display: none;
+    background-color: #000000;
+    opacity: 0.7;
+    z-index: 1997;
+    width: 100%;
+    height: 1000px;
+    position: fixed;
+    top: 0;"></div>
+
+    <div id="canbox" class="canbox">
+      <canvas id="myCanvas" width="" height=""></canvas>
+      <div class="" style="height: 100vw;">
+        <img class="backgroundImage" src="" style="display: block;z-index: 1999;width: 100%;height: 100%;background-size: cover;object-fit: cover;">
+      </div>
+      <div class="flexContent">
+        <img class="userHeader" src="" />
+
+        <div class="" style="margin-top: 9vw;">
+          <div class="saoyisaoText">扫描此二维码,瞅瞅我分享的宝贝吧</div>
+          <!-- <div class="saoyisaoText">赶快瞅瞅我分享的宝贝吧</div> -->
+        </div>
+
+        <img class="canimg" src="" />
+      </div>
+
+    </div>
+
+    <div class="backIcon" style="background-color: rgb(255, 255, 255);
+    width: 21vw;
+    text-align: center;
+    padding: 2vw 4vw;
+    position: fixed;
+    bottom: 10%;
+    left: 18%;
+    display: none;
+    z-index: 2001;
+    border-radius: 3px;">关闭</div>
+    <div class="downLoadImage" style="background-color: rgb(30, 144, 255);
+    width: 21vw;
+    padding: 2vw 4vw;
+    text-align: center;
+    color: #FFFFFF;
+    position: fixed;
+    bottom: 10%;
+    right: 18%;
+    display: none;
+    z-index: 2001;
+    border-radius: 3px;">保存图片</div>
+  </body>
+  <!--轮播JS-->
+  <script type='text/javascript' src='dist/js/swiper.js' charset='utf-8' th:src="@{/dist/js/swiper.js}"></script>
+  <!--选择器-->
+  <script src="dist/js/jquery-weui.js" th:src="@{/dist/js/jquery-weui.js}"></script>
+  <script type="text/javascript" src="dist/lib/layer/layer.js" th:src="@{/dist/lib/layer/layer.js}"></script>
+  <script type="text/javascript" src="js/v1/mallProductDetail.js" th:src="@{/js/v1/mallProductDetail.js}"></script>
+</html>

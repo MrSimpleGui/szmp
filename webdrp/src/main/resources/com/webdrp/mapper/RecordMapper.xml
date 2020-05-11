@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.RecordMapper">
+    <cache type="com.webdrp.config.MybatisRedisCache"/>
+    <insert id="insert" parameterType="com.webdrp.entity.Record"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into record(id,
+        targetRichUserId,
+        money,
+        zfbName,
+        zfb,
+        status,
+        rType,
+        openid,
+        poundage,
+        phone,
+        note,
+        zfbOrderNo)
+        values(#{id} ,
+        #{targetRichUserId},
+        #{money},
+        #{zfbName},
+        #{zfb},
+        #{status},
+        #{rType},
+        #{openid},
+        #{poundage},
+        #{phone},
+        #{note},
+        #{zfbOrderNo})
+    </insert>
+    <!--sql片段，时间格式化-->
+    <sql id="select">
+          id,targetRichUserId,phone,openid,poundage,money,zfbName,zfb,status,rType,note,zfbOrderNo,DATE_FORMAT(createTime,'%Y-%m-%d %H:%i:%s')as createTime,DATE_FORMAT(updateTime,'%Y-%m-%d %H:%i:%s')as updateTime
+    </sql>
+
+    <delete id="delete" parameterType="com.webdrp.entity.Record">
+        delete from record where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.webdrp.entity.Record">
+        update record
+        <set>
+            <if test="id!=null">
+                id = #{id},
+            </if>
+            <if test="targetRichUserId!=null">
+                targetRichUserId = #{targetRichUserId},
+            </if>
+            <if test="orderId!=null">
+                orderId = #{orderId},
+            </if>
+            <if test="money!=null">
+                money = #{money},
+            </if>
+            <if test="zfbName!=null">
+                zfbName = #{zfbName},
+            </if>
+            <if test="zfb!=null">
+                zfb = #{zfb},
+            </if>
+            <if test="status!=null">
+                status = #{status},
+            </if>
+            <if test="rType!=null">
+                rType = #{rType},
+            </if>
+            <if test="note!=null">
+                note = #{note},
+            </if>
+            <if test="zfbOrderNo!=null">
+                zfbOrderNo = #{zfbOrderNo},
+            </if>
+            <if test="createTime!=null">
+                createTime = #{createTime},
+            </if>
+            <if test="updateTime!=null">
+                updateTime = #{updateTime},
+            </if>
+            <if test="deleteTime!=null">
+                deleteTime = #{deleteTime},
+            </if>
+            <if test="phone!=null">
+                phone = #{phone},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateRecodeStatus" parameterType="com.webdrp.entity.Record">
+        update record  set `status` = #{status} where id = #{id}
+    </update>
+
+    <select id="findAll" resultMap="resultList">
+        select
+        <include refid="select"></include>
+        from record where deleteTime is NULL
+        <include refid="query"/>
+        order by createTime desc
+    </select>
+
+    <select id="findById" resultMap="resultList">
+        SELECT
+        <include refid="select"/>
+        from record
+        where deleteTime IS NULL
+        and id  = #{id}
+    </select>
+
+    <select id="count" resultType="long">
+        SELECT
+        count(*)
+        from record
+        where deleteTime IS NULL
+        <include refid="query"/>
+        order by createTime desc
+    </select>
+    
+    <select id="loadAll" resultMap="resultList">
+        SELECT
+        <include refid="select"/>
+        from record
+        where deleteTime IS NULL
+        <include refid="query"/>
+        order by createTime desc
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="sumRecordStatus" parameterType="com.webdrp.entity.dto.RecordDto" resultType="com.webdrp.entity.vo.RecordVo">
+        SELECT
+        status,
+        sum(money) AS totalPrice
+        FROM record r
+        <where>
+            <if test='startTime != null and startTime != "" and endTime != null and endTime != "" '>
+                r.createTime &gt;=#{startTime} AND r.createTime &lt;= #{endTime}
+            </if>
+        </where>
+        GROUP BY status
+
+    </select>
+    
+    <sql id="query">
+        <if test="entity.id!=null">
+            and id = #{entity.id}
+        </if>
+        <if test="entity.targetRichUserId!=null">
+            and targetRichUserId = #{entity.targetRichUserId}
+        </if>
+        <if test="entity.money!=null">
+            and money = #{entity.money}
+        </if>
+        <if test="entity.zfbName!=null">
+            and zfbName = #{entity.zfbName}
+        </if>
+        <if test="entity.zfb!=null">
+            and zfb = #{entity.zfb}
+        </if>
+        <if test="entity.status!=null">
+            and status = #{entity.status}
+        </if>
+        <if test="entity.rType!=null">
+            and rType = #{entity.rType}
+        </if>
+        <if test="entity.note!=null">
+            and note = #{entity.note}
+        </if>
+        <if test="entity.zfbOrderNo!=null">
+            and zfbOrderNo = #{entity.zfbOrderNo}
+        </if>
+        <if test="entity.createTime!=null">
+            and createTime = #{entity.createTime}
+        </if>
+        <if test="entity.updateTime!=null">
+            and updateTime = #{entity.updateTime}
+        </if>
+         <if test="entity.phone!=null">
+            and phone = #{entity.phone}
+        </if>
+    </sql>
+
+    <select id="sumRecord" resultType="double" parameterType="integer">
+         SELECT sum(money) from record where status = #{value} and deleteTime IS NULL
+    </select>
+    
+    <select id="sumRecordByRichUserId"  resultType="double" parameterType="integer">
+          SELECT ifnull(sum(money),0) from record where  targetRichUserId = #{value} and deleteTime IS NULL
+    </select>
+
+    <select id="findVoByPage" resultMap="recordName">
+        SELECT
+        <include refid="select"/>
+        from record
+        where deleteTime IS NULL
+        <include refid="query"/>
+        order by createTime desc
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <resultMap id="resultList" type="com.webdrp.entity.Record" >
+        <id column="id" property="id" />
+        <result column="targetRichUserId" property="targetRichUserId"/>
+        <result column="money" property="money"/>
+        <result column="zfbName" property="zfbName"/>
+        <result column="zfb" property="zfb"/>
+        <result column="status" property="status"/>
+        <result column="rType" property="rType"/>
+        <result column="note" property="note"/>
+        <result column="poundage" property="poundage"/>
+        <result column="zfbOrderNo" property="zfbOrderNo"/>
+        <result column="openid" property="openid"/>
+        <result column="phone" property="phone"/>
+        <result  column="createTime" property="createTime"/>
+        <result  column="updateTime" property="updateTime"/>
+    </resultMap>
+
+    <resultMap id="recordName" type="com.webdrp.entity.vo.RecordVo" extends="resultList">
+        <association property="nickname" javaType="string" column="targetRichUserId"
+                     select="com.webdrp.mapper.MemberMapper.findNicknameById"/>
+    </resultMap>
+</mapper>
+

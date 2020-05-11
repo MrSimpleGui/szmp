@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>签到领产品</title>
+	<link rel="stylesheet" href="dist/lib/weui.min.css" th:href="@{/dist/lib/weui.min.css}"/>
+	<link rel="stylesheet" href="dist/css/jquery-weui.min.css" th:href="@{/dist/css/jquery-weui.min.css}" />
+    <script type="text/javascript" src="dist/lib/jquery-2.1.4.js" th:src="@{/dist/lib/jquery-2.1.4.js}"></script>
+	<link rel="stylesheet" href="css/header.min.css" th:href="@{/css/header.min.css}" />
+	<link rel="stylesheet" href="css/signIn.css" th:href="@{/css/signIn.css}"/>
+	<link rel="stylesheet" href="css/animate.min.css" th:href="@{/css/animate.min.css}"/>
+    <script  type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        ctxPath = /*[[@{/}]]*/ '';
+        /*]]>*/
+    </script>
+</head>
+<style>
+	.ecgQRCode{
+		width: 80%;
+		margin: 0 auto;
+		margin-top: 10vw;
+	}
+	.ecgQRCode >img{
+		width: 100%;
+		height: auto;
+	}
+
+</style>
+
+<body>
+<div class="header">
+	<div class="goback">
+		<a href="javascript:history.back(-1)">
+			<img class="goback-img" src="img/goback.png" th:src="@{/img/goback.png}" />
+		</a>
+	</div>
+	<div class="header-title">签到小助手</div>
+	<div class="gohome"></div>
+</div>
+<div class="sinInDiv">
+	<div class="signBtnCycle">
+		<div class="signBtn heartBeat" th:if="${hasSign}">
+			已签到
+		</div>
+		<div class="signBtn heartBeat" th:if="${!hasSign}" onclick="signIn()">
+			签到
+		</div>
+
+	</div>
+</div>
+
+<div class="signRule">
+	<p>连续签到两天即可领取体验贴</p>
+</div>
+<div class="signList">
+	<div th:each="item : ${list}" >
+		已签到：<font style="color: #ff5502" th:text="${item.date}">2019-09-09 00:00:00</font>
+	</div>
+    <div th:if="0 eq ${size}" style="color: gray">
+		今天未签到
+	</div>
+
+
+</div>
+
+<div class="getProducts">
+	<div class="heartBeat" th:if="2 eq ${size}">
+		<a href="javascript:;" class="getProducts-a" th:href="@{/wechat/h5/prepay?packageId=10&count=1}">领取产品</a>
+	</div>
+    <div class="heartBeat" th:if="${size} ge 4">
+        <a href="javascript:;" class="getProducts-a" th:href="@{/wechat/h5/prepay?packageId=10&count=1}">领取产品</a>
+    </div>
+</div>
+
+</body>
+<script type="text/javascript" src="dist/js/jquery-weui.js" th:src="@{/dist/js/jquery-weui.js}"></script>
+<script type="text/javascript">
+    function signIn() {
+        $.post(ctxPath + "wechat/api/signIn", {  },
+            function(data){
+                if (data.status){
+                    $.toast("签到成功", "text");
+                    location.reload();
+                }else{
+                    $.toast(data.errorMsg, "text");
+                }
+            }, "json");
+    }
+</script>
+
+</html>

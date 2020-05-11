@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>订单分润</title>
+	<link rel="stylesheet" href="dist/lib/weui.min.css" th:href="@{/dist/lib/weui.min.css}"/>
+	<link rel="stylesheet" href="dist/css/jquery-weui.min.css" th:href="@{/dist/css/jquery-weui.min.css}"/>
+	<script type="text/javascript" src="dist/lib/jquery-2.1.4.js" th:src="@{/dist/lib/jquery-2.1.4.js}"></script>
+	<link rel="stylesheet" href="css/header.min.css" th:href="@{/css/header.min.css}" />
+	<link rel="stylesheet" href="css/income.css" th:href="@{/css/income.css}"/>
+	<script  type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		ctxPath = /*[[@{/}]]*/ '';
+		/*]]>*/
+	</script>
+</head>
+
+<body>
+<div class="header">
+	<div class="goback">
+		<a href="javascript:history.back(-1)">
+			<img class="goback-img" src="img/goback.png" th:src="@{/img/goback.png}" />
+		</a>
+	</div>
+	<div class="header-title">订单分润</div>
+	<div class="gohome"></div>
+</div>
+
+<div class="incomeList" id="incomeList">
+<!--	<div class="incomeCard">-->
+<!--		<div class="incomeCardCell">-->
+<!--			<div class="incomeItem incomeDate">-->
+<!--				<span>2018-09-09 11:11:11</span>-->
+<!--			</div>-->
+<!--		</div>-->
+<!--		<div class="incomeCardCell">-->
+<!--			<div class="incomeItem incomePrice">-->
+<!--				<font class="price-unit">+</font>-->
+<!--				<font class="price">198.00</font>-->
+<!--			</div>-->
+<!--		</div>-->
+<!--		<div class="incomeCardCell">-->
+<!--			<div class="incomeItem text-center incomeFrom">-->
+<!--				<p>来源</p>-->
+<!--			</div>-->
+<!--			<div class="incomeItem  text-center incomeFrom">-->
+<!--				<p>平级奖</p>-->
+<!--			</div>-->
+<!--		</div>-->
+<!--	</div>-->
+
+</div>
+<!--加载更多-->
+<div class="weui-loadmore" id="weui-loadmore">
+	<i class="weui-loading"></i>
+	<span class="weui-loadmore__tips">正在加载</span>
+</div>
+<!--加载更多 end-->
+<div class="weui-loadmore weui-loadmore_line" id="noData">
+	<span class="weui-loadmore__tips">暂无更多数据</span>
+</div>
+
+</body>
+<script type="text/javascript" src="dist/js/jquery-weui.js" th:src="@{/dist/js/jquery-weui.js}"></script>
+<script type="text/javascript" th:src="@{/js/orderIncome.js}"> </script>
+
+
+</html>

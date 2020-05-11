@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.GradeMapper">
+
+    <cache type="com.webdrp.config.MybatisRedisCache"/>
+
+    <insert id="insert" parameterType="com.webdrp.entity.CommissionMode"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into grade(id,
+        name,
+        sort,
+        rank,
+        teamNumber,
+        recommendNumber,
+        specificMode)
+        values(#{id} ,
+        #{name},
+        #{sort},
+        #{rank},
+        #{teamNumber},
+        #{recommendNumber},
+        #{specificMode} )
+    </insert>
+
+    <sql id="select">
+          id,name,sort,rank,teamNumber,recommendNumber,specificMode,DATE_FORMAT(createTime,'%Y-%m-%d %H:%i:%s')as createTime,DATE_FORMAT(updateTime,'%Y-%m-%d %H:%i:%s')as updateTime
+    </sql>
+
+    <update id="delete" parameterType="com.webdrp.entity.CommissionRule">
+        update grade
+        <set>
+            deleteTime = #{deleteTime}
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="update" parameterType="com.webdrp.entity.CommissionRule">
+        update grade
+        <set>
+            <if test="id!=null">
+                id = #{id},
+            </if>
+            <if test="name!=null">
+                name = #{name},
+            </if>
+            <if test="sort!=null">
+                sort = #{sort},
+            </if>
+            <if test="rank!=null">
+                rank = #{rank},
+            </if>
+            <if test="teamNumber!=null">
+                teamNumber = #{teamNumber},
+            </if>
+            <if test="recommendNumber!=null">
+                recommendNumber = #{recommendNumber},
+            </if>
+            <if test="specificMode!=null">
+                specificMode = #{specificMode},
+            </if>
+            <if test="createTime!=null">
+                createTime = #{createTime},
+            </if>
+            <if test="updateTime!=null">
+                updateTime = #{updateTime},
+            </if>
+            <if test="deleteTime!=null">
+                deleteTime = #{deleteTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findAll" resultMap="resultList">
+        SELECT  * from grade where deleteTime is NULL
+        <include refid="query"/>
+    </select>
+
+    <select id="findById" resultMap="resultList">
+        SELECT
+        <include refid="select"></include>
+        from grade where deleteTime IS NULL  and id  = #{id}
+    </select>
+
+    <select id="count" resultType="long">
+        select
+        count(*)
+        from grade
+        where deleteTime is NULL
+        <include refid="query"/>
+    </select>
+
+    <select id="loadAll" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from grade
+        where deleteTime is NULL
+        <include refid="query"/>
+        order by createTime desc
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="findByRank" parameterType="integer" resultType="com.webdrp.entity.Grade">
+       SELECT  * from grade where `rank` = #{value} and deleteTime is NULL
+    </select>
+
+    <select id="findGradeNameByGradeRank" resultType="java.lang.String">
+        select name
+        from grade
+        where deleteTime is null
+        and rank = #{rank}
+    </select>
+
+    <select id="findGradeByNameAndRank" resultType="com.webdrp.entity.Grade">
+        select id
+        from grade
+        where deleteTime is null
+        and (
+            name = #{name} or rank = #{rank}
+        )
+    </select>
+
+    <sql id="query">
+        <if test="entity.id!=null">
+            and id = #{entity.id}
+        </if>
+        <if test="entity.name!=null">
+            and name = #{entity.name}
+        </if>
+        <if test="entity.sort!=null">
+            and sort = #{entity.sort}
+        </if>
+        <if test="entity.rank!=null">
+            and rank = #{entity.rank}
+        </if>
+        <if test="entity.teamNumber!=null">
+            and teamNumber = #{entity.teamNumber}
+        </if>
+        <if test="entity.recommendNumber!=null">
+            and recommendNumber = #{entity.recommendNumber}
+        </if>
+        <if test="entity.specificMode!=null">
+            and specificMode = #{entity.specificMode}
+        </if>
+        <if test="entity.createTime!=null">
+            and createTime = #{entity.createTime}
+        </if>
+        <if test="entity.updateTime!=null">
+            and updateTime = #{entity.updateTime}
+        </if>
+    </sql>
+
+    <resultMap id="resultList" type="com.webdrp.entity.Grade" >
+        <id column="id" property="id" />
+        <result column="sort" property="sort"/>
+        <result column="name" property="name"/>
+        <result column="rank" property="rank"/>
+        <result column="teamNumber" property="teamNumber"/>
+        <result column="recommendNumber" property="recommendNumber"/>
+        <result column="specificMode" property="specificMode"/>
+        <result column="createTime" property="createTime"/>
+        <result column="updateTime" property="updateTime"/>
+    </resultMap>
+</mapper>
+

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.OrderDetailMapper">
+    <insert id="insert" parameterType="com.webdrp.entity.OrderDetail"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into orderDetail(
+        orderId,
+        commodityId,
+        commodityStyleId,
+        imageUrl,
+        `count`,
+        `name`,
+        nameItem,
+        subPrice,
+        openId,
+        richUserId,
+        price,
+        nickName)
+        values(
+        #{orderId},
+        #{commodityId},
+        #{commodityStyleId},
+        #{imageUrl},
+        #{count},
+        #{name},
+        #{nameItem},
+        #{subPrice},
+        #{openId},
+        #{richUserId},
+        #{price},
+        #{nickName})
+    </insert>
+
+    <update id="update" parameterType="com.webdrp.entity.OrderDetail">
+        update orderDetail
+        <set>
+            <if test="orderId != null">
+                orderId=#{orderId},
+            </if>
+            <if test="commodityId != null">
+                commodityId=#{commodityId},
+            </if>
+            <if test="commodityStyleId != null">
+                commodityStyleId=#{commodityStyleId},
+            </if>
+            <if test="imageUrl!=null">
+                imageUrl=#{imageUrl},
+            </if>
+            <if test="count!=null">
+                `count`=#{count},
+            </if>
+            <if test="name != null">
+                `name` =#{name},
+            </if>
+
+            <if test="nameItem != null">
+                nameItem=#{nameItem},
+            </if>
+
+            <if test="subPrice!=null">
+                subPrice=#{subPrice},
+            </if>
+
+            <if test="openId!=null">
+                openId=#{openId},
+            </if>
+            <if test="richUserId != null">
+                richUserId=#{richUserId},
+            </if>
+            <if test="price!=null">
+                price=#{price},
+
+            </if>
+            <if test="nickName != null">
+                nickName=#{nickName},
+            </if>
+
+            <if test="createTime != null">
+                createTime = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                updateTime = #{updateTime},
+            </if>
+            <if test="deleteTime != null">
+                deleteTime = #{deleteTime}
+            </if>
+        </set>
+        where id = #{id} AND deleteTime IS NULL
+    </update>
+
+    <update id="delete" parameterType="com.webdrp.entity.OrderDetail">
+        update  orderDetail
+        SET deleteTime = #{deleteTime}
+        where id = #{id}
+    </update>
+
+    <select id="findAll" parameterType="com.webdrp.entity.OrderDetail" resultType="com.webdrp.entity.OrderDetail">
+         select * from orderDetail
+        where  a.deleteTime IS NULL
+    </select>
+
+    <!-- 暂定-->
+    <select id="loadAll" resultType="com.webdrp.entity.OrderDetail">
+        select * from orderDetail
+        where  deleteTime IS NULL
+         <include refid="query"/>
+        ORDER  BY  createTime DESC
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="count" resultType="long">
+        select count(*) from orderDetail
+        where  deleteTime IS NULL
+    </select>
+
+    <update id="deleteByOrderId" parameterType="com.webdrp.entity.OrderDetail">
+        update  orderDetail
+        <set>
+         deleteTime = #{deleteTime}
+        </set>
+        where orderId = #{orderId}
+    </update>
+
+    <select id="findByOrderId" parameterType="integer" resultMap="resultList">
+        SELECT * from orderDetail where orderId = #{value} and deleteTime is null
+    </select>
+    
+    <select id="findById" parameterType="int" resultType="com.webdrp.entity.OrderDetail">
+        SELECT * from orderDetail
+        WHERE deleteTime IS NULL
+        AND id=#{id}
+    </select>
+
+    <sql id="query">
+        <if test="entity.orderId != null">
+            AND orderId=#{entity.orderId}
+        </if>
+        <if test="entity.commodityId != null">
+            AND  commodityId=#{entity.commodityId}
+        </if>
+        <if test="entity.commodityStyleId != null">
+            AND commodityStyleId=#{entity.commodityStyleId}
+        </if>
+        <if test="entity.imageUrl!=null">
+            AND imageUrl=#{entity.imageUrl}
+        </if>
+        <if test="entity.count!=null">
+            AND  `count`=#{entity.count}
+        </if>
+        <if test="entity.name != null">
+            AND  `name` =#{entity.name}
+        </if>
+        <if test="entity.nameItem != null">
+            AND nameItem=#{entity.nameItem}
+        </if>
+        <if test="entity.subPrice!=null">
+            AND subPrice=#{entity.subPrice}
+        </if>
+        <if test="entity.openId!=null">
+            AND openId=#{entity.openId}
+        </if>
+        <if test="entity.richUserId != null">
+            AND richUserId=#{entity.richUserId}
+        </if>
+        <if test="entity.price!=null">
+            AND   price=#{entity.price}
+        </if>
+        <if test="entity.nickName != null">
+            AND nickName=#{entity.nickName}
+        </if>
+        <if test="entity.createTime != null">
+            AND createTime = #{entity.createTime}
+        </if>
+        <if test="entity.updateTime != null">
+            AND updateTime = #{entity.updateTime}
+        </if>
+    </sql>
+    
+    <resultMap id="resultList" type="com.webdrp.entity.OrderDetail">
+        <id column="id" property="id"/>
+        <result column="orderId" property="orderId"/>
+        <result column="commodityId" property="commodityId"/>
+        <result column="commodityStyleId" property="commodityStyleId"/>
+        <result column="imageUrl" property="imageUrl"/>
+        <result column="count" property="count"/>
+        <result column="name" property="name"/>
+        <result column="nameItem" property="nameItem"/>
+        <result column="subPrice" property="subPrice"/>
+        <result column="openId" property="openId"/>
+        <result column="richUserId" property="richUserId"/>
+        <result column="price" property="price"/>
+        <result column="nickName" property="nickName"/>
+        <result column="createTime" property="createTime"/>
+        <result column="updateTime" property="updateTime"/>
+    </resultMap>
+
+</mapper>
+

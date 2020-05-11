@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.PermissionMapper">
+    <cache type="com.webdrp.config.MybatisRedisCache"/>
+    <insert id="insert" parameterType="com.webdrp.entity.Permission"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into sys_permission(id,
+          pid,
+          esName,
+          zhName,
+          permissionType,
+          weight
+        )
+        values(#{id},
+          #{pid},
+          #{esName},
+          #{zhName},
+          #{permissionType},
+          #{weight}
+        )
+    </insert>
+    <!--sql片段，时间格式化-->
+    <sql id="select">
+          id,pid,esName,
+          zhName,
+          permissionType,
+          weight,DATE_FORMAT(createTime,'%Y-%m-%d %h:%i:%s')as createTime,DATE_FORMAT(updateTime,'%Y-%m-%d %h:%i:%s')as updateTime
+    </sql>
+
+    <update id="delete" parameterType="com.webdrp.entity.Permission">
+        update from sys_permission set deleteTime is null where id = #{id}
+    </update>
+
+    <update id="update" parameterType="com.webdrp.entity.Permission">
+        update  sys_permission
+        <set>
+            <if test="pid != null">
+                pid = #{pid},
+            </if>
+            <if test="esName != null">
+                esName = #{esName},
+            </if>
+            <if test="zhName != null">
+                zhName = #{zhName},
+            </if>
+            <if test="permissionType != null">
+                permissionType = #{permissionType},
+            </if>
+            <if test="weight != null">
+                weight = #{weight},
+            </if>
+        </set>
+        where id = #{id} and deleteTime is null
+    </update>
+
+    <select id="findAll" parameterType="com.webdrp.entity.Permission" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from
+        sys_permission
+        where deleteTime is null
+        <include refid="query"/>
+    </select>
+    <select id="findById" parameterType="integer" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from sys_permission where id = #{id} and deleteTime is null
+    </select>
+
+    <select id="count" parameterType="com.webdrp.entity.Permission" resultType="long">
+        select count(*) from sys_permission where deleteTime is null
+        <include refid="query"/>
+    </select>
+
+    <select id="loadAll" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from sys_permission where deleteTime is null
+        <include refid="query"/>
+        order by createTime desc
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="findPermissions" parameterType="com.webdrp.entity.dto.PermissionDto" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from sys_permission where deleteTime is null
+         <if test="pid != null">
+            and pid = #{pid}
+         </if>
+        <if test="permissionType != null">
+            and permissionType = #{permissionType}
+        </if>
+        <if test="weight != null">
+            and weight = #{weight}
+        </if>
+        <if test="roleId != null">
+            and id in (
+            select permissionId from sys_role_permission where roleId = #{roleId} and deleteTime is null
+            )
+        </if>
+
+    </select>
+
+    <select id="findNotHavePermissionByRoleId" parameterType="integer" resultMap="resultList">
+        select * from sys_permission where deleteTime is null and id not in (
+          select permissionId from sys_role_permission where roleId = #{value} and deleteTime is null
+        )
+    </select>
+
+
+    <sql id="query">
+        <if test="entity.id != null">
+            and id = #{entity.id}
+        </if>
+        <if test="entity.esName != null">
+            and esName = #{entity.esName}
+        </if>
+        <if test="entity.zhName != null">
+            and zhName = #{entity.zhName}
+        </if>
+        <if test="entity.permissionType != null">
+            and permissionType = #{entity.permissionType}
+        </if>
+        <if test="entity.weight != null">
+            and weight = #{entity.weight}
+        </if>
+    </sql>
+
+    <resultMap id="resultList" type="com.webdrp.entity.Permission" >
+        <id column="id" property="id" />
+        <result column="pid" property="pid"/>
+        <result column="esName" property="esName"/>
+        <result column="zhName" property="zhName"/>
+        <result column="permissionType" property="permissionType"/>
+        <result  column="createTime" property="createTime"/>
+        <result  column="updateTime" property="updateTime"/>
+    </resultMap>
+</mapper>
+

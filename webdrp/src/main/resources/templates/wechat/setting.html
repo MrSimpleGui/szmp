@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>账户设置</title>
+		<link rel="stylesheet" href="dist/lib/weui.min.css" th:href="@{/dist/lib/weui.min.css}" />
+		<link rel="stylesheet" href="dist/css/jquery-weui.min.css" th:href="@{/dist/css/jquery-weui.min.css}" />
+		<script type="text/javascript" src="dist/lib/jquery-2.1.4.js" th:src="@{/dist/lib/jquery-2.1.4.js}"></script>
+		<link rel="stylesheet" href="css/header.min.css" th:href="@{/css/header.min.css}"/>
+		<link rel="stylesheet" href="css/toRecord.css" th:href="@{/css/toRecord.css}" />
+		<script  type="text/javascript" th:inline="javascript">
+			/*<![CDATA[*/
+			ctxPath = /*[[@{/}]]*/ '';
+			/*]]>*/
+		</script>
+		<style>
+			.input-user{
+				width: 100%;
+				border: none;
+				font-size: 7vw;
+				border-bottom: 1px solid gray;
+				line-height: 1.47;
+			}
+			.input-user:focus{
+				border: none;
+				border-bottom: 1px solid gray;
+				outline: 0;
+			}
+			.setting-title{
+				margin-top: 3vw;
+			}
+			.setting-div{
+				box-sizing: border-box;
+				margin: 2vw 6vw;
+				padding: 3vw
+			}
+			.tips{
+				font-size: 3vw;
+				color: gray;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="header">
+			<div class="goback">
+				<a href="javascript:history.back(-1)">
+					<img class="goback-img" src="img/goback.png" th:src="@{/img/goback.png}" />
+				</a>
+			</div>
+			<div class="header-title">帐号设置</div>
+			<div class="gohome"></div>
+		</div>
+
+
+		<div class="setting-div" >
+			<div class="setting-title">用户名<font style="color: red">*</font></div>
+			<div>
+				<input class="input-user" type="text" th:value="${username}" id="username"/>
+				<span class="tips">推荐使用手机号</span>
+			</div>
+			<div class="setting-title">密码<font style="color: red">*</font></div>
+			<div>
+				<input class="input-user" type="password" id="password"/>
+				<span class="tips">推荐长度在6～18位数</span>
+			</div>
+		</div>
+
+		<div class="bt-record" style="margin-top: 20vw">
+			<a href="javascript:;" class="weui-btn weui-btn_plain-primary" style="color: #ff7103;border: 1px #ff7103 solid;" id="updatePassword">提交修改</a>
+		</div>
+
+	</body>
+	<script type="text/javascript" src="dist/js/jquery-weui.js" th:src="@{/dist/js/jquery-weui.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery.md5.js}"></script>
+	<script type="text/javascript" th:src="@{/js/setting.js}"></script>
+
+</html>

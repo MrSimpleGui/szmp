@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>发起提现</title>
+		<link rel="stylesheet" href="dist/lib/weui.min.css" th:href="@{/dist/lib/weui.min.css}" />
+		<link rel="stylesheet" href="dist/css/jquery-weui.min.css" th:href="@{/dist/css/jquery-weui.min.css}" />
+		<script type="text/javascript" src="dist/lib/jquery-2.1.4.js" th:src="@{/dist/lib/jquery-2.1.4.js}"></script>
+		<link rel="stylesheet" href="css/header.min.css" th:href="@{/css/header.min.css}"/>
+		<link rel="stylesheet" href="css/toRecord.css" th:href="@{/css/toRecord.css}" />
+		<script  type="text/javascript" th:inline="javascript">
+			/*<![CDATA[*/
+			ctxPath = /*[[@{/}]]*/ '';
+			/*]]>*/
+		</script>
+	</head>
+	<body>
+		<div class="header">
+			<div class="goback">
+				<a href="javascript:history.back(-1)">
+					<img class="goback-img" src="img/goback.png" th:src="@{/img/goback.png}" />
+				</a>
+			</div>
+			<div class="header-title">发起提现</div>
+			<div class="gohome"></div>
+		</div>
+		<div class="record-wallet">
+			<div class="record-title">可用余额</div>
+			<div class="record-data">
+				<span th:text="${user.wallet}">399.<font class="price-float">00</font></span>
+				
+			</div>
+		</div>
+
+		<div class="weui-cells weui-cells_form" style="margin-top: 0;">
+
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">姓名<font style="color: red">*</font></label>
+				</div>
+				<div class="weui-cell__bd">
+					<input class="weui-input" type="text" placeholder="姓名" id="name">
+				</div>
+			</div>
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">支付宝帐号<font style="color: red">*</font></label>
+				</div>
+				<div class="weui-cell__bd">
+					<input class="weui-input" type="text" placeholder="支付宝帐号" id="account">
+				</div>
+			</div>
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">金额<font style="color: red">*</font></label>
+				</div>
+				<div class="weui-cell__bd">
+					<input class="weui-input" type="number" placeholder="提现金额" id="money">
+				</div>
+			</div>
+
+		</div>
+		<div class="bt-record">
+			<a href="javascript:;" class="weui-btn weui-btn_plain-primary" style="color: #ff7103;border: 1px #ff7103 solid;" id="toRecord">发起提现</a>
+		</div>
+
+	</body>
+	<script type="text/javascript" th:src="@{/dist/js/jquery-weui.js}"></script>
+	<script>
+		$("#toRecord").click(function () {
+			var money = $("#money").val();
+			var name = $("#name").val();
+			var account = $("#account").val();
+			if (''==name){
+				$.toast("请输入支付宝姓名", "text");
+				$("#name").focus();
+				return;
+			}
+			if (""==account){
+				$.toast("请输入支付宝帐号", "text");
+				$("#account").focus();
+				return;
+			}
+			if (''==money){
+				$.toast("请输入金额", "text");
+				$("#money").focus();
+				return;
+			}
+
+			$.post(ctxPath + "wechat/api/toRecord", { "name": name,"account":account,"money":money},
+				function(data){
+					if (data.status){
+						$.toast("发起申请成功！", "text");
+						window.location.href= ctxPath +"wechat/h5/record";
+					}else{
+						$.toast(data.errorMsg, "text");
+					}
+				}, "json");
+		});
+	</script>
+
+</html>

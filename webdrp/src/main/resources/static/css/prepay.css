@@ -1,0 +1,195 @@
+body {
+	background-color: #F8F8F8;
+}
+
+.address-tabs {
+	margin: 2vw 2vw;
+	display: flex;
+	background-color: white;
+	padding: 3vw 1vw;
+}
+
+.address-icon {
+	flex: 2;
+}
+
+.address-data {
+	flex: 10;
+}
+
+.change {
+	flex: 1;
+}
+
+.name {
+	font-size: 4vw;
+}
+
+.phone {
+	font-size: 3vw;
+	color: gray;
+}
+
+.address {
+	font-size: 3vw;
+}
+
+.products{
+	margin: 2vw 2vw;
+	display: flex;
+	background-color: white;
+	box-sizing: border-box;
+	padding: 3vw 1vw;
+	font-size: 4vw;
+}
+
+.productLists {
+	width: 100%;
+	margin: 2vw 0;
+}
+
+.product{
+	margin: 0vw 2vw;
+	display: flex;
+	background-color: white;
+	box-sizing: border-box;
+	padding: 0vw 3vw;
+	font-size: 4vw;
+}
+
+.product-img {
+	flex: 1;
+	text-align: center;
+}
+
+.product-img-data {
+	object-fit: cover;
+	width: 24vw;
+	height: 24vw;
+}
+
+.productPacakge {
+	flex: 3;
+}
+
+
+.buyCount {
+	font-size: 3vw;
+	color: gray;
+	text-align: right;
+}
+
+.price {
+	text-align: right;
+}
+
+.price-unit {
+	font-size: 3vw;
+}
+
+.price-float {
+	font-size: 3vw;
+}
+
+
+/*订单标题最多两行展示*/
+
+.packageName {
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-line-clamp: 2 ;
+	-webkit-box-orient: vertical;
+	padding-left: 3vw;
+}
+
+.packageNameItem {
+	height: 5.86vw;
+	display: inline-block;
+	color: #666666;
+	padding: 0.66vw 1.6vw;
+	/* border: 2px solid #11b57c; */
+	background-color: #F2F2F2;
+	border-radius: 0.53vw;
+	text-align: center;
+	line-height: 4.86vw;
+	margin-top: 1.33vw;
+	font-size: 3.2vw;
+	max-width: 47vw;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	box-sizing: border-box;
+	margin-left: 3vw;
+}
+
+.packageName2 {
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-line-clamp: 2 ;
+	-webkit-box-orient: vertical;
+	padding-left: 3vw;
+	margin-top: 3vw;
+}
+
+.products-express {
+	margin: 2vw 2vw;
+	background-color: white;
+	box-sizing: border-box;
+	padding: 3vw 4vw;
+	font-size: 4vw;
+}
+.buyNow{
+	-moz-box-flex: 1;
+	flex: 1;
+	text-align: center;
+	margin: 3vw 1vw;
+}
+.goToPay{
+	background-color: red;
+	color: white;
+	border-radius: 5px;
+	padding: 2vw 3vw;
+	margin: 1vw 1vw;
+	font-size: 4vw;
+}
+.tab-price-data{
+	flex: 3;
+	margin: 3vw 1vw;
+}
+.priceData{
+	box-sizing: border-box;
+	padding: 0.5vw 1vw;
+	font-size: 4vw;
+	
+}
+
+.weui-tabbar:before {
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 1px;
+    border-top: none;
+    color: #c0bfc4;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(.5);
+    transform: scaleY(.5);
+}
+.citySelect{
+	width: 100%;
+	/*margin-top: 3vw;*/
+	background-color:  white;
+	box-sizing: border-box;
+	padding: 5vw;
+}
+.citySelect >div{
+	width: 96%;
+	margin: 0 auto;
+}
+
+.noAdddress{
+	color: gray;
+	margin-top: 10px;
+}

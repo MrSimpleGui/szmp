@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>购物车</title>
+    <link rel="stylesheet" href="dist/lib/weui.min.css" th:href="@{/dist/lib/weui.min.css}"/>
+    <link rel="stylesheet" href="dist/css/jquery-weui.min.css" th:href="@{/dist/css/jquery-weui.min.css}"/>
+    <!--自定义样式-->
+    <link rel="stylesheet" href="css/shoppingCart.css" th:href="@{/css/shoppingCart.css}"/>
+    <!--轮播依赖-->
+    <script type="text/javascript" src="dist/lib/jquery-2.1.4.js" th:src="@{/dist/lib/jquery-2.1.4.js}"></script>
+    <script type="text/javascript" src="dist/js/jquery-weui.js" th:src="@{/dist/js/jquery-weui.js}"></script>
+    <link rel="stylesheet" href="css/header.min.css" th:href="@{/css/header.min.css}"/>
+    <script  type="text/javascript" th:inline="javascript">
+      /*<![CDATA[*/
+      ctxPath = /*[[@{/}]]*/ '';
+      /*]]>*/
+    </script>
+  </head>
+
+  <body>
+    <div class="header">
+      <div class="goback">
+        <!--<a href="javascript:history.back(-1)">
+			<img class="goback-img" src="img/goback.png" th:src="@{/img/goback.png}" />
+		</a>-->
+      </div>
+      <div class="header-title">购物车</div>
+      <div class="gohome" index="0">编辑</div>
+    </div>
+    
+    <div class="main">
+      <ul class="main_shop">
+
+      </ul>
+    </div>
+    
+    <!--加载更多-->
+    <div class="weui-loadmore" id="weui-loadmore">
+    	<i class="weui-loading"></i>
+    	<span class="weui-loadmore__tips loading">正在加载</span>
+    </div>
+    
+    <!--空数据页	-->
+    <div class="weui-loadmore weui-loadmore_line" id="noData">
+      <img class="orderStatus" src="img/icon/orderStatus.png" th:src="@{/img/icon/orderStatus.png}">
+    	<span class="weui-loadmore__tips noData">暂无更多数据</span>
+    </div>
+    <!--空数据页	end-->
+
+    <div class="car">
+      <div class="car_left">
+        <img id="quan" index="0" src='img/icon/unCheck.png' th:src="@{/img/icon/unCheck.png}" style="width:5.86vw;height:5.86vw;margin-left: 7vw;padding-right: 3vw;"/><span>全选</span>
+      </div>
+      <div class="car_right">
+        <div class="te">
+          <p>合计：<span> ￥</span><span id="money">0</span></p>
+        </div>
+        <div class="btn" style="display: block;">
+          去结算(<span>0</span>)
+        </div>
+        <div class="btn1" style="display: none;">
+          删除(<span>0</span>)
+        </div>
+      </div>
+    </div>
+    <!--tabbar-->
+
+    <div class="weui-tabbar" style="position: fixed;">
+      <a href="index.html" class="weui-tabbar__item" th:href="@{/wechat/h5/index}">
+        <!--<span class="weui-badge" style="position: absolute;top: -.4em;right: 1em;">8</span>-->
+        <div class="weui-tabbar__icon">
+          <img src="dist/demos/images/icon_nav_search_bar.png" th:src="@{/img/icon2/index-1.png}"  alt="">
+        </div>
+        <p class="weui-tabbar__label">商城</p>
+      </a>
+      <a href="javascript:;" class="weui-tabbar__item" th:href="@{/wechat/h5/orderList}">
+        <div class="weui-tabbar__icon">
+          <img src="dist/demos/images/icon_nav_msg.png" th:src="@{/img/icon2/order-1.png}" alt="">
+        </div>
+        <p class="weui-tabbar__label">订单</p>
+      </a>
+      <a href="javascript:;" class="weui-tabbar__item weui-bar__item--on" >
+        <div class="weui-tabbar__icon">
+          <img src="img/icon2/cart.png" alt="" th:src="@{/img/icon2/cart.png}">
+        </div>
+        <p class="weui-tabbar__label">购物车</p>
+      </a>
+      <a href="personal.html" class="weui-tabbar__item" th:href="@{/wechat/h5/personal}">
+        <div class="weui-tabbar__icon">
+          <img src="dist/demos/images/icon_nav_cell.png" th:src="@{/img/icon2/user-1.png}" alt="">
+        </div>
+        <p class="weui-tabbar__label">个人中心</p>
+      </a>
+    </div>
+    <!--tabbar end-->
+  </body>
+  <script type='text/javascript' src='dist/js/swiper.js' charset='utf-8' th:src="@{/dist/js/swiper.js}"></script>
+  <script type="text/javascript" src="dist/js/jquery-weui.js" th:src="@{/dist/js/jquery-weui.js}"></script>
+  <script type="text/javascript" src="js/shoppingCart.js" th:src="@{/js/shoppingCart.js}"></script>
+
+</html>

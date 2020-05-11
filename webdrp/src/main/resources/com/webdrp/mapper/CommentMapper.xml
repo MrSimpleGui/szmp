@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.CommentMapper">
+    <insert id="insert" parameterType="com.webdrp.entity.Comment"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into comment(
+            `from`,
+            `to`,
+            message,
+            friendsId
+            )
+            values(
+            #{from},
+            #{to},
+            #{message},
+            #{friendsId}
+            )
+    </insert>
+
+
+
+    <update id="delete" parameterType="com.webdrp.entity.Comment">
+        update comment
+        <set>
+            deleteTime=#{deleteTime}
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="deleteCommentByFriendsId" parameterType="com.webdrp.entity.Comment">
+        update comment
+        <set>
+            deleteTime=#{deleteTime}
+        </set>
+        where friendsId=#{friendsId}
+    </update>
+
+
+    <select id="loadCommentByFriendsId" parameterType="com.webdrp.entity.Comment" resultType="com.webdrp.entity.vo.CommentVo">
+        SELECT
+        a.message AS message,
+        b.id AS  `from`,
+        c.id AS  `to`,
+        b.username AS fromUserName,
+        b.nickname AS fromNickName,
+        c.username AS toUserName,
+        c.nickname AS toNickName
+        FROM comment a,member b ,member c
+        where a.from = b.id and a.to = c.id AND a.deleteTime IS NULL AND b.deleteTime IS NULL AND c.deleteTime IS NULL
+        AND a.friendsId = #{friendsId}
+    </select>
+</mapper>
+

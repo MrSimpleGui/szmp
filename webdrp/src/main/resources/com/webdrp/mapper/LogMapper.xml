@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.LogMapper">
+    <insert id="insert" parameterType="com.webdrp.entity.Log"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into log(id,
+        `type`,
+        `title`,
+        remoteAddr,
+        requestUri,
+        method,
+        params,
+        `exception`,
+        `operateDate`,
+        `timeout`,
+        `richuserId`
+        )
+        values(#{id} ,
+         #{type},
+       #{title},
+        #{remoteAddr},
+        #{requestUri},
+        #{method},
+        #{params},
+        #{exception},
+        #{operateDate},
+        #{timeout},
+        #{userId}
+       )
+    </insert>
+    <sql id="select">
+        id,
+        `type`,
+        `title`,
+        remoteAddr,
+        requestUri,
+        method,
+        params,
+        `exception`,
+        `operateDate`,
+        `timeout`,
+        `richuserId` AS  userId
+    </sql>
+
+    <delete id="delete" parameterType="com.webdrp.entity.Log">
+        delete from log where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.webdrp.entity.Log">
+        update log
+        <set>
+            <if test="id!=null">
+                id = #{id},
+            </if>
+            <if test="type!=null">
+                `type` = #{type},
+            </if>
+            <if test="title!=null">
+                title = #{title},
+            </if>
+            <if test="remoteAddr!=null">
+                remoteAddr = #{remoteAddr},
+            </if>
+            <if test="requestUri!=null">
+                requestUri = #{requestUri},
+            </if>
+            <if test="method!=null">
+                method = #{method},
+            </if>
+            <if test="params!=null">
+                params = #{params},
+            </if>
+            <if test="exception!=null">
+                `exception` = #{exception},
+            </if>
+            <if test="operateDate!=null">
+                operateDate = #{operateDate},
+            </if>
+            <if test="timeout!=null">
+                timeout = #{timeout},
+            </if>
+            <if test="userId!=null">
+                richuserId = #{userId},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findAll" resultMap="resultList">
+        select * from log where deleteTime is NULL
+        <if test="id!=null">
+            and id = #{id}
+        </if>
+        <if test="userId!=null">
+            and richuserId = #{userId}
+        </if>
+        order by operateDate desc
+    </select>
+
+    <select id="findById" resultMap="resultList">
+        SELECT *
+         from log where deleteTime IS NULL  and id  = #{id}
+    </select>
+
+    <select id="findLogCountAvgByDate" parameterType="string" resultMap="resultList">
+          SELECT
+            title,
+            count(*) as timeout,
+            AVG(timeout) as method
+            FROM
+            log
+            where log.operateDate BETWEEN #{start} and #{end}
+            GROUP BY
+            title;
+    </select>
+
+
+    <select id="findLogCountUserByDate"  parameterType="string" resultType="integer">
+          SELECT
+	      COUNT(DISTINCT log.richuserId)
+          FROM
+          log
+          WHERE
+          log.operateDate
+          BETWEEN #{start} and #{end}
+    </select>
+
+    <select id="count" resultType="long">
+         SELECT   count(*)
+         FROM
+         log where deleteTime is NULL
+         <include refid="query"/>
+    </select>
+    <select id="loadAll" resultMap="resultList">
+          SELECT   *
+          FROM
+          log where deleteTime is NULL
+           <include refid="query"/>
+          order by operateDate desc
+          Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <sql id="query">
+        <if test="entity.id!=null">
+            and id = #{entity.id}
+        </if>
+        <if test="entity.type!=null">
+            and `type` = #{entity.type}
+        </if>
+        <if test="entity.title!=null">
+            and title = #{entity.title}
+        </if>
+        <if test="entity.remoteAddr!=null">
+            and remoteAddr = #{entity.remoteAddr}
+        </if>
+        <if test="entity.requestUri!=null">
+            and requestUri = #{entity.requestUri}
+        </if>
+        <if test="entity.method!=null">
+            and method = #{entity.method}
+        </if>
+        <if test="entity.params!=null">
+            and params = #{entity.params}
+        </if>
+        <if test="entity.exception!=null">
+            and `exception` = #{entity.exception}
+        </if>
+        <if test="entity.operateDate!=null">
+            and operateDate = #{entity.operateDate}
+        </if>
+        <if test="entity.timeout!=null">
+            and timeout = #{entity.timeout}
+        </if>
+        <if test="entity.userId!=null">
+            and richuserId = #{entity.userId}
+        </if>
+    </sql>
+
+    <resultMap id="resultList" type="com.webdrp.entity.Log">
+        <id column="id" property="id"/>
+        <result column="type" property="type"/>
+        <result column="title" property="title"/>
+        <result column="remoteAddr" property="remoteAddr"/>
+        <result column="requestUri" property="requestUri"/>
+        <result column="method" property="method"/>
+        <result column="params" property="params"/>
+        <result column="exception" property="exception"/>
+        <result column="operateDate" property="operateDate"/>
+        <result column="timeout" property="timeout"/>
+        <result column="richuserId" property="userId"/>
+        <result column="createTime" property="createTime"/>
+        <result column="updateTime" property="updateTime"/>
+    </resultMap>
+
+</mapper>
+

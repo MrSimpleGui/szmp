@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>物流详情</title>
+    <link rel="stylesheet" href="dist/lib/weui.min.css"  th:href="@{/dist/lib/weui.min.css}"/>
+    <link rel="stylesheet" href="dist/css/jquery-weui.min.css" th:href="@{/dist/css/jquery-weui.min.css}"/>
+    <script type="text/javascript" src="dist/lib/jquery-2.1.4.js" th:src="@{/dist/lib/jquery-2.1.4.js}"></script>
+    <link rel="stylesheet" type="text/css" href="css/logisticsDetails.css" th:href="@{/css/logisticsDetails.css}"/>
+    <link rel="stylesheet" href="css/header.min.css" th:href="@{/css/header.min.css}"/>
+    <script  type="text/javascript" th:inline="javascript">
+      /*<![CDATA[*/
+      ctxPath = /*[[@{/}]]*/ '';
+      /*]]>*/
+    </script>
+  </head>
+
+  <body>
+  <div class="header">
+    <div class="goback">
+      <a href="javascript:history.back(-1)">
+        <img class="goback-img" src="img/goback.png" th:src="@{/img/goback.png}" />
+      </a>
+    </div>
+    <div class="header-title">物流详情</div>
+    <div class="gohome"></div>
+  </div>
+    <div class="package-status">
+      <div class="status-box">
+        <ul class="status-list">
+          <li class="latest" th:each="item : ${logistics}">
+            <div class="status-content-before" th:text="${item.status}">
+              [广州市] 已签收,本人签收 :安,投递员:冯岸达,电话:18902241649
+            </div>
+            <div class="status-time-before" th:text="${item.time}">2020-03-26 14:58:03</div>
+            <div class="status-line"></div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </body>
+<!--  <script src="js/logisticsDetails.js" th:src="@{/js/logisticsDetails.js}"></script>-->
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>订单详情</title>
+	<link rel="stylesheet" href="dist/lib/weui.min.css" th:href="@{/dist/lib/weui.min.css}" />
+	<link rel="stylesheet" href="dist/css/jquery-weui.min.css" th:href="@{/dist/css/jquery-weui.min.css}"/>
+	<script type="text/javascript" src="dist/lib/jquery-2.1.4.js" th:src="@{/dist/lib/jquery-2.1.4.js}"></script>
+	<link rel="stylesheet" href="css/prepay.css" th:href="@{/css/prepay.css}" />
+	<link rel="stylesheet" href="css/orderDetail.css" th:href="@{/css/orderDetail.css}" />
+	<link rel="stylesheet" href="css/header.min.css" th:href="@{/css/header.min.css}" />
+	<script  type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		ctxPath = /*[[@{/}]]*/ '';
+		orderId = [[${order.id}]];
+		/*]]>*/
+	</script>
+</head>
+
+<body>
+<div class="header">
+	<div class="goback">
+		<a href="javascript:history.back(-1)">
+			<img class="goback-img" src="img/goback.png" th:src="@{/img/goback.png}" />
+		</a>
+	</div>
+	<div class="header-title">订单详情</div>
+	<div class="gohome"></div>
+</div>
+<div class="orderStatus">
+	<div class="orderStatusTitle">
+		<p>
+			<font th:text="${order.statusString}">&nbsp;&nbsp;</font>
+			<span th:if="2 eq ${order.status}">
+				<font th:if="'' ne ${order.wuliuId}">已发货</font>
+				<font th:if="'' eq ${order.wuliuId}">未发货</font>
+			</span>
+		</p>
+	</div>
+	<div class="orderStatusImg">
+		<img src="dist/demos/images/icon_nav_noti.png" th:src="@{/dist/demos/images/icon_nav_noti.png}" />
+		<!--<svg t="1581860404490" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="972" width="48" height="48"><path d="M139.03 726.77H37.73c-6.77 0-13.27-2.69-18.06-7.48a25.523 25.523 0 0 1-7.48-18.05v-570.8c0-14.11 11.43-25.53 25.53-25.53H643.6c14.11 0 25.53 11.43 25.53 25.53v569.61c0 6.77-2.69 13.27-7.48 18.05a25.529 25.529 0 0 1-18.06 7.48H466.96c-14.1 0-25.53-11.43-25.53-25.53s11.43-25.53 25.53-25.53h151.12V155.98H63.28v519.7h75.75c14.11 0 25.55 11.43 25.55 25.54s-11.44 25.55-25.55 25.55z m0 0" fill="#ffffff" p-id="973"></path><path d="M306.19 917.86c-74.55 0-135.2-60.65-135.2-135.2 0-74.55 60.65-135.2 135.2-135.2 74.55 0 135.21 60.64 135.21 135.2s-60.66 135.2-135.21 135.2z m0-219.32c-46.38 0-84.12 37.74-84.12 84.12s37.74 84.12 84.12 84.12 84.11-37.74 84.11-84.12-37.73-84.12-84.11-84.12z m513.98 219.32c-74.55 0-135.2-60.65-135.2-135.2 0-74.55 60.65-135.2 135.2-135.2 74.55 0 135.21 60.64 135.21 135.2s-60.66 135.2-135.21 135.2z m0-219.32c-46.39 0-84.12 37.74-84.12 84.12s37.73 84.12 84.12 84.12c46.38 0 84.11-37.74 84.11-84.12s-37.73-84.12-84.11-84.12z m165.96-17.56c-6.77 0-13.27-2.69-18.05-7.48a25.529 25.529 0 0 1-7.48-18.06v-191.4L808.08 278.01H659.94a25.55 25.55 0 0 1-22.12-12.77 25.538 25.538 0 1 1 22.12-38.31h160.23c7.65 0 14.9 3.44 19.76 9.34l165.96 202.44a25.577 25.577 0 0 1 5.79 16.2v200.54c-0.02 14.11-11.45 25.53-25.55 25.53z m0 0" fill="#ffffff" p-id="974"></path><path d="M966.42 486.35H754.65c-9.12 0-17.55-4.86-22.11-12.77a25.534 25.534 0 0 1 22.11-38.3h211.78c14.11 0.01 25.53 11.44 25.53 25.54-0.01 14.1-11.44 25.54-25.54 25.53z m-828.19-124a25.539 25.539 0 0 1-23.62-15.76 25.529 25.529 0 0 1 5.55-27.84L231.1 207.81c9.97-9.98 26.15-9.98 36.12 0 9.97 9.97 9.97 26.14 0 36.12L156.29 354.86c-5 4.98-11.54 7.49-18.06 7.49z m36.14 135.76a25.519 25.519 0 0 1-23.61-15.77 25.51 25.51 0 0 1 5.55-27.84L369.8 241.01c9.97-9.97 26.15-9.97 36.12 0 9.97 9.98 9.97 26.15 0 36.12L192.43 490.62a25.521 25.521 0 0 1-18.06 7.49z m0 0" fill="#ffffff" p-id="975"></path></svg>-->
+	</div>
+</div>
+
+<!--地址选择-->
+<div class="address-tabs">
+	<div class="address-icon">
+		<svg t="1581777196791" class="icon" style="transform: translate(2vw, 23%);width: 9vw;height: 9vw;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3181">
+			<path d="M535.395431 2.19957c-174.765866-3.999219-329.535638 146.771334-325.536419 319.537591 0 63.987502 44.991213 168.767038 111.778168 275.746143 67.986721 106.779145 117.776997 177.76528 173.766062 252.750635 9.998047 12.997461 22.995509 19.996095 39.992189 19.996094 15.996876 0 30.993946-7.998438 39.992189-19.996094 55.989065-74.985354 106.779145-145.771529 173.766061-252.750635 66.986917-106.779145 111.778168-211.758641 111.778168-275.746143 3.999219-172.766257-148.770943-323.536809-325.536418-319.537591z m200.760788 498.502637c-42.991603 80.984183-102.779926 171.766452-177.76528 274.746338-4.999024 6.998633-13.997266 10.997852-22.995508 10.997852-7.998438 0-17.996485-2.999414-21.995704-10.997852-149.770748-203.960164-243.552431-377.726225-243.552432-453.511423 0-71.98594 25.994923-133.773872 77.984769-184.763914s114.777583-76.984964 187.763328-76.984964c72.985745 0 135.773482 25.994923 187.763327 76.984964C776.148409 187.963288 802.143331 249.951181 802.143331 321.937122c0 38.792423-21.995704 97.780902-65.987112 178.765085z" fill="#f4510c" p-id="3182"></path>
+			<path d="M933.917594 839.236087c-14.997071-14.997071-34.993165-26.994728-59.988283-35.99297s-53.989455-12.997461-84.983402-12.997462v0.999805h-1.199766c-11.997657-0.999805-20.995899 7.998438-21.995704 19.996094 0 11.997657 8.998243 21.995704 20.9959 21.995704l26.794766 0.799844c54.789299 4.399141 81.384105 26.194884 90.182387 35.193126 8.998243 8.998243 12.997461 16.99668 12.997461 24.995119 0 18.99629-31.993751 41.991798-100.780316 58.988478-70.986136 17.996485-172.766257 28.994337-282.544816 28.994337-114.777583 0-208.759227-10.198008-283.54462-29.194298-70.986136-18.99629-102.779926-41.991798-102.779926-58.988478 0-14.997071 5.998828-26.994728 17.996485-34.993166 15.796915-9.798086 41.391916-17.396602 75.785198-20.396016 1.599688 0.399922 3.399336 0.599883 5.198985 0.599883l31.993751-1.99961c11.997657-0.999805 20.995899-10.997852 19.996095-22.995508 0-10.997852-10.997852-19.996095-21.995704-19.996095v-0.199961c-61.987893 0.999805-106.779145 10.997852-134.773677 28.994337-25.195079 16.99668-37.192736 39.992189-37.192736 70.986136 0 23.995313 14.997071 45.991017 41.991798 62.987697 21.995704 14.997071 52.98965 26.994728 92.781879 36.992775 74.985354 19.996095 180.764694 29.994142 294.542472 29.994142 114.777583 0 218.557313-9.998047 292.542863-29.794181 39.992189-9.998047 70.986136-21.995704 92.781878-36.992775 26.994728-16.99668 40.991994-38.992384 40.991994-62.987697 0.199961-19.996095-8.798282-37.99258-25.794962-54.98926zM448.012498 334.3347c0-46.390939 37.592658-83.983597 83.983597-83.983597s83.983597 37.592658 83.983596 83.983597-37.592658 83.983597-83.983596 83.983597c-46.390939-0.199961-83.983597-37.592658-83.983597-83.983597" fill="#f4510c" p-id="3183"></path>
+		</svg>
+	</div>
+	<div class="address-data">
+		<p>
+			<font class="name" id="takeName" th:text="${order.takeName}">xxx明</font>
+			<font class="phone" id="takeTel" th:text="${order.phone}">86-13800138000</font>
+		</p>
+		<p class="address" id="takeAddress" th:text="${order.address}">
+			地址地址地址地址地址地址地址地址地址地址地址地
+		</p>
+	</div>
+<!--	修改地址选项 start-->
+<!--	<div class="change" id="addressChange">-->
+<!--		<svg t="1581777947172" class="icon" style="transform: translate(4px, 66%);width: 6vw;height: 6vw;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5915">-->
+<!--			<path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#bfbfbf" p-id="5916"></path>-->
+<!--		</svg>-->
+<!--	</div>-->
+<!--	修改地址选项 end-->
+</div>
+<!--地址选择 end-->
+
+<!--产品数据-->
+<div class="productLists">
+	<div class="product" th:each="item : ${order.orderDetails}">
+		<div class="product-img">
+			<img class="product-img-data" src="testimg/001.jpg" th:src="${item.imageUrl}" />
+		</div>
+		<div class="productPacakge">
+			<p class="packageName2" th:text="${item.nameItem}">new Balance NB 官方男鞋专业跑步鞋Zante系 白色44码</p>
+			<p class="price">
+				<font class="price-unit">￥</font> <font th:text="${item.subPrice}"></font><font class="price-float"></font>
+			</p>
+			<p class="buyCount" th:text="'x'+${item.count}">x10</p>
+		</div>
+	</div>
+</div>
+
+<!--产品数据 end-->
+
+<!--配送数据-->
+<div class="products-express">
+	<p>配送方式：
+		<font style="color: gray;">普通配送</font>
+	</p>
+<!--	<p>运费：-->
+<!--		<font style="color: gray;">免邮</font>-->
+<!--	</p>-->
+</div>
+<!--配送数据-->
+
+<!--订单信息-->
+<div class="products-express" style="color: gray;line-height: 2.5;">
+	<p style="color: black;border-bottom: 1px #ff8e05 dashed;">订单信息</p>
+	<p>订单编号：
+		<font style="color: gray;" th:text="${order.userOrder}">d10087T213123123123</font>
+	</p>
+	<p>订单金额：
+		<font style="color: gray;" th:text="${order.subPrice}+'元'">688元</font>
+	</p>
+	<p>创建时间：
+		<font style="color: gray;" th:text="${order.createTime}">2018-09-09 11:11:11</font>
+	</p>
+	<p th:if="'' ne ${order.wuliuId}">物流单号：
+		<font style="color: gray;" th:text="${order.wuliuId}">SF 2131312312312331</font>
+	</p>
+	<p th:if="'' eq ${order.wuliuId}">物流信息：
+		<font style="color: gray;">暂无物流信息</font>
+	</p>
+	<p style="text-align: right;"><a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary" style="background-color:#ff5502 ;" th:if="'' ne ${order.wuliuId}" th:href="@{/wechat/h5/logisticsDetails}+'?id='+${order.id}">查看物流信息</a></p>
+</div>
+<!--配送数据-->
+
+
+
+<!--底部tab-->
+<div style="height: 100px;"></div>
+<div class="weui-tabbar" style="position: fixed;background: white;border-top: none;text-align: right;" id="tabbarBt2">
+	<div class="buyNow">
+		<a href="javascript:;" class="goToPay" id="continueToPay" th:if="0 eq ${order.status}">
+			继续支付
+		</a>
+		<a href="javascript:;" class="goToPay" id="cancelOrder" th:if="0 eq ${order.status}">
+			取消订单
+		</a>
+	</div>
+</div>
+<!--底部tab end-->
+
+<div id="addresPickPage" class='weui-popup__container'>
+	<div class="weui-popup__overlay"></div>
+	<div class="weui-popup__modal" style="background-color: #F8F8F8;">
+		<div style="width: 100%;height: 13vw;"></div>
+
+		<div>
+			<div class="address-tabs">
+				<div class="address-data">
+					<p>
+						<font class="name" th:text="${order.takeName}">张远明</font>
+						<font class="phone" th:text="${order.phone}">1379****173</font>
+					</p>
+					<p class="address" th:text="${order.address}">
+						广东省 官方男鞋专业跑步鞋Z2号2号
+					</p>
+				</div>
+			</div>
+			<div class="weui-cells weui-cells_form">
+				<div style="width: 100%;text-align: center;margin: 4vw 0;">
+					请选择收货地址
+				</div>
+				<div class="weui-cell">
+					<div class="weui-cell__hd">
+						<label class="weui-label">手机号</label>
+					</div>
+					<div class="weui-cell__bd">
+						<input class="weui-input" id="newTel" type="tel" placeholder="请输入手机号">
+					</div>
+				</div>
+				<div class="weui-cell">
+					<div class="weui-cell__hd">
+						<label class="weui-label">收货人</label>
+					</div>
+					<div class="weui-cell__bd">
+						<input class="weui-input" id="newName" type="text" placeholder="姓名">
+					</div>
+				</div>
+
+				<div class="weui-cell">
+					<div class="weui-cell__hd"><label class="weui-label">省市/区</label></div>
+					<div class="weui-cell__bd">
+						<input class="weui-input" id="city-picker" type="text" value="湖北省 武汉市 武昌区">
+					</div>
+				</div>
+				<div class="weui-cells__title">详细地址</div>
+				<div class="weui-cells weui-cells_form">
+					<div class="weui-cell">
+						<div class="weui-cell__bd">
+							<textarea id="addresDetail" class="weui-textarea" placeholder="请输入详细地址" rows="3"></textarea>
+							<div class="weui-textarea-counter"><span>0</span>/200</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="citySelect">
+			<div>
+				<a href="javascript:;" class="weui-btn weui-btn_primary" id="confirmCity">确定</a>
+				<a href="javascript:;" class="weui-btn weui-btn_plain-default close-popup" id="useHisAddress" >使用旧地址</a>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+</body>
+<script src="dist/js/jquery-weui.js" th:src="@{/dist/js/jquery-weui.js}"></script>
+<script src="dist/js/city-picker.js" th:src="@{/dist/js/city-picker.js}"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="js/orderDetail.js" th:src="@{/js/orderDetail.js}"></script>
+
+</html>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webdrp.mapper.SignInMapper">
+    <insert id="insert" parameterType="com.webdrp.entity.SignIn"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into signin(id,
+            userId,`date`,nickName
+        )
+        values(#{id} ,
+            #{userId} ,
+            #{date} ,
+            #{nickName}
+        )
+    </insert>
+    <!--sql片段，时间格式化-->
+    <sql id="select">
+          id,
+          userId,
+          DATE_FORMAT(`date`,'%Y-%m-%d %H:%m:%s')as `date`,
+          nickName,
+          DATE_FORMAT(createTime,'%Y-%m-%d %H:%m:%s')as createTime,DATE_FORMAT(updateTime,'%Y-%m-%d %H:%m:%s')as updateTime
+    </sql>
+
+    <delete id="delete" parameterType="com.webdrp.entity.Spot">
+        delete from signin where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.webdrp.entity.Spot">
+        update signin
+        <set>
+            <if test="id!=null">
+                id = #{id},
+            </if>
+            <if test="userId!=null">
+                userId = #{userId},
+            </if>
+            <if test="date!=null">
+                date = #{date},
+            </if>
+            <if test="nickName!=null">
+                nickName = #{nickName},
+            </if>
+
+            <if test="createTime!=null">
+                createTime = #{createTime},
+            </if>
+            <if test="updateTime!=null">
+                updateTime = #{updateTime},
+            </if>
+            <if test="deleteTime!=null">
+                deleteTime = #{deleteTime},
+            </if>
+
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findAll" resultMap="resultList">
+        select
+        <include refid="select"></include>
+        from signin where deleteTime is NULL
+        <if test="id!=null">
+            and id = #{id}
+        </if>
+        <if test="userId!=null">
+            and userId = #{userId}
+        </if>
+        <if test="date!=null">
+            and date = #{date}
+        </if>
+        <if test="nickName!=null">
+            and nickName = #{nickName}
+        </if>
+        <if test="createTime!=null">
+            and createTime = #{createTime}
+        </if>
+        <if test="updateTime!=null">
+            and updateTime = #{updateTime}
+        </if>
+        <if test="deleteTime!=null">
+            and deleteTime = #{deleteTime}
+        </if>
+
+    </select>
+
+    <select id="findById" resultMap="resultList">
+        SELECT
+        <include refid="select"></include>
+        from signin where deleteTime IS NULL  and id  = #{id}
+    </select>
+
+    <select id="findByRichUserId" parameterType="integer" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from signin
+        where deleteTime is null
+        and userId = #{userId}
+    </select>
+
+    <select id="findByRichUserIdCount" parameterType="integer" resultType="int">
+        select
+        count(*)
+        from signin
+        where deleteTime is null
+        and userId = #{userId}
+    </select>
+
+
+
+    <select id="findUserLastTime" parameterType="integer" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from signin
+        where deleteTime is null
+        and userId = #{userId}
+        order by createTime desc
+        limit 1
+    </select>
+
+    <resultMap id="resultList" type="com.webdrp.entity.SignIn" >
+        <id column="id" property="id" />
+
+        <result  column="userId" property="userId"/>
+        <result  column="date" property="date"/>
+        <result  column="nickName" property="nickName"/>
+        <result  column="createTime" property="createTime"/>
+        <result  column="updateTime" property="updateTime"/>
+    </resultMap>
+</mapper>
+

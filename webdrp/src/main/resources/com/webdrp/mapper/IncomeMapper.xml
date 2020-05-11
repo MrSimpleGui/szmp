@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.IncomeMapper">
+    <cache type="com.webdrp.config.MybatisRedisCache"/>
+    <insert id="insert" parameterType="com.webdrp.entity.Income"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into income(id,
+        orderId,
+        targetRichUserId,
+        originRichUserId,
+        note,
+        money,
+        grade,
+        floor,
+        amount,
+        incomeType)
+        values(#{id} ,
+         #{orderId},
+        #{targetRichUserId},
+        #{originRichUserId},
+        #{note},
+        #{money},
+        #{grade},
+        #{floor},
+        #{amount},
+        #{incomeType})
+    </insert>
+    <!--sql片段，时间格式化-->
+    <sql id="select">
+          id,orderId,targetRichUserId,originRichUserId,note,amount,money,grade,floor,incomeType,DATE_FORMAT(createTime,'%Y-%m-%d %H:%i:%s')as createTime,DATE_FORMAT(updateTime,'%Y-%m-%d %H:%i:%s')as updateTime
+    </sql>
+
+    <delete id="delete" parameterType="com.webdrp.entity.Income">
+        delete from income where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.webdrp.entity.Income">
+        update income
+        <set>
+            <if test="id!=null">
+                id = #{id},
+            </if>
+            <if test="orderId!=null">
+                orderId = #{orderId},
+            </if>
+            <if test="targetRichUserId!=null">
+                targetRichUserId = #{targetRichUserId},
+            </if>
+            <if test="note!=null">
+                note = #{note},
+            </if>
+            <if test="money!=null">
+                money = #{money},
+            </if>
+            <if test="grade!=null">
+                grade = #{grade},
+            </if>
+            <if test="floor!=null">
+                floor = #{floor},
+            </if>
+            <if test="incomeType!=null">
+                incomeType = #{incomeType},
+            </if>
+            <if test="createTime!=null">
+                createTime = #{createTime},
+            </if>
+            <if test="updateTime!=null">
+                updateTime = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findAll" resultMap="resultList">
+        select
+        <include refid="select"></include>
+        from income
+        where deleteTime is NULL
+        <include refid="query"></include>
+        order by createTime desc
+    </select>
+
+    <select id="findIncome" parameterType="com.webdrp.entity.Income" resultMap="resultList">
+        SELECT  * from income where orderId = #{orderId} and incomeType = #{incomeType}
+    </select>
+
+    <select id="findIncomeByOrderIdAndTargetIdAndIncomeTypeAndFloor" resultMap="resultList">
+        select * from income where orderId = #{orderId} and incomeType = #{incomeType} and targetRichUserId = #{targetRichUserId} and floor = #{floor} limit 1
+    </select>
+
+    <select id="findIncomeByOrderIdAndTargetIdAndIncomeType" parameterType="com.webdrp.entity.Income" resultMap="resultList" useCache="false">
+         SELECT  * from income where orderId = #{orderId} and incomeType = #{incomeType} and targetRichUserId = #{targetRichUserId} limit 1
+    </select>
+    
+    <select id="count" resultType="long">
+        select
+        count(*)
+        from income
+        where deleteTime is NULL
+        <include refid="query"/>
+
+    </select>
+
+    <select id="loadAll" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from income
+        where deleteTime is NULL
+        <include refid="query"/>
+        order by createTime desc
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="findById" resultMap="resultList">
+        SELECT
+        <include refid="select"></include>
+        from income
+        where deleteTime IS NULL
+        and id  = #{id}
+    </select>
+    
+    
+    <select id="sumIncome" resultType="double">
+       SELECT sum(money) from income
+    </select>
+
+    <select id="findTongJi"  parameterType="com.webdrp.entity.Income" resultType="integer" useCache="false">
+         SELECT  COUNT(*) FROM  income where orderId = #{orderId} and incomeType = #{incomeType} and grade = #{grade}
+    </select>
+
+    <select id="sumIncomeByOrderId" parameterType="integer" resultType="int" useCache="false">
+         SELECT sum(money) from income WHERE  orderId = #{orderId} and incomeType in (0,1)
+    </select>
+
+    <select id="findCanJjanDian"  parameterType="com.webdrp.entity.Income" resultType="integer" useCache="false">
+          SELECT  count(*) from income WHERE  orderId = #{orderId} and incomeType = #{incomeType} and grade  &gt;= #{grade}
+    </select>
+
+    <select id="sumPriceByRichUserId" parameterType="integer" resultType="double">
+         SELECT ifnull(sum(money),0) from income WHERE targetRichUserId = #{targetRichUserId}
+    </select>
+
+    <select id="sumZhiTui" parameterType="integer" resultType="int">
+        select count(*) from income where targetRichUserId = #{value} and incomeType = 0
+    </select>
+    <select id="sumTeam" parameterType="integer" resultType="int">
+        select count(*) from income where targetRichUserId = #{value}
+    </select>
+
+    <select id="findMyIncome" resultMap="resultListVo">
+        select
+            income.id as id,orderId,targetRichUserId,originRichUserId,note,money,income.grade,floor,incomeType,
+            DATE_FORMAT(income.createTime,'%Y-%m-%d %H:%i:%s')as createTime,DATE_FORMAT(income.updateTime,'%Y-%m-%d %H:%i:%s')as updateTime,
+        member.nickname as nickname
+        from income
+        left join member on income.originRichUserId = member.id
+        where income.deleteTime is null and targetRichUserId = #{entity.targetRichUserId}
+        and income.money > 0
+        order by income.createTime DESC
+         Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="countMyIncome" resultType="long" >
+         select
+            count(*)
+        from income
+        left join member on income.originRichUserId = member.id
+        where income.deleteTime is null
+        and targetRichUserId = #{targetRichUserId}
+        and income.money > 0
+    </select>
+
+    <select id="findOneFloorOrder" resultType="int">
+        select count(*) from income where targetRichUserId = #{value} and floor = 1 and money > 0
+    </select>
+    <select id="secondFloorOrder" resultType="int">
+        select count(*) from income where targetRichUserId = #{value} and floor = 2 and money > 0
+    </select>
+    <select id="teamOrder" resultType="int">
+        select count(*) from income where targetRichUserId = #{value} and money > 0
+    </select>
+
+
+    
+    <select id="findJichaZhiTui" parameterType="integer" resultType="integer" useCache="false">
+        SELECT  IFNULL(sum(amount),0) from income where targetRichUserId = #{value} and incomeType = 0  and deleteTime is null
+    </select>
+
+  <select id="findJiChaTuanDui" parameterType="integer" resultType="integer" useCache="false">
+        SELECT  IFNULL(sum(amount),0) from income where targetRichUserId = #{value} and deleteTime is null and incomeType in (0,1,5,7)
+    </select>
+    
+    <select id="sumDayIncome" parameterType="com.webdrp.entity.Income" resultType="double">
+        SELECT IFNULL(sum(money),0)  from income where targetRichUserId = #{targetRichUserId} and deleteTime is null and createTime between #{createTime} and #{updateTime}
+    </select>
+    
+    <select id="sumOthers" parameterType="integer" resultType="integer" useCache="false">
+        SELECT IFNULL(SUM(amount),0)  FROM income where targetRichUserId = #{value}
+        and orderId in (
+        SELECT orderId from income where targetRichUserId = #{value} and deleteTime is null GROUP BY orderId HAVING count(*) >1)
+    </select>
+
+    <select id="findCountByOrderId" parameterType="com.webdrp.entity.Income" resultType="int">
+         select ifnull(count(*),0) from income where orderId = #{orderId} and deleteTime is null
+    </select>
+
+    <select id="findVoByPage" resultMap="nicknameVo">
+        select
+        <include refid="select"/>
+        from income
+        where deleteTime is NULL
+        <include refid="query"/>
+        order by createTime desc
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="sumIncomeByMemberId" resultType="java.lang.Double">
+        select ifnull(sum(money),0) from income
+        where deleteTime is null
+        and targetRichUserId = #{memberId}
+    </select>
+
+    <sql id="query">
+        <if test="entity.id!=null">
+            and id = #{entity.id}
+        </if>
+        <if test="entity.orderId!=null">
+            and orderId = #{entity.orderId}
+        </if>
+        <if test="entity.targetRichUserId!=null">
+            and targetRichUserId = #{entity.targetRichUserId}
+        </if>
+        <if test="entity.originRichUserId!=null">
+            and originRichUserId = #{entity.originRichUserId}
+        </if>
+
+        <if test="entity.note!=null">
+            and note = #{entity.note}
+        </if>
+        <if test="entity.money!=null">
+            and money = #{entity.money}
+        </if>
+        <if test="entity.grade!=null">
+            and grade = #{entity.grade}
+        </if>
+        <if test="entity.floor!=null">
+            and floor = #{entity.floor}
+        </if>
+        <if test="entity.incomeType!=null">
+            and incomeType = #{entity.incomeType}
+        </if>
+        <if test="entity.createTime!=null">
+            and createTime = #{entity.createTime}
+        </if>
+        <if test="entity.updateTime!=null">
+            and updateTime = #{entity.updateTime}
+        </if>
+        <if test="entity.amount!=null">
+            and amount = #{entity.amount}
+        </if>
+    </sql>
+
+    <resultMap id="resultList" type="com.webdrp.entity.Income" >
+        <id column="id" property="id" />
+        <result column="orderId" property="orderId" />
+        <result column="targetRichUserId" property="targetRichUserId" />
+        <result column="originRichUserId" property="originRichUserId" />
+        <result column="note" property="note" />
+        <result column="money" property="money" />
+        <result column="grade" property="grade" />
+        <result column="floor" property="floor" />
+        <result  column="createTime" property="createTime"/>
+        <result  column="updateTime" property="updateTime"/>
+    </resultMap>
+
+    <resultMap id="resultListVo" extends="resultList" type="com.webdrp.entity.vo.IncomeVo">
+        <result column="nickname" property="nickname"/>
+    </resultMap>
+
+    <resultMap id="nicknameVo" type="com.webdrp.entity.vo.IncomeNameVo" extends="resultList">
+        <association property="targetNickname" javaType="string" column="targetRichUserId"
+                     select="com.webdrp.mapper.MemberMapper.findNicknameById"/>
+        <association property="originNickname" javaType="string" column="originRichUserId"
+                     select="com.webdrp.mapper.MemberMapper.findNicknameById"/>
+    </resultMap>
+</mapper>
+

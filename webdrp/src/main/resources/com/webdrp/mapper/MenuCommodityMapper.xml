@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.MenuCommodityMapper">
+    <insert id="insert" parameterType="com.webdrp.entity.MenuCommodity"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into menucommodity(id,
+        menuId,
+        commodityId,
+        sort)
+        values(#{id},
+        #{menuId},
+        #{commodityId},
+        #{sort})
+    </insert>
+
+    <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        insert into menucommodity
+        (id, menuId, commodityId, sort)
+        values
+        <foreach collection ="list" item="item" index= "index" separator =",">
+            (
+                #{item.id},
+                #{item.menuId},
+                #{item.commodityId},
+                #{item.sort}
+            )
+        </foreach >
+    </insert>
+
+    <update id="deleteBatch" parameterType="list">
+        update menucommodity
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="deleteTime=case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when commodityId=#{item.commodityId} then #{item.deleteTime}
+                </foreach>
+            </trim>
+        </trim>
+        where deleteTime is null
+        and menuId = #{menuId}
+        and commodityId in
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item.commodityId}
+        </foreach>
+    </update>
+
+    <update id="deleteBatchByMenuId" parameterType="list">
+        update menucommodity
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="deleteTime=case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when menuId=#{item.menuId} then #{item.deleteTime}
+                </foreach>
+            </trim>
+        </trim>
+        where deleteTime is null
+        and menuId in
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item.menuId}
+        </foreach>
+    </update>
+
+    <update id="deleteByCommodityId">
+        update menucommodity
+        set deleteTime = #{deleteTime}
+        where deleteTime is null
+        and commodityId = #{commodityId}
+    </update>
+
+    <!--sql片段，时间格式化-->
+    <sql id="select">
+          id,menuId,commodityId,sort,DATE_FORMAT(createTime,'%Y-%m-%d %H:%i:%s')as createTime,DATE_FORMAT(updateTime,'%Y-%m-%d %H:%i:%s')as updateTime
+    </sql>
+
+    <update id="delete" parameterType="com.webdrp.entity.MenuCommodity">
+        update menucommodity
+        SET deleteTime=#{deleteTime}
+        where id = #{id}
+    </update>
+
+    <update id="update" parameterType="com.webdrp.entity.MenuCommodity">
+        update menucommodity
+        <set>
+            <if test="id!=null">
+                id = #{id},
+            </if>
+            <if test="menuId!=null">
+                menuId = #{menuId},
+            </if>
+            <if test="commodityId!=null">
+                commodityId = #{commodityId},
+            </if>
+            <if test="sort!=null">
+                sort = #{sort},
+            </if>
+            <if test="createTime!=null">
+                createTime = #{createTime},
+            </if>
+            <if test="updateTime!=null">
+                updateTime = #{updateTime},
+            </if>
+            <if test="deleteTime!=null">
+                deleteTime = #{deleteTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findAll" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from menucommodity
+        where deleteTime is NULL
+        <include refid="query"/>
+        order by createTime desc
+    </select>
+
+    <select id="count" resultType="long">
+        select
+        count(*)
+        from menucommodity
+        where deleteTime is NULL
+        <include refid="query"/>
+    </select>
+
+    <select id="loadAll" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from menucommodity
+        where deleteTime is NULL
+        <include refid="query"/>
+        order by createTime desc
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="findById" resultMap="resultList">
+        SELECT
+        <include refid="select"/>
+        from menucommodity
+        where deleteTime IS NULL
+        and id = #{id}
+    </select>
+
+    <select id="findCommodityIdByMenuId" resultType="java.lang.Integer">
+        select commodityId
+        from menucommodity
+        where deleteTime is null
+        and menuId = #{menuId}
+    </select>
+
+    <select id="selectBatch" resultType="java.lang.Integer">
+        select id
+        from menucommodity
+        where deleteTime is null
+        and menuId = #{menuId}
+        and commodityId in
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="findMenuCommodityByMenuId" resultMap="voList">
+        select
+        <include refid="select"/>
+        from menucommodity
+        where deleteTime is null
+        and menuId = #{entity.menuId}
+        limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="countByMenuId" resultType="java.lang.Long">
+        select
+        count(distinct commodityId)
+        from menucommodity
+        where deleteTime is NULL
+        and menuId in
+        <foreach collection="menuIdList" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="findByMenuIds" resultType="integer">
+        select commodityId
+        from menucommodity
+        where deleteTime is NULL
+        and menuId in
+        <foreach collection="menuIdList" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        group by commodityId
+        limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <sql id="query">
+        <if test="entity.id!=null">
+            and id = #{entity.id}
+        </if>
+        <if test="entity.menuId!=null">
+            and menuId = #{entity.menuId}
+        </if>
+        <if test="entity.commodityId!=null">
+            and commodityId = #{entity.commodityId}
+        </if>
+        <if test="entity.sort!=null">
+            and sort = #{entity.sort}
+        </if>
+    </sql>
+
+    <resultMap id="resultList" type="com.webdrp.entity.MenuCommodity" >
+        <id column="id" property="id" />
+        <result column="menuId" property="menuId" />
+        <result column="commodityId" property="commodityId" />
+        <result column="sort" property="sort" />
+        <result  column="createTime" property="createTime"/>
+        <result  column="updateTime" property="updateTime"/>
+    </resultMap>
+
+    <resultMap id="voList" type="com.webdrp.entity.vo.MenuCommodityVo" extends="resultList">
+        <association property="commodity" javaType="com.webdrp.entity.Commodity" column="commodityId"
+                     select="com.webdrp.mapper.CommodityMapper.findById"/>
+    </resultMap>
+
+
+</mapper>

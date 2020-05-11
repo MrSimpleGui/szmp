@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title th:text="${detail?.title}">通知</title>
+		<link rel="stylesheet" href="dist/lib/weui.min.css" th:href="@{/dist/lib/weui.min.css}" />
+		<link rel="stylesheet" href="dist/css/jquery-weui.min.css" th:href="@{/dist/css/jquery-weui.min.css}" />
+		<script type="text/javascript" src="dist/lib/jquery-2.1.4.js" th:src="@{/dist/lib/jquery-2.1.4.js}"></script>
+		<link rel="stylesheet" href="css/header.min.css" th:href="@{/css/header.min.css}"/>
+
+		<style>
+			body {
+				background-color: #F8F8F8;
+			}
+			.topic-list{
+				width: 94%;
+				box-sizing: border-box;
+				margin: 3vw auto;
+			}
+			.topic-list img {
+				width: 100%;
+				vertical-align:top;
+			}
+
+
+		</style>
+	</head>
+
+	<body>
+		<div class="header">
+			<div class="goback">
+				<a href="javascript:history.back(-1)">
+					<img class="goback-img" src="img/goback.png" th:src="@{/img/goback.png}" />
+				</a>
+			</div>
+			<div class="header-title" th:text="${detail.subtitle}"></div>
+			<div class="gohome"></div>
+		</div>
+		<div class="topic-list" th:utext="${detail?.content}">
+
+		</div>
+
+
+	</body>
+</html>

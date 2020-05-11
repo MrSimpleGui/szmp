@@ -1,0 +1,118 @@
+body {
+  background-color: #F8F8F8;
+}
+
+ul li {
+  list-style: none;
+}
+
+.package-status {
+  padding: 8vw 0 0 0
+}
+
+.package-status .status-list {
+  margin: 0;
+  padding: 0 4vw;
+  list-style: none;
+}
+
+.package-status .status-list>li {
+  border-left: 2px solid #0278D8;
+  text-align: left;
+}
+
+.package-status .status-list>li:before {
+  /* 流程点的样式 */
+  content: '';
+  border: 0.8vw solid #0278D8;
+  background-color: #0278D8;
+  display: inline-block;
+  width: 1.6vw;
+  height: 1.6vw;
+  border-radius: 2.66vw;
+  margin-left: -1.86vw;
+  margin-right: 2.66vw
+}
+
+.package-status .status-box {
+  overflow: hidden
+}
+
+.package-status .status-list>li {
+  height: auto;
+  width: 95%;
+}
+
+.package-status .status-list {
+  margin-top: -2.66vw;
+}
+
+.package-status .status-box {
+  position: relative;
+}
+
+.package-status .status-box:before {
+  content: " ";
+  background-color: #f3f3f3;
+  display: block;
+  position: absolute;
+  top: -2.66vw;
+  left: 5.33vw;
+  width: 2.66vw;
+  height: 1vw
+}
+
+.package-status .status-list {
+  margin-top: 0px;
+}
+
+.status-list>li:not(:first-child) {
+  padding-top: 2.66vw;
+  margin-bottom: 2.66vw;
+}
+
+.status-content-before {
+  text-align: left;
+  margin-left: 6.6vw;
+  margin-top: -5.33vw;
+}
+
+.status-content-latest {
+  text-align: left;
+  margin-left: 25px;
+  color: #0278D8;
+  margin-top: -5.33vw;
+}
+
+.status-time-before {
+  text-align: left;
+  margin-left: 6vw;
+  font-size: 2.66vw;
+  margin-top: 1vw;
+}
+
+.status-time-latest {
+  text-align: left;
+  margin-left: 6.66vw;
+  color: #0278D8;
+  font-size: 2.66vw;
+  margin-top: 5px;
+}
+
+.status-line {
+  border-bottom: 1px solid #ccc;
+  margin-left: 6.66vw;
+  margin-top: 2.66vw;
+}
+
+.list {
+  padding: 0 5.33vw;
+  background-color: #F8F8F8;
+  margin: 2.66vw 0 0 6.66vw;
+  border: 1px solid #EBEBEB;
+}
+
+.list li {
+  line-height: 8vw;
+  color: #616161;
+}

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.BannerMapper">
+    <insert id="insert" parameterType="com.webdrp.entity.Banner"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into banner(id,
+            url,priority,`type`,useIn,extra,menuId
+        )
+        values(#{id} ,
+            #{url},#{priority},#{type},#{useIn},#{extra},#{menuId}
+        )
+    </insert>
+    <!--sql片段，时间格式化-->
+    <sql id="select">
+          id,url,priority,`type`,useIn,extra,menuId,DATE_FORMAT(createTime,'%Y-%m-%d %H:%i:%s')as createTime,DATE_FORMAT(updateTime,'%Y-%m-%d %H:%i:%s')as updateTime
+    </sql>
+
+    <sql id="query">
+        <if test="entity.id!=null">
+            and id = #{entity.id}
+        </if>
+        <if test="entity.url!=null">
+            and url = #{entity.url}
+        </if>
+        <if test="entity.priority!=null">
+            and priority = #{entity.priority}
+        </if>
+        <if test="entity.useIn!=null">
+            and useIn = #{entity.useIn}
+        </if>
+        <if test="entity.extra!=null">
+            and extra = #{entity.extra}
+        </if>
+        <if test="entity.type!=null">
+            and type = #{entity.type}
+        </if>
+        <if test="entity.menuId!=null">
+            and menuId = #{entity.menuId}
+        </if>
+    </sql>
+
+    <delete id="delete" parameterType="com.webdrp.entity.Banner">
+        delete from banner where id = #{id}
+    </delete>
+
+
+    <update id="update" parameterType="com.webdrp.entity.Banner">
+        update banner
+        <set>
+            <if test="id!=null">
+                id = #{id},
+            </if>
+            <if test="url!=null">
+                url = #{url},
+            </if>
+            <if test="priority!=null">
+                priority = #{priority},
+            </if>
+            <if test="type!=null">
+                type = #{type},
+            </if>
+            <if test="useIn!=null">
+                useIn = #{useIn},
+            </if>
+            <if test="extra!=null">
+                extra = #{extra},
+            </if>
+            <if test="menuId!=null">
+                menuId = #{menuId},
+            </if>
+            <if test="deleteTime!=null">
+                deleteTime = #{deleteTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findAll" resultMap="resultList">
+        select
+        <include refid="select"></include>
+        from banner where deleteTime is NULL
+        <include refid="query"/>
+    </select>
+
+    <select id="count" resultType="long">
+        select
+        count(*)
+        from banner where deleteTime is NULL
+        <include refid="query"/>
+    </select>
+
+    <select id="loadAll" resultMap="resultList">
+        select
+        <include refid="select"></include>
+        from banner where deleteTime is NULL
+        <include refid="query"/>
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="findById" resultMap="resultList">
+        SELECT
+        <include refid="select"></include>
+        from banner where deleteTime IS NULL  and id  = #{id}
+    </select>
+
+
+    <resultMap id="resultList" type="com.webdrp.entity.Banner" >
+        <id column="id" property="id" />
+        <result  column="url" property="url"/>
+        <result  column="priority" property="priority"/>
+        <result  column="type" property="type"/>
+        <result  column="useIn" property="useIn"/>
+        <result  column="extra" property="extra"/>
+        <result  column="menuId" property="menuId"/>
+        <result  column="createTime" property="createTime"/>
+        <result  column="updateTime" property="updateTime"/>
+    </resultMap>
+</mapper>
+

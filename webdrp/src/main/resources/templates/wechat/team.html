@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>我的团队</title>
+		<link rel="stylesheet" href="dist/lib/weui.min.css" th:href="@{/dist/lib/weui.min.css}" />
+		<link rel="stylesheet" href="dist/css/jquery-weui.min.css" th:href="@{/dist/css/jquery-weui.min.css}" />
+		<script type="text/javascript" src="dist/lib/jquery-2.1.4.js" th:src="@{/dist/lib/jquery-2.1.4.js}"></script>
+		<link rel="stylesheet" href="css/header.min.css" th:href="@{/css/header.min.css}"/>
+		<link rel="stylesheet" href="css/team.css" th:href="@{/css/team.css}"/>
+		<script  type="text/javascript" th:inline="javascript">
+			/*<![CDATA[*/
+			ctxPath = /*[[@{/}]]*/ '';
+			/*]]>*/
+		</script>
+
+	</head>
+	<body>
+		<div class="header">
+			<div class="goback">
+				<a href="javascript:history.back(-1)">
+					<img class="goback-img" src="img/goback.png" th:src="@{/img/goback.png}"/>
+				</a>
+			</div>
+			<div class="header-title">我的团队</div>
+			<div class="gohome"></div>
+		</div>
+
+		<div class="weui-tab">
+			<div class="weui-navbar">
+				<a class="weui-navbar__item weui-bar__item--on" href="#tab1" th:text="'一级('+${first}+')'">
+					一级(199)
+				</a>
+				<a class="weui-navbar__item" href="#tab2" th:text="'二级('+${second}+')'">
+					二级(999)
+				</a>
+				<a class="weui-navbar__item" href="#tab3" th:text="'团队('+${team}+')'">
+					团队(999)
+				</a>
+			</div>
+			<div class="weui-tab__bd">
+				<div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+					<div class="teamList" id="teamList1">
+						<!--			团队数据1			-->
+					</div>
+					<div class="dataOthers">
+						<div class="weui-loadmore" id="loadingMore" style="display: none">
+							<i class="weui-loading"></i>
+							<span class="weui-loadmore__tips">正在加载1</span>
+						</div>
+
+						<div class="divMoreData" id="morDataBt">
+							<a href="javascript:;" class="weui-btn weui-btn_plain-primary" style="color: #ff7103;border: 1px #ff7103 solid;" onclick="teamList(1)">查看更多</a>
+						</div>
+
+						<div class="weui-loadmore weui-loadmore_line" id="noMoreData" style="display: none">
+							<span class="weui-loadmore__tips">暂无更多数据</span>
+						</div>
+					</div>
+				</div>
+				<div id="tab2" class="weui-tab__bd-item">
+					<div class="teamList" id="teamList2">
+						<!--			团队数据2			-->
+					</div>
+					<div class="dataOthers">
+						<div class="weui-loadmore" id="loadingMore2" style="display: none">
+							<i class="weui-loading"></i>
+							<span class="weui-loadmore__tips">正在加载2</span>
+						</div>
+						<div class="divMoreData" id="morDataBt2">
+							<a href="javascript:;" class="weui-btn weui-btn_plain-primary" style="color: #ff7103;border: 1px #ff7103 solid;" onclick="teamList(2)">查看更多</a>
+						</div>
+						<div class="weui-loadmore weui-loadmore_line" id="noMoreData2" style="display: none">
+							<span class="weui-loadmore__tips">暂无更多数据</span>
+						</div>
+					</div>
+				</div>
+				<div id="tab3" class="weui-tab__bd-item">
+					<div class="teamList" id="teamList3">
+						<!--			团队数据3			-->
+					</div>
+					<div class="dataOthers">
+						<div class="weui-loadmore" id="loadingMore3" style="display: none">
+							<i class="weui-loading"></i>
+							<span class="weui-loadmore__tips">正在加载3</span>
+						</div>
+						<div class="divMoreData" id="morDataBt3">
+							<a href="javascript:;" class="weui-btn weui-btn_plain-primary" style="color: #ff7103;border: 1px #ff7103 solid;" onclick="teamList(4)">查看更多</a>
+						</div>
+						<div class="weui-loadmore weui-loadmore_line" id="noMoreData3" style="display: none">
+							<span class="weui-loadmore__tips">暂无更多数据</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</body>
+	<script src="dist/js/jquery-weui.js" th:src="@{/dist/js/jquery-weui.js}"></script>
+	<script src="js/team.js" th:src="@{/js/team.js}"></script>
+
+</html>

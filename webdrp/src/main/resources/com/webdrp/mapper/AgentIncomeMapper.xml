@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.AgentIncomeMapper">
+    <cache type="com.webdrp.config.MybatisRedisCache"/>
+    <insert id="insert" parameterType="com.webdrp.entity.AgentIncome"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into agentincome(id,
+            title,
+            agentIncomeType,
+            cid,
+            csid,
+            agentId,
+            money,
+            description,
+            incomeDate,
+            userId,
+            userName)
+        values(#{id} ,
+            #{title},
+            #{agentIncomeType},
+            #{cid},
+            #{csid},
+            #{agentId},
+            #{money},
+            #{description},
+            #{incomeDate},
+            #{userId},
+            #{userName}
+            )
+    </insert>
+    <!--sql片段，时间格式化-->
+    <sql id="select">
+          id,title,
+            agentIncomeType,
+            cid,
+            csid,
+            agentId,
+            money,
+            description,
+            incomeDate,
+            userId,
+            userName, DATE_FORMAT(createTime,'%Y-%m-%d %h:%i:%s')as createTime,DATE_FORMAT(updateTime,'%Y-%m-%d %h:%i:%s')as updateTime
+    </sql>
+
+    <delete id="delete" parameterType="com.webdrp.entity.AgentIncome">
+        update  agentincome set deleteTime = now()  where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.webdrp.entity.AgentIncome">
+        update agentincome
+        <set>
+            <if test="id!=null">
+                id = #{id},
+            </if>
+            <if test="title!=null">
+                title = #{title},
+            </if>
+            <if test="agentIncomeType!=null">
+                agentIncomeType = #{agentIncomeType},
+            </if>
+            <if test="cid!=null">
+                cid = #{cid},
+            </if>
+            <if test="csid!=null">
+                csid = #{csid},
+            </if>
+            <if test="agentId!=null">
+                agentId = #{agentId},
+            </if>
+            <if test="money!=null">
+                money = #{money},
+            </if>
+            <if test="description!=null">
+                description = #{description},
+            </if>
+            <if test="incomeDate!=null">
+                incomeDate = #{incomeDate},
+            </if>
+             <if test="userId!=null">
+                 userId = #{userId},
+            </if>
+             <if test="userName!=null">
+                 userName = #{userName},
+            </if>
+            <if test="createTime!=null">
+                createTime = #{createTime},
+            </if>
+            <if test="updateTime!=null">
+                updateTime = #{updateTime},
+            </if>
+            <if test="deleteTime!=null">
+                deleteTime = #{deleteTime},
+            </if>
+
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findAll" resultMap="resultList">
+        select
+        <include refid="select"></include>
+        from agentincome where deleteTime is NULL
+        <include refid="query"/>
+    </select>
+
+    <select id="count" parameterType="com.webdrp.entity.AgentIncome" resultType="long">
+        select
+        count(*)
+        from agentincome where deleteTime is NULL
+        <include refid="query"/>
+    </select>
+
+    <select id="loadAll" resultMap="resultList">
+        select
+        <include refid="select"></include>
+        from agentincome where deleteTime is NULL
+        <include refid="query"/>
+        order by createTime desc
+    </select>
+
+
+    <select id="findById" resultMap="resultList">
+        SELECT
+        <include refid="select"></include>
+         from agentincome where deleteTime IS NULL  and id  = #{id}
+    </select>
+
+    <select id="findByCsid" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from agentincome
+        where deleteTime IS NULL and csid = #{csid} and agentId = #{agentId} limit 1
+    </select>
+
+    <select id="findByCid" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from agentincome
+        where deleteTime IS NULL and cid = #{cid}
+    </select>
+
+    <select id="findByAgentIncomeType" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from agentincome
+        where deleteTime IS NULL
+        and agentIncomeType = #{agentIncomeType}
+    </select>
+
+    <sql id="query">
+        <if test="entity.id!=null">
+            and id = #{entity.id}
+        </if>
+        <if test="entity.title!=null">
+            and title = #{entity.title}
+        </if>
+         <if test="entity.agentIncomeType!=null">
+            and agentIncomeType = #{entity.agentIncomeType}
+        </if>
+         <if test="entity.cid!=null">
+            and cid = #{entity.cid}
+        </if>
+        <if test="entity.csid!=null">
+            and csid = #{entity.csid}
+        </if>
+        <if test="entity.agentId!=null">
+            and agentId = #{entity.agentId}
+        </if>
+         <if test="entity.money!=null">
+            and money = #{entity.money}
+        </if>
+        <if test="entity.description!=null">
+            and description = #{entity.description}
+        </if>
+        <if test="entity.incomeDate!=null">
+            and incomeDate = #{entity.incomeDate}
+        </if>
+        <if test="entity.createTime!=null">
+            and createTime = #{entity.createTime}
+        </if>
+        <if test="entity.updateTime!=null">
+            and updateTime = #{entity.updateTime}
+        </if>
+    </sql>
+
+    <resultMap id="resultList" type="com.webdrp.entity.AgentIncome" >
+        <id column="id" property="id" />
+        <result  column="title" property="title"/>
+        <result  column="agentIncomeType" property="agentIncomeType"/>
+        <result  column="cid" property="cid"/>
+        <result  column="csid" property="csid"/>
+        <result  column="agentId" property="agentId"/>
+        <result  column="money" property="money"/>
+        <result  column="description" property="description"/>
+        <result  column="incomeDate" property="incomeDate"/>
+        <result  column="userName" property="userName"/>
+        <result  column="createTime" property="createTime"/>
+        <result  column="updateTime" property="updateTime"/>
+    </resultMap>
+</mapper>
+

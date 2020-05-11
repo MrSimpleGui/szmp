@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.ProviderMapper">
+    <cache type="com.webdrp.config.MybatisRedisCache"/>
+
+    <insert id="insert" parameterType="com.webdrp.entity.Provider"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into provider(id,
+          providerusername,
+          providerpassword,
+          prividername,
+          imageurl,
+          sort,
+          context,
+          status,
+          address,
+          addresscode,
+          realaddress,
+          phone,
+          realName,
+          agentType,
+          provinceCode,
+          province,
+          cityCode,
+          city,
+          idcard,
+          unionPay,
+          unionPayDesc
+        )
+        values(#{id} ,
+         #{providerusername},
+          #{providerpassword},
+          #{prividername},
+          #{imageurl},
+          #{sort},
+          #{context},
+          #{status},
+          #{address},
+          #{addresscode},
+          #{realaddress},
+          #{phone},
+          #{realName},
+          #{agentType},
+          #{provinceCode},
+          #{province},
+          #{cityCode},
+          #{city},
+          #{idcard},
+          #{unionPay},
+          #{unionPayDesc}
+        )
+    </insert>
+    <!--sql片段，时间格式化-->
+    <sql id="select">
+          id,
+          providerusername,
+          providerpassword,
+          prividername,
+          imageurl,
+          sort,
+          context,
+          status,
+          address,
+          addresscode,
+          realaddress,
+          phone,
+          realName,
+          agentType,
+          provinceCode,
+          province,
+          cityCode,
+          city,
+          idcard,
+          unionPay,
+          unionPayDesc,
+          DATE_FORMAT(createTime,'%Y-%m-%d %h:%i:%s')as createTime,DATE_FORMAT(updateTime,'%Y-%m-%d %h:%i:%s')as updateTime
+    </sql>
+
+    <delete id="delete" parameterType="com.webdrp.entity.Provider">
+        update provider
+        <set>
+            deleteTime = now()
+        </set>
+        where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.webdrp.entity.Provider">
+        update provider
+        <set>
+            <if test="id!=null">
+                id = #{id},
+            </if>
+            <if test="providerusername!=null">
+                providerusername = #{providerusername},
+            </if>
+            <if test="providerpassword!=null">
+                providerpassword = #{providerpassword},
+            </if>
+            <if test="prividername!=null">
+                prividername = #{prividername},
+            </if>
+            <if test="imageurl!=null">
+                imageurl = #{imageurl},
+            </if>
+            <if test="sort!=null">
+                sort = #{sort},
+            </if>
+            <if test="context!=null">
+                context = #{context},
+            </if>
+            <if test="status!=null">
+                status = #{status},
+            </if>
+            <if test="address!=null">
+                address = #{address},
+            </if>
+            <if test="addresscode!=null">
+                addresscode = #{addresscode},
+            </if>
+            <if test="realaddress!=null">
+                realaddress = #{realaddress},
+            </if>
+             <if test="phone!=null">
+                 phone = #{phone},
+            </if>
+            <if test="realName!=null">
+                realName = #{realName},
+            </if>
+            <if test="idcard!=null">
+                idcard = #{idcard},
+            </if>
+            <if test="unionPay!=null">
+                unionPay = #{unionPay},
+            </if>
+            <if test="unionPayDesc!=null">
+                unionPayDesc = #{unionPayDesc},
+            </if>
+            <if test="createTime!=null">
+                createTime = #{createTime},
+            </if>
+            <if test="updateTime!=null">
+                updateTime = #{updateTime},
+            </if>
+            <if test="deleteTime!=null">
+                deleteTime = #{deleteTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findAll" resultMap="resultList">
+        select
+        <include refid="select"></include>
+        from provider where deleteTime is NULL
+        <include refid="query"/>
+    </select>
+
+    <select id="count" resultType="long">
+        select
+        count(*)
+        from provider
+        where deleteTime is NULL
+        <include refid="query"/>
+    </select>
+
+    <select id="loadAll" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from provider
+        where deleteTime is NULL
+        <include refid="query"/>
+        order by sort desc
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+
+    <sql id="query">
+        <if test="entity.id!=null">
+            and id = #{entity.id}
+        </if>
+        <if test="entity.providerusername!=null">
+          and providerusername = #{entity.providerusername}
+         </if>
+        <if test="entity.providerpassword!=null">
+            and providerpassword = #{entity.providerpassword}
+        </if>
+        <if test="entity.prividername!=null">
+            and prividername = #{entity.prividername}
+        </if>
+        <if test="entity.imageurl!=null">
+            and imageurl = #{entity.imageurl}
+        </if>
+        <if test="entity.sort!=null">
+            and sort = #{entity.sort}
+        </if>
+        <if test="entity.context!=null">
+            and context = #{entity.context}
+        </if>
+        <if test="entity.status!=null">
+            and status = #{entity.status}
+        </if>
+        <if test="entity.address!=null">
+           and address = #{entity.address}
+        </if>
+         <if test="entity.addresscode!=null">
+           and addresscode = #{entity.addresscode}
+        </if>
+        <if test="entity.agentType!=null">
+            and agentType = #{entity.agentType}
+        </if>
+        <if test="entity.realaddress!=null">
+           and realaddress = #{entity.realaddress}
+        </if>
+        <if test="entity.phone!=null">
+           and phone = #{entity.phone}
+        </if>
+        <if test="entity.realName!=null">
+           and realName = #{entity.realName}
+        </if>
+        <if test="entity.idcard!=null">
+           and idcard = #{entity.idcard}
+        </if>
+        <if test="entity.unionPay!=null">
+           and unionPay = #{entity.unionPay}
+        </if>
+        <if test="entity.unionPayDesc!=null">
+            and unionPayDesc = #{entity.unionPayDesc}
+        </if>
+    </sql>
+
+    <select id="findById" resultMap="resultList">
+        SELECT
+        <include refid="select"></include>
+         from provider where deleteTime IS NULL  and id  = #{id}
+    </select>
+    
+    <select id="findByUsername" resultType="com.webdrp.entity.Provider">
+       select
+       <include refid="select"/>
+        from provider where deleteTime is null
+        and providerusername = #{providerusername}
+    </select>
+
+
+    <select id="getAgentListCityAndProvince" resultMap="resultList">
+        SELECT
+        <include refid="select"></include>
+        from provider where deleteTime IS NULL
+        and agentType in (1,2)
+    </select>
+
+    <select id="findAgentCommodityVo" resultMap="resultListCommodityVo">
+        select
+        id,prividername,imageurl
+        from provider
+        where deleteTime is NULL
+        <include refid="query"/>
+        order by sort desc
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <resultMap id="resultList" type="com.webdrp.entity.Provider" >
+        <id column="id" property="id" />
+        <result  column="providerusername" property="providerusername"/>
+        <result  column="providerpassword" property="providerpassword"/>
+        <result  column="prividername" property="prividername"/>
+        <result  column="imageurl" property="imageurl"/>
+        <result  column="sort" property="sort"/>
+        <result  column="context" property="context"/>
+        <result  column="status" property="status"/>
+        <result  column="address" property="address"/>
+        <result  column="addresscode" property="addresscode"/>
+        <result  column="realaddress" property="realaddress"/>
+        <result  column="phone" property="phone"/>
+        <result  column="realName" property="realName"/>
+        <result  column="agentType" property="agentType"/>
+        <result  column="provinceCode" property="provinceCode"/>
+        <result  column="province" property="province"/>
+        <result  column="cityCode" property="cityCode"/>
+        <result  column="city" property="city"/>
+        <result  column="idcard" property="idcard"/>
+        <result  column="unionPay" property="unionPay"/>
+        <result  column="unionPayDesc" property="unionPayDesc"/>
+        <result  column="createTime" property="createTime"/>
+        <result  column="updateTime" property="updateTime"/>
+    </resultMap>
+
+    <resultMap id="resultListCommodityVo" type="com.webdrp.entity.vo.ProviderCommodityVo" extends="resultList">
+        <collection property="productList" ofType="com.webdrp.entity.Commodity" column="id" select="com.webdrp.mapper.CommodityMapper.findCommodityByVentorId1" >
+            <id column="id" property="id" />
+            <result column="ventorId" property="ventorId"/>
+            <result column="ventorName" property="ventorName"/>
+            <result column="name" property="name"/>
+            <result column="nameItem" property="nameItem"/>
+            <result column="context" property="context"/>
+            <result column="publish" property="publish"/>
+            <result column="cType" property="cType"/>
+            <result column="rebate" property="rebate"/>
+            <result column="jiandian" property="jiandian"/>
+            <result column="classId" property="classId"/>
+            <result column="imgUrl" property="imgUrl"/>
+            <result column="express" property="express"/>
+            <result  column="createTime" property="createTime"/>
+            <result  column="updateTime" property="updateTime"/>
+        </collection>
+    </resultMap>
+</mapper>
+

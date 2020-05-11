@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.CommissionModeMapper">
+
+    <insert id="insert" parameterType="com.webdrp.entity.CommissionMode"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into commissionmode(id,
+        name)
+        values(#{id} ,
+        #{name})
+    </insert>
+    <!--sql片段，时间格式化-->
+    <sql id="select">
+          id,name,DATE_FORMAT(createTime,'%Y-%m-%d %H:%i:%s')as createTime,DATE_FORMAT(updateTime,'%Y-%m-%d %H:%i:%s')as updateTime
+    </sql>
+
+    <update id="delete" parameterType="com.webdrp.entity.CommissionMode">
+        update commissionmode
+        <set>
+            deleteTime = #{deleteTime}
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="update" parameterType="com.webdrp.entity.CommissionMode">
+        update commissionmode
+        <set>
+            <if test="id!=null">
+                id = #{id},
+            </if>
+            <if test="name!=null">
+                name = #{name},
+            </if>
+            <if test="createTime!=null">
+                createTime = #{createTime},
+            </if>
+            <if test="updateTime!=null">
+                updateTime = #{updateTime},
+            </if>
+            <if test="deleteTime!=null">
+                deleteTime = #{deleteTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findAll" resultMap="resultList">
+        select
+        <include refid="select"></include>
+        from commissionmode where deleteTime is NULL
+        <if test="entity.id!=null">
+            and id = #{entity.id}
+        </if>
+        <if test="entity.name!=null">
+            and name = #{entity.name}
+        </if>
+        <if test="entity.createTime!=null">
+            and createTime = #{entity.createTime}
+        </if>
+        <if test="entity.updateTime!=null">
+            and updateTime = #{entity.updateTime}
+        </if>
+        <if test="entity.deleteTime!=null">
+            and deleteTime = #{entity.deleteTime}
+        </if>
+    </select>
+
+    <select id="findById" resultMap="resultList">
+        SELECT
+        <include refid="select"></include>
+        from commissionmode where deleteTime IS NULL  and id  = #{id}
+    </select>
+
+    <select id="count" resultType="long">
+        select
+        count(*)
+        from commissionmode
+        where deleteTime is NULL
+        <include refid="query"/>
+    </select>
+
+    <select id="loadAll" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from commissionmode
+        where deleteTime is NULL
+        <include refid="query"/>
+        order by createTime desc
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="findModeIdList" resultType="java.lang.Integer">
+        select id
+        from commissionmode
+        where deleteTime is NULL
+    </select>
+
+    <select id="findByIds" resultType="com.webdrp.entity.CommissionMode">
+        select <include refid="select"/>
+        from commissionmode
+        where deleteTime is NULL
+        and id in
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <sql id="query">
+        <if test="entity.id!=null">
+            and id = #{entity.id}
+        </if>
+        <if test="entity.name!=null">
+            and name = #{entity.name}
+        </if>
+        <if test="entity.createTime!=null">
+            and createTime = #{entity.createTime}
+        </if>
+        <if test="entity.updateTime!=null">
+            and updateTime = #{entity.updateTime}
+        </if>
+    </sql>
+
+    <resultMap id="resultList" type="com.webdrp.entity.CommissionMode" >
+        <id column="id" property="id" />
+        <result  column="name" property="name"/>
+        <result  column="createTime" property="createTime"/>
+        <result  column="updateTime" property="updateTime"/>
+    </resultMap>
+
+</mapper>

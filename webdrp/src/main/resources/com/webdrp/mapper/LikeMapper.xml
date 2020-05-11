@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.LikeMapper">
+    <insert id="insert" parameterType="com.webdrp.entity.Like"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into `like` (
+            richUserId,
+            friendsId
+            )
+            values(
+            #{richUserId},
+            #{friendsId}
+            )
+    </insert>
+
+    <update id="delete" parameterType="com.webdrp.entity.Like">
+      update `like`
+      <set>
+        deleteTime = #{deleteTime}
+      </set>
+        where id=#{id}
+    </update>
+
+    <update id="deleteByFriendsId" parameterType="com.webdrp.entity.Like">
+        update `like`
+        <set>
+            deleteTime = #{deleteTime}
+        </set>
+        where friendsId=#{friendsId}
+    </update>
+
+    <select id="findByFriendsIdAndRichUserId" parameterType="com.webdrp.entity.Like" resultType="com.webdrp.entity.Like">
+        SELECT *
+        FROM `like`
+        where friendsId = #{friendsId} AND richUserId=#{richUserId} AND deleteTime IS NULL
+    </select>
+</mapper>
+

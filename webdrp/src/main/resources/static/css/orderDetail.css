@@ -1,0 +1,28 @@
+.orderStatus{
+	background-image: linear-gradient(to right, #ff8e05 , #ff5502);
+	height: 40vw;
+	display: flex;
+}
+.orderStatusTitle{
+	flex: 3;
+	color: white;
+	/*text-align: center;*/
+	text-indent: 5vw ;
+	line-height: 40vw;
+}
+.orderStatusImg{
+	flex: 2;
+	line-height: 40vw;
+}
+.orderStatusImg>img{
+	object-fit: cover;
+	width: 20vw;
+	height: 20vw;
+	margin: 10vw auto;
+}
+.buyNow {
+    -moz-box-flex: 3;
+    flex: 3;
+    text-align: center;
+    margin: 3vw 1vw;
+}

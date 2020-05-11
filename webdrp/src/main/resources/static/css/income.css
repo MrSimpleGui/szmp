@@ -1,0 +1,101 @@
+body {
+	background-color: #F8F8F8;
+}
+
+.incomeList{
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.incomeCard{
+	width: 96%;
+	margin: 0 auto;
+	box-sizing: border-box;
+	/*border: 1px dashed #ff8e05;*/
+	background-color: white;
+	padding: 1vw 2vw;
+	border-radius: 5px;
+	margin-top: 2vw;
+}
+
+.incomeCardCell{
+	display: flex;
+}
+.incomeItem{
+	flex: 1;
+}
+.incomePrice{
+	font-size: 9vw;
+	text-align: center;
+	margin: 3vw;
+}
+.text-center{
+	text-align: center;
+}
+.incomeDate{
+	color: gray;
+}
+/*.incomeDate > span{
+	background-color: #ff8e05;
+	color: white;
+}*/
+.incomeFrom{
+	color: gray;
+	margin: 2vw;
+}
+.price-unit{
+	font-size: 6vw;
+	color: red;
+}
+.price{
+	color: #ff5502;
+}
+.order-analyse{
+	width: 100%;
+	position: sticky;
+	top: 13vw;
+	box-sizing: border-box;
+	border-radius: 5px;
+	
+}
+.orderCell{
+	width: 96%;
+	margin: 0 auto;
+	display: flex;
+	padding: 1vw 2vw;
+	box-sizing: border-box;
+	background-color: white;
+	margin-top: 2vw;
+	
+}
+.orderLabel{
+	flex: 1;
+	text-align: left;
+}
+.orderData{
+	flex: 3;
+	text-align: left;
+}
+.number-count{
+	color: #ff8e05;
+}
+
+
+.recordCardCell{
+	display: flex;
+	color: gray;
+}
+
+.recordItem{
+	flex: 1;
+}
+.recordItemData{
+	flex: 2;
+}
+.colorGreen{
+	color: #1aad19;
+}
+
+
+
+

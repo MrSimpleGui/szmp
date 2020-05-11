@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.CommodityMapper">
+    <cache type="com.webdrp.config.MybatisRedisCache"/>
+    <insert id="insert" parameterType="com.webdrp.entity.Commodity"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into commodity(
+        ventorId,
+        ventorName,
+        `name`,
+        nameItem,
+        context,
+        publish,
+        cType,
+        rebate,
+        jiandian,
+        classId,
+        imgUrl,
+        express,
+        shareTitle,
+        shareImg,
+        sharePoster,
+        service,
+        specification
+        )
+        values(
+        #{ventorId},
+        #{ventorName},
+        #{name},
+        #{nameItem},
+        #{context},
+        #{publish},
+        #{cType},
+        #{rebate},
+        #{jiandian},
+        #{classId} ,
+        #{imgUrl},
+        #{express},
+        #{shareTitle},
+        #{shareImg},
+        #{sharePoster},
+        #{service},
+        #{specification})
+    </insert>
+
+    <update id="update" parameterType="com.webdrp.entity.Commodity">
+        update commodity
+        <set>
+            <if test="ventorId != null">
+                ventorId=#{ventorId},
+            </if>
+            <if test="ventorName != null">
+                ventorName=#{ventorName},
+            </if>
+            <if test="name != null">
+                `name`=#{name},
+            </if>
+            <if test="nameItem!=null">
+                nameItem=#{nameItem},
+            </if>
+            <if test="context!=null">
+                context=#{context},
+            </if>
+            <if test="publish!=null">
+                publish=#{publish},
+            </if>
+            <if test="cType!=null">
+                cType=#{cType},
+            </if>
+            <if test="rebate!=null">
+                rebate=#{rebate},
+            </if>
+            <if test="jiandian != null">
+                jiandian=#{jiandian},
+            </if>
+            <if test="classId != null">
+                classId=#{classId},
+            </if>
+            <if test="imgUrl != null">
+                imgUrl=#{imgUrl},
+            </if>
+            <if test="express != null">
+                express=#{express},
+            </if>
+            <if test="shareTitle != null">
+                shareTitle=#{shareTitle},
+            </if>
+            <if test="shareImg != null">
+                shareImg=#{shareImg},
+            </if>
+            <if test="sharePoster != null">
+                sharePoster=#{sharePoster},
+            </if>
+            <if test="service != null">
+                service=#{service},
+            </if>
+            <if test="specification != null">
+                specification=#{specification},
+            </if>
+            <if test="deleteTime != null">
+                deleteTime = #{deleteTime}
+            </if>
+        </set>
+        where id = #{id} AND deleteTime IS NULL
+    </update>
+
+    <update id="delete" parameterType="com.webdrp.entity.Commodity">
+        update commodity
+        <set>
+            deleteTime = #{deleteTime}
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findAll" parameterType="com.webdrp.entity.Commodity" resultType="com.webdrp.entity.Commodity">
+         select
+        <include refid="select"/>
+        from commodity
+        where  deleteTime IS NULL
+        <include refid="query"/>
+        order by createTime desc
+    </select>
+
+    <select id="findById" parameterType="int" resultType="com.webdrp.entity.Commodity">
+        select * from commodity
+        where id = #{id} and deleteTime IS NULL
+    </select>
+
+    <!-- 暂定-->
+    <select id="loadAll" resultType="com.webdrp.entity.Commodity">
+        select * from commodity
+        where  deleteTime IS NULL
+       <!-- <if test="entity.name != null">
+           AND name LIKE CONCAT(CONCAT('%',#{entity.name},'%'))
+        </if>-->
+        <include refid="query"/>
+        order by createTime desc
+         Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="count" resultType="long">
+        select count(*) from commodity
+        where  deleteTime IS NULL
+        <include refid="query"/>
+    </select>
+
+    <insert id="addCommodityImage">
+        INSERT  INTO  commodityImage (commodityId,imageId)VALUES (#{commodityId},#{imageId})
+    </insert>
+
+
+    <delete id="deleteCommodityImageByCommodityId" parameterType="com.webdrp.entity.Commodity">
+        delete from commodityImage
+        where commodityId = #{id}
+    </delete>
+
+
+    <select id="findCommodityImageByCommodityId" parameterType="int" resultType="com.webdrp.entity.Image">
+        SELECT c.* FROM commodity a , commodityImage b, image c
+        WHERE a.id = b.commodityId AND b.imageId = c.id
+        AND a.deleteTime IS NULL AND a.id = #{id}
+    </select>
+    
+    <select id="findCommodityVo" parameterType="com.webdrp.entity.Commodity" resultMap="resultListAll">
+        SELECT
+        commodity.id,
+        commodity.ventorId,
+        commodity.ventorName,
+        commodity.`name`,
+        commodity.nameItem,
+        commodity.context,
+        commodity.publish,
+        commodity.cType,
+        commodity.rebate,
+        commodity.jiandian,
+        commodity.classId,
+        commodity.imgUrl,
+        commodity.shareTitle,
+        commodity.shareImg,
+        commodity.sharePoster,
+        DATE_FORMAT(commodity.createTime,'%Y-%m-%d %H:%m:%s')as createTime,
+        DATE_FORMAT(commodity.createTime,'%Y-%m-%d %H:%m:%s')as updateTime,
+        image.id as icid,
+        image.fullUrl as fullUrl,
+        image.imageType as imageType,
+        commodityStyle.id as csid,
+        commodityStyle.commodityId,
+        commodityStyle.`name` as commodityStyleName,
+        commodityStyle.price as commodityStylePrice,
+        commodityStyle.stock as commodityStyleStock,
+        commodityStyle.normalPrice as commodityStyleNormalPrice,
+        commodityStyle.cost as commodityStyleCost,
+        image1.id as csid,
+        image1.fullUrl as fullUrl1,
+        image1.imageType as imageType1
+        FROM
+        commodity
+        LEFT JOIN commodityImage ON commodity.id = commodityImage.commodityId
+        LEFT JOIN image ON commodityImage.imageId = image.id
+        LEFT JOIN commodityStyle ON commodity.id = commodityStyle.commodityId
+        LEFT JOIN commodityStyleImage ON commodityStyle.id = commodityStyleImage.commodityStyleId
+        LEFT JOIN image AS image1 ON commodityStyleImage.imageId = image1.id
+        where commodity.deleteTime is NULL and review = 1
+        and commodityStyle.deleteTime is NULL
+        <include refid="query"/>
+        order by commodity.sort DESC
+    </select>
+
+    <select id="findVoById" parameterType="int" resultMap="resultListAllPage">
+        select
+        <include refid="select"/>
+        from
+        commodity
+        where deleteTime is null
+        and id = #{id}
+        and commodity.publish = 1
+    </select>
+
+    <select id="findCommodityAllCount" resultType="long">
+        select count(*)
+        from
+        commodity
+        where deleteTime is null
+        <include refid="query"/>
+    </select>
+
+    <select id="findCommodityAllByPage"  resultMap="resultListAllPage">
+        select
+        <include refid="select"/>
+        from
+        commodity
+        where deleteTime is null
+        <include refid="query"/>
+        order by sort
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="findCommodityImages" parameterType="int" resultType="image">
+        select  * from image where id in(
+        select imageId from commodityImage where commodityId = #{value}
+        )
+    </select>
+
+    <select id="findCommodityStyles" parameterType="int" resultMap="commodityStyleVo">
+        select commodityStyle.*,
+        image1.id as csid,
+        image1.fullUrl as fullUrl1,
+        image1.imageType as imageType1
+        from commodityStyle
+        LEFT JOIN commodityStyleImage ON commodityStyle.id = commodityStyleImage.commodityStyleId
+        LEFT JOIN image AS image1 ON commodityStyleImage.imageId = image1.id
+        where commodityStyle.commodityId = #{value} and commodityStyle.deleteTime is null
+    </select>
+
+
+    <select id="findCommodityByVentorId" parameterType="com.webdrp.entity.Commodity" resultType="com.webdrp.entity.Commodity">
+        select
+        <include refid="select"/>
+        from commodity
+        where deleteTime is null
+        and ventorId = #{ventorId}
+        and publish = 1
+        and cType = 7
+        limit 3
+    </select>
+    <select id="findCommodityByVentorId1" parameterType="integer" resultType="com.webdrp.entity.Commodity">
+        select
+        <include refid="select"/>
+        from commodity
+        where deleteTime is null
+        and ventorId = #{value}
+        and publish = 1
+        and cType = 7
+        limit 3
+    </select>
+
+    <select id="findCommodityByIds" resultType="com.webdrp.entity.Commodity">
+        select
+        <include refid="select"/>
+        from commodity
+        where deleteTime is null
+        and publish = 1
+        and id in
+        <foreach collection="commodityIdList" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="findVoIndexByIds" resultMap="voIndex">
+        select
+        <include refid="select"/>
+        from commodity
+        where deleteTime is null
+        and publish = 1
+        and id in
+        <foreach collection="commodityIdList" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="findVoIndexByClassId" resultMap="voIndex">
+        select
+        <include refid="select"/>
+        from commodity
+        where deleteTime is null
+        and publish = 1
+        <include refid="query"/>
+        order by sort
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+
+    <resultMap id="resultList" type="com.webdrp.entity.Commodity" >
+        <id column="id" property="id" />
+        <result column="ventorId" property="ventorId"/>
+        <result column="ventorName" property="ventorName"/>
+        <result column="name" property="name"/>
+        <result column="nameItem" property="nameItem"/>
+        <result column="context" property="context"/>
+        <result column="publish" property="publish"/>
+        <result column="cType" property="cType"/>
+        <result column="rebate" property="rebate"/>
+        <result column="jiandian" property="jiandian"/>
+        <result column="classId" property="classId"/>
+        <result column="imgUrl" property="imgUrl"/>
+        <result column="express" property="express"/>
+        <result column="shareTitle" property="shareTitle"/>
+        <result column="shareImg" property="shareImg"/>
+        <result column="sharePoster" property="sharePoster"/>
+        <result column="service" property="service"/>
+        <result column="specification" property="specification"/>
+        <result  column="createTime" property="createTime"/>
+        <result  column="updateTime" property="updateTime"/>
+    </resultMap>
+
+    <resultMap id="resultListAllPage" type="com.webdrp.entity.vo.CommodityAllVo" extends="resultList">
+        <collection property="images" ofType="com.webdrp.entity.Image" select="findCommodityImages" column="id"></collection>
+        <collection property="commodityStyleVoList" ofType="com.webdrp.entity.vo.CommodityStyleVo" select="findCommodityStyles" column="id"></collection>
+    </resultMap>
+
+
+    <resultMap id="resultListAll" type="com.webdrp.entity.vo.CommodityAllVo" extends="resultList">
+        <collection property="images" ofType="com.webdrp.entity.Image">
+             <id column="icid" property="id"/>
+             <result column="fullUrl" property="fullUrl"/>
+             <result column="imageType" property="imageType"/>
+        </collection>
+        <collection property="commodityStyleVoList" ofType="com.webdrp.entity.vo.CommodityStyleVo">
+            <id column="csid" property="id"/>
+            <result column="commodityId" property="commodityId"/>
+            <result column="commodityStyleName" property="name"/>
+            <result column="commodityStylePrice" property="price"/>
+            <result column="commodityStyleStock" property="stock"/>
+            <result column="commodityStyleNormalPrice" property="normalPrice"/>
+            <result column="commodityStyleCost" property="cost"/>
+            <collection property="images" ofType="com.webdrp.entity.Image">
+                <id column="csid" property="id"/>
+                <result column="fullUrl1" property="fullUrl"/>
+                <result column="imageType1" property="imageType"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <resultMap id="commodityStyleVo" type="com.webdrp.entity.vo.CommodityStyleVo">
+        <id column="id" property="id"/>
+        <result column="commodityId" property="commodityId"/>
+        <result column="name" property="name"/>
+        <result column="price" property="price"/>
+        <result column="stock" property="stock"/>
+        <result column="normalPrice" property="normalPrice"/>
+        <result column="cost" property="cost"/>
+        <collection property="images" ofType="com.webdrp.entity.Image">
+            <id column="csid" property="id"/>
+            <result column="fullUrl1" property="fullUrl"/>
+            <result column="imageType1" property="imageType"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="voIndex" type="com.webdrp.entity.vo.CommodityVoIndex" extends="resultList">
+        <association property="price" javaType="double" column="id"
+                     select="com.webdrp.mapper.CommodityStyleMapper.findLowestPriceByCommodityId"/>
+    </resultMap>
+
+
+
+
+
+    <sql id="select">
+        id,
+        ventorId,
+        ventorName,
+        `name`,
+        nameItem,
+        context,
+        publish,
+        cType,
+        rebate,
+        jiandian,
+        classId,
+        imgUrl,
+        createTime,
+        updateTime,
+        express,
+        shareTitle,
+        shareImg,
+        sharePoster,
+        service,
+        specification
+    </sql>
+
+    <sql id="query">
+        <if test="entity.ventorId != null">
+           AND ventorId=#{entity.ventorId}
+        </if>
+        <if test="entity.ventorName != null">
+            AND ventorName=#{entity.ventorName}
+        </if>
+        <if test="entity.name != null">
+            AND `name` LIKE CONCAT('%',#{entity.name},'%')
+        </if>
+        <if test="entity.nameItem!=null">
+            AND  nameItem=#{entity.nameItem}
+        </if>
+        <if test="entity.context!=null">
+            AND context=#{entity.context}
+        </if>
+        <if test="entity.publish!=null">
+            AND publish=#{entity.publish}
+        </if>
+        <if test="entity.cType!=null">
+            AND cType=#{entity.cType}
+        </if>
+        <if test="entity.rebate!=null">
+            AND rebate=#{entity.rebate}
+        </if>
+        <if test="entity.jiandian != null">
+            AND jiandian=#{entity.jiandian}
+        </if>
+        <if test="entity.classId != null">
+            AND classId=#{entity.classId}
+        </if>
+        <if test="entity.imgUrl != null">
+            AND imgUrl=#{entity.imgUrl}
+        </if>
+        <if test="entity.createTime != null">
+            AND createTime = #{entity.createTime}
+        </if>
+        <if test="entity.updateTime != null">
+            AND updateTime = #{entity.updateTime}
+        </if>
+        <if test="entity.deleteTime != null">
+            AND deleteTime = #{entity.deleteTime}
+        </if>
+        <if test="entity.express != null">
+            AND express = #{entity.express}
+        </if>
+        <if test="entity.shareTitle != null">
+            AND shareTitle = #{entity.shareTitle}
+        </if>
+        <if test="entity.shareImg != null">
+            AND shareImg = #{entity.shareImg}
+        </if>
+        <if test="entity.sharePoster != null">
+            AND sharePoster = #{entity.sharePoster}
+        </if>
+        <if test="entity.service != null">
+            AND service = #{entity.service}
+        </if>
+        <if test="entity.specification != null">
+            AND specification = #{entity.specification}
+        </if>
+    </sql>
+</mapper>
+

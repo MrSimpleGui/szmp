@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.ShoppingCartMapper">
+    <insert id="insert" parameterType="com.webdrp.entity.ShoppingCart"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into shoppingcart(
+        richUserId,
+        commodityId,
+        commodityStyleId,
+        `name`,
+        nameItem,
+        commodityStyleName,
+        price,
+        `inventory`,
+        imageUrl)
+        values(
+        #{richUserId},
+        #{commodityId},
+        #{commodityStyleId},
+        #{name},
+        #{nameItem},
+        #{commodityStyleName},
+        #{price},
+        #{inventory},
+        #{imageUrl})
+    </insert>
+    <!--sql片段，时间格式化-->
+    <sql id="select">
+          id,richUserId,
+        commodityId,
+        commodityStyleId,
+        `name`,
+        nameItem,
+        commodityStyleName,
+        price,
+        `inventory`,
+        `imageUrl`,DATE_FORMAT(createTime,'%Y-%m-%d %H:%i:%s')as createTime,DATE_FORMAT(updateTime,'%Y-%m-%d %H:%i:%s')as updateTime
+    </sql>
+    <sql id="query">
+        <if test="entity.id!=null">
+            and id = #{entity.id}
+        </if>
+        <if test="entity.richUserId!=null">
+            and richUserId = #{entity.richUserId}
+        </if>
+        <if test="entity.commodityId!=null">
+            and commodityId = #{entity.commodityId}
+        </if>
+        <if test="entity.commodityStyleId!=null">
+            and commodityStyleId = #{entity.commodityStyleId}
+        </if>
+        <if test="entity.name!=null">
+            and name = #{entity.name}
+        </if>
+        <if test="entity.nameItem!=null">
+            and nameItem = #{entity.nameItem}
+        </if>
+        <if test="entity.commodityStyleName!=null">
+            and commodityStyleName = #{entity.commodityStyleName}
+        </if>
+        <if test="entity.price!=null">
+            and price = #{entity.price}
+        </if>
+        <if test="entity.inventory!=null">
+            and inventory = #{entity.inventory}
+        </if>
+         <if test="entity.imageUrl!=null">
+            and imageUrl = #{entity.imageUrl}
+        </if>
+    </sql>
+
+    <delete id="delete" parameterType="com.webdrp.entity.ShoppingCart">
+        delete from shoppingcart where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.webdrp.entity.ShoppingCart">
+        update shoppingcart
+        <set>
+            <if test="id!=null">
+                id = #{id},
+            </if>
+
+             <if test="richUserId!=null">
+                 richUserId = #{richUserId},
+            </if>
+            <if test="richUserId!=null">
+                 richUserId = #{richUserId},
+            </if>
+            <if test="commodityStyleId!=null">
+                commodityStyleId = #{commodityStyleId},
+            </if>
+            <if test="name!=null">
+                name = #{name},
+            </if>
+            <if test="nameItem!=null">
+                nameItem = #{nameItem},
+            </if>
+            <if test="commodityStyleName!=null">
+                commodityStyleName = #{commodityStyleName},
+            </if>
+            <if test="price!=null">
+                price = #{price},
+            </if>
+            <if test="inventory!=null">
+                inventory = #{inventory},
+            </if>
+            <if test="imageUrl!=null">
+                imageUrl = #{imageUrl},
+            </if>
+            <if test="deleteTime!=null">
+                deleteTime = #{deleteTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findAll" resultMap="resultList">
+        select
+        <include refid="select"></include>
+        from shoppingcart where deleteTime is NULL
+    </select>
+
+    <select id="findById" resultMap="resultList">
+        SELECT
+        <include refid="select"></include>
+         from shoppingcart where deleteTime IS NULL  and id  = #{id}
+    </select>
+
+    <select id="findByRichUserId" parameterType="int" resultMap="resultList">
+        SELECT
+        <include refid="select"></include>
+        from shoppingcart where deleteTime IS NULL  and richUserId  = #{richUserId}
+        and deleteTime is NULL
+    </select>
+
+    <update id="delByUserIdAndCartId">
+        update shoppingcart set deleteTime = now() where id = #{id} and richUserId = #{richUserId}
+    </update>
+
+    <update id="updateBuyCount">
+        update shoppingcart set inventory = #{inventory} where id = #{id}
+    </update>
+
+    <select id="findByCardIds" resultMap="resultList">
+        select
+        <include refid="select"/>
+        from shoppingcart where deleteTime is null
+        and id in
+        <foreach collection="ids" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+
+    <select id="count" resultType="long">
+        select
+        count(*)
+        from shoppingcart where deleteTime is NULL
+        <include refid="query"/>
+    </select>
+
+    <select id="loadAll" resultMap="resultList">
+        select
+        <include refid="select"></include>
+        from shoppingcart where deleteTime is NULL
+        <include refid="query"/>
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+
+    <resultMap id="resultList" type="com.webdrp.entity.ShoppingCart" >
+        <id column="id" property="id" />
+        <result  column="richUserId" property="richUserId"/>
+        <result  column="commodityId" property="commodityId"/>
+        <result  column="commodityStyleId" property="commodityStyleId"/>
+        <result  column="name" property="name"/>
+        <result  column="nameItem" property="nameItem"/>
+        <result  column="commodityStyleName" property="commodityStyleName"/>
+        <result  column="price" property="price"/>
+        <result  column="inventory" property="inventory"/>
+        <result  column="imageUrl" property="imageUrl"/>
+        <result  column="createTime" property="createTime"/>
+        <result  column="updateTime" property="updateTime"/>
+    </resultMap>
+</mapper>
+

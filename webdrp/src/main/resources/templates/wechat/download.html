@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>下载APP</title>
+	<link rel="stylesheet" href="dist/lib/weui.min.css" th:href="@{/dist/lib/weui.min.css}"/>
+	<link rel="stylesheet" href="dist/css/jquery-weui.min.css" th:href="@{/dist/css/jquery-weui.min.css}"/>
+	<link rel="stylesheet" href="css/header.min.css" th:href="@{/css/header.min.css}"/>
+	<script type="text/javascript" src="dist/lib/jquery-2.1.4.js" th:src="@{/dist/lib/jquery-2.1.4.js}"></script>
+	<link rel="stylesheet" type="text/css" href="css/download.css" th:href="@{/css/download.css}"/>
+	<script  type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		ctxPath = /*[[@{/}]]*/ '';
+		config = [[${config}]]
+		console.log(config)
+		/*]]>*/
+	</script>
+	<style>
+		.bgLogo{
+			width: 100%;
+			height: auto;
+			text-align: center;
+			margin-top: 10vw;
+		}
+		.bgLogo img {
+			width: 40vw;
+			height: 40vw;
+			object-fit: cover;
+		}
+
+		div a {
+			text-decoration: none;
+			color: white;
+		}
+	</style>
+
+</head>
+
+<body>
+
+<!-- 蒙版区域 -->
+<div id="cover">
+	<img class="rightUp" src="img/icon/rightUp.png" th:src="@{/img/icon/rightUp.png}">
+	<div class="coverText1">
+		①  请选择右上角的按钮
+	</div>
+	<div class="coverText2" id="secondText">
+		②  选择  ' 在浏览器中打开 '
+	</div>
+</div>
+
+<div class="header">
+	<div class="goback">
+		<a href="javascript:history.back(-1)">
+			<img class="goback-img" src="img/goback.png" th:src="@{/img/goback.png}" />
+		</a>
+	</div>
+	<div class="header-title">下载APP</div>
+	<div class="gohome"></div>
+</div>
+
+<div class="bgLogo">
+	<img  src="" alt="" th:src="${config.note2}"/>
+</div>
+
+<div class="anroidButton">
+	<img class="buttonIcon" src="img/icon/anroid.png" th:src="@{/img/icon/anroid.png}">
+	<div class="anroidButtonText">
+		<a href="" th:href="${config.note}" download="APP.apk">Android App下载</a>
+	</div>
+</div>
+
+<div class="iosButton">
+	<img class="buttonIcon" src="img/icon/iOS.png" th:src="@{/img/icon/iOS.png}">
+	<div class="iosButtonText">
+		<a href="" th:href="${config.val1}" download>IOS 下载</a>
+	</div>
+</div>
+</body>
+<script src="js/download.js" type="text/javascript" charset="utf-8" th:src="@{/js/download.js}"></script>
+</html>

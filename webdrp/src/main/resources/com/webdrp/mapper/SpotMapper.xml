@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.SpotMapper">
+    <insert id="insert" parameterType="com.webdrp.entity.Spot"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into spot(id,
+        richuserId,
+        idcard,
+        tel,
+        idcardName,
+        openid,
+        nickName,
+        sex,
+        cardNum)
+        values(#{id} ,
+        #{richuserId},
+        #{idcard},
+        #{tel},
+        #{idcardName},
+        #{openId},
+        #{nickName},
+        #{sex},
+        #{cardNum})
+    </insert>
+    <!--sql片段，时间格式化-->
+    <sql id="select">
+          id,richuserId,
+        idcard,
+        tel,
+        idcardName,
+        openid,
+        nickName,
+        sex,
+        cardNum,DATE_FORMAT(createTime,'%Y-%m-%d %h:%i:%s')as createTime,DATE_FORMAT(updateTime,'%Y-%m-%d %h:%i:%s')as updateTime
+    </sql>
+
+    <delete id="delete" parameterType="com.webdrp.entity.Spot">
+        delete from spot where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.webdrp.entity.Spot">
+        update spot
+        <set>
+            <if test="id!=null">
+                id = #{id},
+            </if>
+
+            <if test="createTime!=null">
+                createTime = #{createTime},
+            </if>
+            <if test="updateTime!=null">
+                updateTime = #{updateTime},
+            </if>
+            <if test="deleteTime!=null">
+                deleteTime = #{deleteTime},
+            </if>
+
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findAll" resultMap="resultList">
+        select
+        <include refid="select"></include>
+        from spot where deleteTime is NULL
+        <if test="id!=null">
+            and id = #{id}
+        </if>
+        <if test="createTime!=null">
+            and createTime = #{createTime}
+        </if>
+        <if test="updateTime!=null">
+            and updateTime = #{updateTime}
+        </if>
+        <if test="deleteTime!=null">
+            and deleteTime = #{deleteTime}
+        </if>
+
+    </select>
+
+    <select id="findById" resultMap="resultList">
+        SELECT
+        <include refid="select"></include>
+         from spot where deleteTime IS NULL  and id  = #{id}
+    </select>
+
+    <select id="findByCardNumAndTel" parameterType="string" resultMap="resultList">
+        select
+         <include refid="select"/>
+         from spot where deleteTime is null and cardNum = #{cardNum} and tel = #{tel}  limit 1
+    </select>
+
+    <select id="findByRichUserId" parameterType="integer" resultMap="resultList">
+      select
+        <include refid="select"/>
+       from spot where deleteTime is null and richuserId = #{richuserId}
+    </select>
+
+    <resultMap id="resultList" type="com.webdrp.entity.Spot" >
+        <id column="id" property="id" />
+        <result  column="richuserId" property="richuserId"/>
+        <result  column="idcard" property="idcard"/>
+        <result  column="tel" property="tel"/>
+        <result  column="idcardName" property="idcardName"/>
+        <result  column="openid" property="openId"/>
+        <result  column="nickName" property="nickName"/>
+        <result  column="sex" property="sex"/>
+        <result  column="cardNum" property="cardNum"/>
+        <result  column="createTime" property="createTime"/>
+        <result  column="updateTime" property="updateTime"/>
+    </resultMap>
+</mapper>
+

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdrp.mapper.RoleMapper">
+    <insert id="insert" parameterType="com.webdrp.entity.Role"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into sys_role(id,
+        roleName,
+        esName)
+        values(#{id} ,
+        #{roleName},
+        #{esName} )
+    </insert>
+    <!--sql片段，时间格式化-->
+    <sql id="select">
+          id,roleName,esName,DATE_FORMAT(createTime,'%Y-%m-%d %H:%i:%s')as createTime,DATE_FORMAT(updateTime,'%Y-%m-%d %H:%i:%s')as updateTime
+    </sql>
+
+    <delete id="delete" parameterType="com.webdrp.entity.Role">
+        delete from sys_role where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.webdrp.entity.Role">
+        update sys_role
+        <set>
+            <if test="id!=null">
+                id = #{id},
+            </if>
+            <if test="roleName!=null">
+                roleName = #{roleName},
+            </if>
+            <if test="esName!=null">
+                esName = #{esName},
+            </if>
+            <if test="createTime!=null">
+                createTime = #{createTime},
+            </if>
+            <if test="updateTime!=null">
+                updateTime = #{updateTime},
+            </if>
+            <if test="deleteTime!=null">
+                deleteTime = #{deleteTime},
+            </if>
+
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findAll" resultMap="resultList">
+        select
+        <include refid="select"></include>
+        from sys_role where deleteTime is NULL
+        <include refid="query"/>
+    </select>
+    <sql id="query">
+        <if test="entity.id!=null">
+            and id = #{entity.id}
+        </if>
+        <if test="entity.roleName!=null">
+            and roleName = #{entity.roleName}
+        </if>
+        <if test="entity.esName!=null">
+            and esName = #{entity.esName}
+        </if>
+        <if test="entity.createTime!=null">
+            and createTime = #{entity.createTime}
+        </if>
+        <if test="entity.updateTime!=null">
+            and updateTime = #{entity.updateTime}
+        </if>
+    </sql>
+
+    <select id="count" resultType="long">
+          SELECT
+          count(*)
+          FROM
+          sys_role where deleteTime IS NULL
+          <include refid="query"/>
+    </select>
+
+    <select id="loadAll">
+        SELECT
+        <include refid="query"/>
+        FROM
+        sys_role where deleteTime IS NULL
+        <include refid="query"/>
+        Limit #{pager.beginIndex} , #{pager.pageSize}
+    </select>
+
+    <select id="findById" resultMap="resultList">
+        SELECT
+        <include refid="select"></include>
+         from sys_role where deleteTime IS NULL  and id  = #{id}
+    </select>
+
+
+    <insert id="addPermissionToRole" >
+        insert into sys_role_permission (roleId,permissionId)values(#{roleId},#{permissionId})
+    </insert>
+
+    <update id="removePermissionFromRole">
+        update sys_role_permission set deleteTime = now() where roleId = #{roleId} and permissionId = #{permissionId}
+    </update>
+
+
+    <resultMap id="resultList" type="com.webdrp.entity.Role" >
+        <id column="id" property="id" />
+        <result  column="roleName" property="roleName"/>
+        <result  column="esName" property="esName"/>
+        <result  column="createTime" property="createTime"/>
+        <result  column="updateTime" property="updateTime"/>
+    </resultMap>
+</mapper>
+

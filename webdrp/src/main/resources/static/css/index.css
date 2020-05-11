@@ -1,0 +1,174 @@
+body {
+	background-color: #F8F8F8;
+}
+
+
+/*清除浮动*/
+
+.clearfix:after {
+	/*伪元素是行内元素 正常浏览器清除浮动方法*/
+	content: "";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+
+.clearfix {
+	*zoom: 1;
+	/*ie6清除浮动的方式 *号只有IE6-IE7执行，其他浏览器不执行*/
+}
+
+
+/*2：1比例轮播图*/
+
+.swiper-slide>img {
+	/*保证比例不变形*/
+	object-fit: cover;
+	width: 100%;
+	height: 50vw;
+}
+
+.swiper-pagination>span {
+	width: 10vw;
+	border-radius: 2px;
+}
+
+
+/*轮播图点点点*/
+
+.swiper-pagination-bullet-active {
+	opacity: 1;
+	background: #8e1312;
+	height: 3px;
+}
+.swiper-pagination-bullet{
+	height: 3px;
+}
+
+
+/*商品列表*/
+
+.goods-lists {
+	/*margin-top: 2vw;*/
+	width: 100%;
+}
+
+.goods-list {
+	width: 96vw;
+	margin: 0 auto;
+	/*display: flex;*/
+}
+
+.goods-card {
+	width: 47vw;
+	/*width: 47%;*/
+	/*border:1px solid red;*/
+	/*box-sizing: border-box;*/
+	/*display: inline-block;*/
+	background-color: white;
+	margin-top: 2vw;
+	float: left;
+	/*display: block;*/
+}
+
+
+/* 奇数偶数样式不一样 */
+
+.goods-card:nth-child(odd) {
+	margin-right: 2vw;
+}
+
+.goods-card-img {
+	width: 100%;
+	height: 47vw;
+	object-fit: cover;
+}
+
+.goods-card-title {
+	/*行首缩进*/
+	text-indent: 10px;
+	font-size: 16px;
+	color: black;
+}
+
+.goods-card-price {
+	/*text-indent:10px;*/
+	padding-bottom: 10px;
+}
+
+.goods-card-icon {
+	font-size: 10px;
+	color: red;
+}
+
+.sales-price {
+	font-size: 16px;
+	color: red;
+}
+
+.bt-buy {
+	color: red;
+	border: 1px solid red;
+	float: right;
+	font-size: 14px;
+	margin-right: 10px;
+	padding: 0px 6px;
+}
+/*改样式*/
+.weui-grid:before {
+    top: 0;
+    width: 1px;
+    border-right: none;
+    -webkit-transform-origin: 100% 0;
+    transform-origin: 100% 0;
+    -webkit-transform: scaleX(.5);
+    transform: scaleX(.5);
+}
+.weui-grid:after {
+    left: 0;
+    height: 1px;
+    border-bottom:none;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(.5);
+    transform: scaleY(.5);
+}
+.weui-grids:before {
+    right: 0;
+    height: 1px;
+    border-top: none;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(.5);
+    transform: scaleY(.5);
+}
+.weui-grids:after {
+    width: 1px;
+    bottom: 0;
+    border-left: none;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleX(.5);
+    transform: scaleX(.5);
+}
+.weui-grid__label{
+	color: #838383;
+}
+.weui-grid{
+	padding: 7px 10px;
+}
+
+.weui-tabbar__item.weui-bar__item--on .weui-tabbar__label {
+    color: #ff7103;
+}
+
+.goosTab{
+	width: 96%;
+	margin: 2vw auto 0 auto;
+	box-sizing: border-box;
+	text-align: center;
+	background-color: white;
+	padding: 0.5vw;
+	color: #581714;
+}
